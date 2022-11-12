@@ -4,7 +4,8 @@
   "info": {
     "singularName": "actor",
     "pluralName": "actors",
-    "displayName": "Actor"
+    "displayName": "Actor",
+    "description": ""
   },
   "options": {
     "draftAndPublish": false
@@ -32,6 +33,9 @@
       "relation": "manyToMany",
       "target": "api::mcu-project.mcu-project",
       "mappedBy": "actors"
+    },
+    "ImageUrl": {
+      "type": "string"
     }
   }
 }

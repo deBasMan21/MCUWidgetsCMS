@@ -4,7 +4,8 @@
   "info": {
     "singularName": "director",
     "pluralName": "directors",
-    "displayName": "Director"
+    "displayName": "Director",
+    "description": ""
   },
   "options": {
     "draftAndPublish": false
@@ -24,6 +25,9 @@
       "relation": "manyToMany",
       "target": "api::mcu-project.mcu-project",
       "mappedBy": "directors"
+    },
+    "ImageUrl": {
+      "type": "string"
     }
   }
 }
