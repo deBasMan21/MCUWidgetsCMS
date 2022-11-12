@@ -26,7 +26,7 @@
     },
     "DateOfBirth": {
       "type": "date",
-      "required": true
+      "required": false
     },
     "mcu_projects": {
       "type": "relation",

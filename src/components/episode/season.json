@@ -27,6 +27,10 @@
       "repeatable": true,
       "component": "poster.poster",
       "required": true
+    },
+    "NumberOfEpisodes": {
+      "type": "integer",
+      "min": 0
     }
   }
 }
