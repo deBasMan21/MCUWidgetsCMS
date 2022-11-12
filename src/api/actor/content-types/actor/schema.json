@@ -1,0 +1,37 @@
+{
+  "kind": "collectionType",
+  "collectionName": "actors",
+  "info": {
+    "singularName": "actor",
+    "pluralName": "actors",
+    "displayName": "Actor"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "FirstName": {
+      "type": "string",
+      "required": true
+    },
+    "LastName": {
+      "type": "string",
+      "required": true
+    },
+    "Character": {
+      "type": "string",
+      "required": true
+    },
+    "DateOfBirth": {
+      "type": "date",
+      "required": true
+    },
+    "mcu_projects": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::mcu-project.mcu-project",
+      "mappedBy": "actors"
+    }
+  }
+}

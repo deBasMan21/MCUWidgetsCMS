@@ -1,0 +1,99 @@
+{
+  "kind": "collectionType",
+  "collectionName": "mcu_projects",
+  "info": {
+    "singularName": "mcu-project",
+    "pluralName": "mcu-projects",
+    "displayName": "MCUProject",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "Title": {
+      "type": "string",
+      "required": true
+    },
+    "ReleaseDate": {
+      "type": "date",
+      "required": true
+    },
+    "directors": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::director.director",
+      "inversedBy": "mcu_projects"
+    },
+    "actors": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::actor.actor",
+      "inversedBy": "mcu_projects"
+    },
+    "PostCreditScenes": {
+      "type": "integer"
+    },
+    "Duration": {
+      "type": "integer"
+    },
+    "Phase": {
+      "type": "enumeration",
+      "enum": [
+        "Phase 1",
+        "Phase 2",
+        "Phase 3",
+        "Phase 4",
+        "Phase 5"
+      ],
+      "required": true
+    },
+    "Saga": {
+      "type": "enumeration",
+      "enum": [
+        "Infinity Saga",
+        "Multiverse Saga"
+      ],
+      "required": true
+    },
+    "Overview": {
+      "type": "richtext",
+      "required": true
+    },
+    "related_projects": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::mcu-project.mcu-project"
+    },
+    "Trailers": {
+      "type": "component",
+      "repeatable": true,
+      "component": "trailer.trailer",
+      "required": false
+    },
+    "Posters": {
+      "type": "component",
+      "repeatable": true,
+      "component": "poster.poster"
+    },
+    "Seasons": {
+      "type": "component",
+      "repeatable": true,
+      "component": "episode.season",
+      "required": false
+    },
+    "Type": {
+      "type": "enumeration",
+      "enum": [
+        "Serie",
+        "Movie",
+        "Special"
+      ]
+    },
+    "BoxOffice": {
+      "type": "biginteger",
+      "min": "0"
+    }
+  }
+}

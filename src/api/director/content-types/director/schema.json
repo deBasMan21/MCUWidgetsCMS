@@ -1,0 +1,29 @@
+{
+  "kind": "collectionType",
+  "collectionName": "directors",
+  "info": {
+    "singularName": "director",
+    "pluralName": "directors",
+    "displayName": "Director"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "FirstName": {
+      "type": "string",
+      "required": true
+    },
+    "LastName": {
+      "type": "string",
+      "required": true
+    },
+    "mcu_projects": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::mcu-project.mcu-project",
+      "mappedBy": "directors"
+    }
+  }
+}

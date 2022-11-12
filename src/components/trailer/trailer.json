@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_trailer_trailers",
+  "info": {
+    "displayName": "Trailer",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "TrailerName": {
+      "type": "string",
+      "required": true
+    },
+    "YoutubeLink": {
+      "type": "string",
+      "required": true,
+      "regex": "https:\\/\\/youtu.be\\/"
+    }
+  }
+}

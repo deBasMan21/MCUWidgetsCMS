@@ -1,0 +1,32 @@
+{
+  "collectionName": "components_episode_seasons",
+  "info": {
+    "displayName": "Season",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "SeasonNumber": {
+      "type": "integer",
+      "required": true
+    },
+    "Episodes": {
+      "type": "component",
+      "repeatable": true,
+      "component": "episode.episode",
+      "required": true
+    },
+    "SeasonTrailers": {
+      "type": "component",
+      "repeatable": true,
+      "component": "trailer.trailer",
+      "required": true
+    },
+    "Posters": {
+      "type": "component",
+      "repeatable": true,
+      "component": "poster.poster",
+      "required": true
+    }
+  }
+}

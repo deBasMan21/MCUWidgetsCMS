@@ -1,0 +1,38 @@
+{
+  "collectionName": "components_episode_episodes",
+  "info": {
+    "displayName": "Episode",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "Title": {
+      "type": "string",
+      "required": true
+    },
+    "Description": {
+      "type": "richtext",
+      "required": true
+    },
+    "PostCreditScenes": {
+      "type": "integer",
+      "required": true
+    },
+    "EpisodeReleaseDate": {
+      "type": "date",
+      "required": true
+    },
+    "EpisodeNumber": {
+      "type": "integer",
+      "required": true
+    },
+    "EpisodeUrl": {
+      "type": "string",
+      "required": true
+    },
+    "Duration": {
+      "type": "integer",
+      "required": true
+    }
+  }
+}
