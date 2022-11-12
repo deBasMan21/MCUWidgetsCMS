@@ -26,10 +26,6 @@
       "type": "integer",
       "required": true
     },
-    "EpisodeUrl": {
-      "type": "string",
-      "required": true
-    },
     "Duration": {
       "type": "integer",
       "required": true

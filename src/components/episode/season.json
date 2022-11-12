@@ -14,19 +14,19 @@
       "type": "component",
       "repeatable": true,
       "component": "episode.episode",
-      "required": true
+      "required": false
     },
     "SeasonTrailers": {
       "type": "component",
       "repeatable": true,
       "component": "trailer.trailer",
-      "required": true
+      "required": false
     },
     "Posters": {
       "type": "component",
       "repeatable": true,
       "component": "poster.poster",
-      "required": true
+      "required": false
     },
     "NumberOfEpisodes": {
       "type": "integer",

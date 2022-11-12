@@ -97,6 +97,9 @@
     "BoxOffice": {
       "type": "biginteger",
       "min": "0"
+    },
+    "DisneyPlusUrl": {
+      "type": "string"
     }
   }
 }
