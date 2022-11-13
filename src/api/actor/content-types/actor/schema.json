@@ -26,7 +26,7 @@
     },
     "DateOfBirth": {
       "type": "date",
-      "required": false
+      "required": true
     },
     "mcu_projects": {
       "type": "relation",
@@ -35,7 +35,8 @@
       "mappedBy": "actors"
     },
     "ImageUrl": {
-      "type": "string"
+      "type": "string",
+      "required": true
     }
   }
 }
