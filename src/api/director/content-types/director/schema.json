@@ -27,7 +27,8 @@
       "mappedBy": "directors"
     },
     "ImageUrl": {
-      "type": "string"
+      "type": "string",
+      "required": true
     }
   }
 }
