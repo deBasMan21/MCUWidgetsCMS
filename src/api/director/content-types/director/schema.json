@@ -29,6 +29,10 @@
     "ImageUrl": {
       "type": "string",
       "required": true
+    },
+    "DateOfBirth": {
+      "type": "date",
+      "required": true
     }
   }
 }
