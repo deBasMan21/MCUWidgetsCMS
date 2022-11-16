@@ -1,0 +1,58 @@
+{
+  "kind": "collectionType",
+  "collectionName": "fcm_notifications",
+  "info": {
+    "singularName": "fcm-notification",
+    "pluralName": "fcm-notifications",
+    "displayName": "FCM Notification",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true,
+    "comment": ""
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "body": {
+      "type": "text"
+    },
+    "payload": {
+      "type": "json"
+    },
+    "image": {
+      "type": "string"
+    },
+    "targetType": {
+      "type": "enumeration",
+      "enum": [
+        "topics"
+      ],
+      "required": true,
+      "default": "topics"
+    },
+    "response": {
+      "type": "json"
+    },
+    "target": {
+      "type": "enumeration",
+      "enum": [
+        "Movie",
+        "Serie",
+        "Special"
+      ],
+      "required": true
+    },
+    "publish_at": {
+      "type": "datetime"
+    },
+    "mcu_project": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::mcu-project.mcu-project",
+      "inversedBy": "notifications"
+    }
+  }
+}
