@@ -77,7 +77,10 @@
     "Posters": {
       "type": "component",
       "repeatable": true,
-      "component": "poster.poster"
+      "component": "poster.poster",
+      "min": 1,
+      "required": true,
+      "max": 10
     },
     "Seasons": {
       "type": "component",
