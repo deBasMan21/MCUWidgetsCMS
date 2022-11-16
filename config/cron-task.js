@@ -7,7 +7,6 @@ module.exports = {
   '*/1 * * * *': async () => {
     // fetch articles to publish;
 
-    console.log(strapi.contentTypes['mcu-project'])
     const draftArticleToPublish = await strapi.entityService.findMany('plugin::strapi-plugin-fcm.fcm-notification', {
       publicationState: 'preview', // preview returns both draft and published entries
       filters: {
@@ -19,7 +18,6 @@ module.exports = {
         }
       }
     });
-    console.log(draftArticleToPublish)
     // update the publish_at of articles previously fetched
     await Promise.all(draftArticleToPublish.map(article => {
       return strapi.entityService.update('plugin::strapi-plugin-fcm.fcm-notification', article.id, {

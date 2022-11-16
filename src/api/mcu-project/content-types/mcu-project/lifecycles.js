@@ -11,7 +11,7 @@ module.exports = {
           body: `${Title} (${Type}) releases today!`,
           targetType: 'topics',
           target: Type,
-          publish_at: `${ReleaseDate}T18:17:00.000Z`,
+          publish_at: `${ReleaseDate}T08:00:00.000Z`,
           mcu_project: [id]
         }
       })
