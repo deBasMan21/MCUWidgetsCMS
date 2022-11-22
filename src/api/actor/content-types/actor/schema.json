@@ -37,6 +37,12 @@
     "ImageUrl": {
       "type": "string",
       "required": true
+    },
+    "related_projects": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::related-project.related-project",
+      "mappedBy": "actors"
     }
   }
 }
