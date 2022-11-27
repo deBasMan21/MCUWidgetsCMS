@@ -54,7 +54,7 @@
       "target": "api::director.director",
       "inversedBy": "related_projects"
     },
-    "WatchLink": {
+    "DisneyPlusUrl": {
       "type": "string"
     },
     "Type": {
