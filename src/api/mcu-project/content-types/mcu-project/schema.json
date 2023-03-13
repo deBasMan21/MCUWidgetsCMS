@@ -137,6 +137,9 @@
     },
     "ProductionBudget": {
       "type": "integer"
+    },
+    "QuoteCaption": {
+      "type": "string"
     }
   }
 }
