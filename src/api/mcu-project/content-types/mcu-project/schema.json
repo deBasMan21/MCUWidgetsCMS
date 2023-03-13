@@ -110,6 +110,33 @@
       "relation": "oneToMany",
       "target": "plugin::strapi-plugin-fcm.fcm-notification",
       "mappedBy": "mcu_project"
+    },
+    "imdb_id": {
+      "type": "string",
+      "required": false,
+      "unique": true,
+      "private": true
+    },
+    "Rating": {
+      "type": "decimal"
+    },
+    "VoteCount": {
+      "type": "integer"
+    },
+    "Categories": {
+      "type": "string"
+    },
+    "AwardsNominated": {
+      "type": "integer"
+    },
+    "AwardsWon": {
+      "type": "integer"
+    },
+    "Quote": {
+      "type": "string"
+    },
+    "ProductionBudget": {
+      "type": "integer"
     }
   }
 }
