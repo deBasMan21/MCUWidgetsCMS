@@ -1,7 +1,6 @@
 'use strict';
 
 const { beforeUpdate } = require("./api/mcu-project/content-types/mcu-project/lifecycles");
-const fetch = require('node-fetch')
 
 module.exports = {
   /**
@@ -34,19 +33,32 @@ module.exports = {
 
 async function getExtraInformation(event) {
   const { result, params } = event;
-  const { imdb_id } = params.data
+  const { imdb_id, Title } = params.data
+  console.log(Title)
 
-  const extraInformation = await getExtraData(imdb_id)
+  const extraInformation = await getExtraData(imdb_id, Title)
+  // Categories
+  event.params.data.Categories = extraInformation.categories ?? event.params.data.Categories ?? null
+
+  // Ratings
   event.params.data.Rating = extraInformation.rating ?? event.params.data.Rating ?? null
   event.params.data.VoteCount = extraInformation.voteCount ?? event.params.data.VoteCount ?? null
-  event.params.data.Categories = extraInformation.categories ?? event.params.data.Categories ?? null
+
+  // Awards
   event.params.data.AwardsNominated = extraInformation.awardsNominated ?? event.params.data.AwardsNominated ?? null
   event.params.data.AwardsWon = extraInformation.awardsWon ?? event.params.data.AwardsWon ?? null
+
+  // Money
   event.params.data.BoxOffice = extraInformation.boxOffice ?? event.params.data.BoxOffice ?? null
   event.params.data.ProductionBudget = extraInformation.budget ?? event.params.data.ProductionBudget ?? null
+
+  // Reviews
+  event.params.data.reviewTitle = extraInformation.reviewTitle ?? event.params.data.reviewTitle ?? null
+  event.params.data.reviewSummary = extraInformation.reviewSummary ?? event.params.data.reviewSummary ?? null
+  event.params.data.reviewCopyright = extraInformation.reviewCopyright ?? event.params.data.reviewCopyright ?? null
 }
 
-async function getExtraData(imdbId) {
+async function getExtraData(imdbId, title) {
   if (!imdbId) {
     return {}
   }
@@ -60,18 +72,23 @@ async function getExtraData(imdbId) {
       }
     };
 
-    const [res, resAwards, resBoxOffice] = await Promise.all([
+    const apiKey = "60I6L7TAl5JXvWMYuQhlilAQTDsAiYot"
+
+    const [res, resAwards, resBoxOffice, resReviews] = await Promise.all([
       fetch(`https://moviesdatabase.p.rapidapi.com/titles/x/titles-by-ids?idsList=${imdbId}&info=base_info`, options).then((res) => res.json()),
       fetch(`https://moviesdatabase.p.rapidapi.com/titles/x/titles-by-ids?idsList=${imdbId}&info=awards`, options).then((res) => res.json()),
-      fetch(`https://moviesdatabase.p.rapidapi.com/titles/x/titles-by-ids?idsList=${imdbId}&info=revenue_budget`, options).then((res) => res.json())
+      fetch(`https://moviesdatabase.p.rapidapi.com/titles/x/titles-by-ids?idsList=${imdbId}&info=revenue_budget`, options).then((res) => res.json()),
+      fetch(`https://api.nytimes.com/svc/movies/v2/reviews/search.json?query=${title}&api-key=${apiKey}`).then((res) => res.json())
     ])
+
+    console.log(resReviews)
 
     let result = res.results[0]
     let resultAwards = resAwards.results[0]
     let resultBoxOffice = resBoxOffice.results[0]
 
     let categories = result.genres.genres.map(genre => genre.text).join(', ')
-    let returnObj = {
+    var returnObj = {
       rating: result.ratingsSummary?.aggregateRating,
       voteCount: result.ratingsSummary?.voteCount,
       categories: categories,
@@ -80,6 +97,17 @@ async function getExtraData(imdbId) {
       boxOffice: resultBoxOffice.worldwideGross?.total.amount,
       budget: resultBoxOffice.productionBudget?.budget.amount
     }
+
+    if (resReviews.results.length > 0) {
+      let review = resReviews.results.filter(review => review.display_title == title)[0]
+      console.log(review)
+
+      returnObj.reviewTitle = review.headline
+      returnObj.reviewSummary = review.summary_short
+      returnObj.reviewCopyright = resReviews.copyright
+    }
+
+    console.log(returnObj)
 
     return returnObj
   } catch (error) {

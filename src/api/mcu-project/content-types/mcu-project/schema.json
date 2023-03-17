@@ -140,6 +140,15 @@
     },
     "QuoteCaption": {
       "type": "string"
+    },
+    "reviewTitle": {
+      "type": "string"
+    },
+    "reviewSummary": {
+      "type": "string"
+    },
+    "reviewCopyright": {
+      "type": "string"
     }
   }
 }
