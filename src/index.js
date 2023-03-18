@@ -97,12 +97,10 @@ async function getExtraData(imdbId, title) {
     if (resReviews.results?.length > 0) {
       let review = resReviews.results.filter(review => review.display_title == title)[0]
 
-      returnObj.reviewTitle = review?.headline
-      returnObj.reviewSummary = review?.summary_short
+      returnObj.reviewTitle = decodeHtmlCharCodes(review?.headline)
+      returnObj.reviewSummary = decodeHtmlCharCodes(review?.summary_short)
       returnObj.reviewCopyright = resReviews.copyright
     }
-
-    console.log(decodeHtmlCharCodes("Review: &#8216;Ant-Man,&#8217; With Paul Rudd, Adds to a Superhero Infestation"))
 
     return returnObj
   } catch (error) {
