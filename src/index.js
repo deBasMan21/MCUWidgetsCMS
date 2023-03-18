@@ -102,9 +102,17 @@ async function getExtraData(imdbId, title) {
       returnObj.reviewCopyright = resReviews.copyright
     }
 
+    console.log(decodeHtmlCharCodes("Review: &#8216;Ant-Man,&#8217; With Paul Rudd, Adds to a Superhero Infestation"))
+
     return returnObj
   } catch (error) {
     console.log(`Error: ${error}`)
     return {}
   }
+}
+
+function decodeHtmlCharCodes(str) {
+  return str.replace(/(&#(\d+);)/g, function (match, capture, charCode) {
+    return String.fromCharCode(charCode);
+  });
 }
