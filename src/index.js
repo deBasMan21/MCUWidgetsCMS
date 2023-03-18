@@ -34,9 +34,8 @@ module.exports = {
 async function getExtraInformation(event) {
   const { result, params } = event;
   const { imdb_id, Title } = params.data
-  console.log(Title)
 
-  const extraInformation = await getExtraData(imdb_id, Title)
+  const extraInformation = await getExtraData(imdb_id, Title.trim())
   // Categories
   event.params.data.Categories = extraInformation.categories ?? event.params.data.Categories ?? null
 
@@ -72,16 +71,13 @@ async function getExtraData(imdbId, title) {
       }
     };
 
-    const apiKey = "60I6L7TAl5JXvWMYuQhlilAQTDsAiYot"
-
+    const apiKey = process.env.NYT_TOKEN
     const [res, resAwards, resBoxOffice, resReviews] = await Promise.all([
       fetch(`https://moviesdatabase.p.rapidapi.com/titles/x/titles-by-ids?idsList=${imdbId}&info=base_info`, options).then((res) => res.json()),
       fetch(`https://moviesdatabase.p.rapidapi.com/titles/x/titles-by-ids?idsList=${imdbId}&info=awards`, options).then((res) => res.json()),
       fetch(`https://moviesdatabase.p.rapidapi.com/titles/x/titles-by-ids?idsList=${imdbId}&info=revenue_budget`, options).then((res) => res.json()),
       fetch(`https://api.nytimes.com/svc/movies/v2/reviews/search.json?query=${title}&api-key=${apiKey}`).then((res) => res.json())
     ])
-
-    console.log(resReviews)
 
     let result = res.results[0]
     let resultAwards = resAwards.results[0]
@@ -100,14 +96,11 @@ async function getExtraData(imdbId, title) {
 
     if (resReviews.results.length > 0) {
       let review = resReviews.results.filter(review => review.display_title == title)[0]
-      console.log(review)
 
-      returnObj.reviewTitle = review.headline
-      returnObj.reviewSummary = review.summary_short
+      returnObj.reviewTitle = review?.headline
+      returnObj.reviewSummary = review?.summary_short
       returnObj.reviewCopyright = resReviews.copyright
     }
-
-    console.log(returnObj)
 
     return returnObj
   } catch (error) {
