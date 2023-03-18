@@ -94,7 +94,7 @@ async function getExtraData(imdbId, title) {
       budget: resultBoxOffice.productionBudget?.budget.amount
     }
 
-    if (resReviews.results.length > 0) {
+    if (resReviews.results?.length > 0) {
       let review = resReviews.results.filter(review => review.display_title == title)[0]
 
       returnObj.reviewTitle = review?.headline
