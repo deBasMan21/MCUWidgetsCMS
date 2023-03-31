@@ -20,14 +20,44 @@ export default {
     },
     // Override or extend the theme
     theme: {
-      colors: {
-        alternative100: '#f6ecfc',
-        alternative200: '#e0c1f4',
-        alternative500: '#ac73e6',
-        alternative600: '#9736e8',
-        alternative700: '#8312d1',
-        danger700: '#b72b1a'
+      dark: {
+        colors: {
+          primary700: '#ff0006',
+          primary600: '#ff0006',
+          primary500: '#ff0006',
+          primary200: '#1c1c1e',
+          primary100: '#1c1c1e',
+          danger700: '#FFA500',
+          buttonPrimary700: '#ff0006',
+          buttonPrimary600: '#ff0006',
+          buttonPrimary500: '#ff0006',
+          neutral0: '#454548',
+          neutral100: '#1c1c1e',
+          neutral1000: '#ffffff',
+          neutral150: '#454548',
+          neutral200: '#ffffff',
+          neutral300: '#666687',
+          neutral400: '#a5a5ba',
+          neutral500: '#c0c0cf',
+          neutral600: '#a5a5ba',
+          neutral700: '#eaeaef',
+          neutral800: '#ffffff',
+          neutral900: '#ffffff',
+        }
       },
+      light: {
+        colors: {
+          primary700: '#ff0006',
+          primary600: '#ff0006',
+          primary500: '#ff0006',
+          primary200: '#ededef',
+          primary100: '#ededef',
+          danger700: '#FFA500',
+          buttonPrimary700: '#ff0006',
+          buttonPrimary600: '#ff0006',
+          buttonPrimary500: '#ff0006'
+        }
+      }
     },
    // Disable notifications about new Strapi releases
     notifications: { release: false },
