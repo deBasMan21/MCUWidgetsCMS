@@ -43,6 +43,7 @@ export default {
           neutral700: '#eaeaef',
           neutral800: '#ffffff',
           neutral900: '#ffffff',
+          success100: '#2E7D32',
         }
       },
       light: {
