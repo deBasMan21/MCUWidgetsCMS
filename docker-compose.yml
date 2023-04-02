@@ -1,0 +1,72 @@
+version: '3'
+services:
+  mcuwidgets:
+    container_name: mcuwidgets
+    build: .
+    image: mcuwidgets:latest
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      DATABASE_CLIENT: ${DATABASE_CLIENT}
+      DATABASE_HOST: mcuwidgetsDB
+      DATABASE_NAME: ${DATABASE_NAME}
+      DATABASE_USERNAME: ${DATABASE_USERNAME}
+      DATABASE_PORT: ${DATABASE_PORT}
+      JWT_SECRET: ${JWT_SECRET}
+      ADMIN_JWT_SECRET: ${ADMIN_JWT_SECRET}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      NODE_ENV: ${NODE_ENV}
+    volumes:
+      - ./config:/opt/app/config
+      - ./src:/opt/app/src
+      - ./package.json:/opt/package.json
+      - ./package-lock.json:/opt/package-lock.json
+
+      - ./.env:/opt/app/.env
+      - ./public/uploads:/opt/app/public/uploads
+    ports:
+      - '1337:1337'
+    networks:
+      - mcuwidgets
+    depends_on:
+      - mcuwidgetsDB
+
+  mcuwidgetsDB:
+    container_name: mcuwidgetsDB
+    platform: linux/amd64
+    restart: unless-stopped
+    env_file: .env
+    image: mysql:latest
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_USER: ${DATABASE_USERNAME}
+      MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
+      MYSQL_PASSWORD: ${DATABASE_PASSWORD}
+      MYSQL_DATABASE: ${DATABASE_NAME}
+    volumes:
+      - mcuwidgets-data:/var/lib/mysql
+    ports:
+      - '3306:3306'
+    networks:
+      - mcuwidgets
+
+  mcuwidgetsAdminer:
+    container_name: mcuwidgetsAdminer
+    image: adminer
+    restart: unless-stopped
+    ports:
+      - '9090:8080'
+    environment:
+      - ADMINER_DEFAULT_SERVER=mcuwidgetsDB
+    networks:
+      - mcuwidgets
+    depends_on:
+      - mcuwidgetsDB
+
+volumes:
+  mcuwidgets-data:
+
+networks:
+  mcuwidgets:
+    name: Mcuwidgets
+    driver: bridge
