@@ -149,6 +149,9 @@
     },
     "reviewCopyright": {
       "type": "string"
+    },
+    "ReleaseDateNameOverride": {
+      "type": "string"
     }
   }
 }
