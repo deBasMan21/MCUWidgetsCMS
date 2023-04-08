@@ -62,8 +62,8 @@ async function getReviews() {
 
         strapi.entityService.update('api::mcu-project.mcu-project', entry.id, {
           data: {
-            reviewTitle: decodeHtmlCharCodes(review?.headline),
-            reviewSummary: decodeHtmlCharCodes(review?.summary_short),
+            reviewTitle: decodeHtmlCharCodes(review?.headline ?? ""),
+            reviewSummary: decodeHtmlCharCodes(review?.summary_short ?? ""),
             reviewCopyright: resReviews.copyright
           }
         });
