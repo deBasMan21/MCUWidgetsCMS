@@ -44,6 +44,9 @@ async function getReviews() {
         },
         ReleaseDate: {
           $lt: new Date().toISOString()
+        },
+        Type: {
+          $eq: "Movie"
         }
       }
     });
