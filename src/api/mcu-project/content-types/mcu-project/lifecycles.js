@@ -13,7 +13,12 @@ module.exports = {
           target: Type,
           publish_at: `${ReleaseDate}T08:00:00.000Z`,
           mcu_project: [id],
-          image: Posters[0].PosterUrl
+          image: Posters[0].PosterUrl,
+          payload: {
+            data: {
+              url: `https://mcuwidgets.page.link/mcu/${id}`
+            }
+          }
         }
       })
     }

@@ -152,6 +152,20 @@
     },
     "ReleaseDateNameOverride": {
       "type": "string"
+    },
+    "rankingCurrentRank": {
+      "type": "integer"
+    },
+    "rankingDifference": {
+      "type": "integer"
+    },
+    "rankingChangeDirection": {
+      "type": "enumeration",
+      "enum": [
+        "UP",
+        "DOWN",
+        "FLAT"
+      ]
     }
   }
 }

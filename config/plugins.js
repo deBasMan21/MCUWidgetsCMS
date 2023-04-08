@@ -4,4 +4,13 @@ module.exports = ({ env }) => ({
             defaultDepth: 5
         }
     },
+    'entity-notes': {
+      enabled: true,
+    },
+    'todo': {
+      enabled: true,
+    },
+    'random-sort': {
+      enabled: true,
+    },
 });
