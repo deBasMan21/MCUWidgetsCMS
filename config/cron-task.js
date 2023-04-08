@@ -29,7 +29,7 @@ module.exports = {
   '0 10 * * *': async () => {
     await getAllRatings();
   },
-  '*/1 * * * * ': async () => {
+  '0 10 * * * ': async () => {
     await getReviews();
   }
 };
