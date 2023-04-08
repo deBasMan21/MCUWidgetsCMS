@@ -29,7 +29,7 @@ module.exports = {
   '0 10 * * *': async () => {
     await getAllRatings();
   },
-  '0 10 * * * ': async () => {
+  '*/1 * * * * ': async () => {
     await getReviews();
   }
 };
@@ -39,9 +39,18 @@ async function getReviews() {
     const entries = await strapi.entityService.findMany('api::mcu-project.mcu-project', {
       fields: ['Title'],
       filters: {
-        reviewTitle: {
-          $null: true
-        },
+        $or: [
+          {
+            reviewTitle: {
+              $null: true
+            }
+          },
+          {
+            reviewTitle: {
+              $eq: ''
+            }
+          }
+        ],
         ReleaseDate: {
           $lt: new Date().toISOString()
         },
