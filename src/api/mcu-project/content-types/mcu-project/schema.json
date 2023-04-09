@@ -166,6 +166,9 @@
         "DOWN",
         "FLAT"
       ]
+    },
+    "chronology": {
+      "type": "integer"
     }
   }
 }

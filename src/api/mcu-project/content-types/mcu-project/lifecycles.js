@@ -28,6 +28,8 @@ module.exports = {
     const { result } = event;
     const { id, Title, ReleaseDate, Type, Posters, notifications } = result
 
+    if (!notifications) { return }
+
     let updateNotifications = notifications
       .filter((not) => not.isReleaseNotification)
       .filter((not) => not.publishedAt == null)

@@ -1,0 +1,20 @@
+{
+  "kind": "singleType",
+  "collectionName": "chronologies",
+  "info": {
+    "singularName": "chronology",
+    "pluralName": "chronologies",
+    "displayName": "chronology"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "mcu_projects": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::mcu-project.mcu-project"
+    }
+  }
+}
