@@ -53,6 +53,11 @@
       "relation": "manyToOne",
       "target": "api::mcu-project.mcu-project",
       "inversedBy": "notifications"
+    },
+    "isReleaseNotification": {
+      "type": "boolean",
+      "default": false,
+      "required": true
     }
   }
 }
