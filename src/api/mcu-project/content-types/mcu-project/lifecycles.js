@@ -26,7 +26,7 @@ module.exports = {
   },
   afterUpdate(event) {
     const { result } = event;
-    const { Title, ReleaseDate, Type, Posters, notifications } = result
+    const { id, Title, ReleaseDate, Type, Posters, notifications } = result
 
     let updateNotifications = notifications
       .filter((not) => not.isReleaseNotification)
@@ -55,6 +55,12 @@ module.exports = {
 
       if (notification.title != Title || notification.target != Type) {
         data.body = `${Title} (${Type}) releases today!`
+      }
+
+      data.payload = {
+        data: {
+          url: `https://mcuwidgets.page.link/mcu/${id}`
+        }
       }
 
       strapi.entityService.update('plugin::strapi-plugin-fcm.fcm-notification', notification.id, {
