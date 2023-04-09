@@ -1,14 +1,16 @@
 {
   "collectionName": "components_poster_posters",
   "info": {
-    "displayName": "Poster"
+    "displayName": "Poster",
+    "description": ""
   },
   "options": {},
   "attributes": {
     "PosterUrl": {
       "type": "string",
       "required": true,
-      "unique": false
+      "unique": false,
+      "maxLength": 255
     }
   }
 }
