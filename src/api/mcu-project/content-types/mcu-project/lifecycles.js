@@ -1,9 +1,13 @@
 module.exports = {
   beforeCreate(event) {
-    event.params.data.isMCUProject = isMcuProject(event.params.data.Type)
+    if (event.params.data.Type) {
+      event.params.data.isMCUProject = isMcuProject(event.params.data.Type)
+    }
   },
   beforeUpdate(event) {
-    event.params.data.isMCUProject = isMcuProject(event.params.data.Type)
+    if (event.params.data.Type) {
+      event.params.data.isMCUProject = isMcuProject(event.params.data.Type)
+    }
   },
   afterCreate(event) {
     const { result } = event;
