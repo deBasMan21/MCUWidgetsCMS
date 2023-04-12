@@ -4,7 +4,8 @@
   "info": {
     "singularName": "chronology",
     "pluralName": "chronologies",
-    "displayName": "chronology"
+    "displayName": "Chronology",
+    "description": ""
   },
   "options": {
     "draftAndPublish": false

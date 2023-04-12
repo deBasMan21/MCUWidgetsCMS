@@ -4,7 +4,7 @@
   "info": {
     "singularName": "mcu-project",
     "pluralName": "mcu-projects",
-    "displayName": "MCUProject",
+    "displayName": "Projects",
     "description": ""
   },
   "options": {
@@ -46,19 +46,15 @@
         "Phase 3",
         "Phase 4",
         "Phase 5",
-        "Phase 6",
-        "Unkown"
-      ],
-      "required": true
+        "Phase 6"
+      ]
     },
     "Saga": {
       "type": "enumeration",
       "enum": [
         "Infinity Saga",
-        "Multiverse Saga",
-        "Unkown"
-      ],
-      "required": true
+        "Multiverse Saga"
+      ]
     },
     "Overview": {
       "type": "richtext",
@@ -94,7 +90,12 @@
       "enum": [
         "Serie",
         "Movie",
-        "Special"
+        "Special",
+        "Fox",
+        "MarvelTelevision",
+        "MarvelOther",
+        "Sony",
+        "Defenders"
       ],
       "required": true
     },
@@ -169,6 +170,11 @@
     },
     "chronology": {
       "type": "integer"
+    },
+    "isMCUProject": {
+      "type": "boolean",
+      "default": true,
+      "required": true
     }
   }
 }

@@ -41,7 +41,9 @@
       "enum": [
         "Movie",
         "Serie",
-        "Special"
+        "Special",
+        "Related",
+        "Testing"
       ],
       "required": true
     },

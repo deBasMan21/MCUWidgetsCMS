@@ -4,7 +4,7 @@
   "info": {
     "singularName": "director",
     "pluralName": "directors",
-    "displayName": "Director",
+    "displayName": "Directors",
     "description": ""
   },
   "options": {
@@ -33,12 +33,6 @@
     "DateOfBirth": {
       "type": "date",
       "required": true
-    },
-    "related_projects": {
-      "type": "relation",
-      "relation": "manyToMany",
-      "target": "api::related-project.related-project",
-      "mappedBy": "directors"
     }
   }
 }

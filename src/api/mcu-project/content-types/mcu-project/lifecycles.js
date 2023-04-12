@@ -1,16 +1,23 @@
 module.exports = {
+  beforeCreate(event) {
+    event.params.data.isMCUProject = isMcuProject(event.params.data.Type)
+  },
+  beforeUpdate(event) {
+    event.params.data.isMCUProject = isMcuProject(event.params.data.Type)
+  },
   afterCreate(event) {
     const { result } = event;
 
     const { id, Title, ReleaseDate, Type, Posters } = result
 
     if (ReleaseDate && ReleaseDate > new Date().toISOString()) {
+      console.log("in here so creating")
       strapi.entityService.create('plugin::strapi-plugin-fcm.fcm-notification', {
         data: {
           title: Title,
           body: `${Title} (${Type}) releases today!`,
           targetType: 'topics',
-          target: Type,
+          target: getTopicName(Type),
           publish_at: `${ReleaseDate}T08:00:00.000Z`,
           mcu_project: [id],
           image: Posters[0].PosterUrl,
@@ -51,8 +58,8 @@ module.exports = {
         data.title = Title
       }
 
-      if (notification.target != Type) {
-        data.target = Type
+      if (notification.target != getTopicName(Type)) {
+        data.target = getTopicName(Type)
       }
 
       if (notification.title != Title || notification.target != Type) {
@@ -71,3 +78,11 @@ module.exports = {
     })
   }
 };
+
+function isMcuProject(type) {
+  return type == 'Serie' || type == 'Movie' || type == 'Special'
+}
+
+function getTopicName(type) {
+  return isMcuProject(type) ? type : 'Related'
+}
