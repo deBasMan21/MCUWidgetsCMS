@@ -10,27 +10,19 @@
       "type": "integer",
       "required": true
     },
-    "Episodes": {
-      "type": "component",
-      "repeatable": true,
-      "component": "episode.episode",
-      "required": false
-    },
-    "SeasonTrailers": {
-      "type": "component",
-      "repeatable": true,
-      "component": "trailer.trailer",
-      "required": false
-    },
-    "Posters": {
-      "type": "component",
-      "repeatable": true,
-      "component": "poster.poster",
-      "required": false
-    },
     "NumberOfEpisodes": {
       "type": "integer",
       "min": 0
+    },
+    "seasonProject": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::mcu-project.mcu-project"
+    },
+    "imageUrl": {
+      "type": "string",
+      "required": false,
+      "maxLength": 255
     }
   }
 }

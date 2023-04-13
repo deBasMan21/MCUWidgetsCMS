@@ -175,6 +175,11 @@
       "type": "boolean",
       "default": true,
       "required": true
+    },
+    "episodes": {
+      "type": "component",
+      "repeatable": true,
+      "component": "episode.episode"
     }
   }
 }
