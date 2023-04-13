@@ -115,7 +115,7 @@
     "imdb_id": {
       "type": "string",
       "required": false,
-      "unique": true,
+      "unique": false,
       "private": true
     },
     "Rating": {
