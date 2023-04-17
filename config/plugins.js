@@ -27,5 +27,34 @@ module.exports = ({ env }) => ({
           defaultReplyTo: 'bbuijsen@gmail.com'
         }
       }
+    },
+    'custom-api': {
+      enabled: true
+    },
+    'strapi-chatgpt': {
+      enabled: true
+    },
+    'rest-cache': {
+      config: {
+        provider: {
+          name: "memory",
+          options: {
+            max: 32767,
+            maxAge: 3600
+          }
+        },
+        strategy: {
+          contentTypes: [
+            "api::mcu-project.mcu-project",
+            "api::actor.actor",
+            "api::director.director"
+          ],
+          enableXCacheHeaders: true,
+          debug: true,
+          hitpass: (ctx) => {
+            return !ctx.request.headers.authorization
+          }
+        }
+      }
     }
 });
