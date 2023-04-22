@@ -83,6 +83,9 @@ async function getReviews() {
 }
 
 async function getAllRatings() {
+  var updatedCount = 0
+  var errors = []
+
   try {
     const entries = await strapi.entityService.findMany('api::mcu-project.mcu-project', {
       fields: ['imdb_id'],
@@ -95,15 +98,28 @@ async function getAllRatings() {
 
     const chunkSize = 25;
     for (let i = 0; i < entries.length; i += chunkSize) {
-        const chunk = entries.slice(i, i + chunkSize);
-        await getInfoForChunk(chunk)
+      const chunk = entries.slice(i, i + chunkSize);
+      let result = await getInfoForChunk(chunk)
+      updatedCount += result.updatedCount
+      errors += result.errors
     }
   } catch (error) {
     console.log(error)
+  } finally {
+    await strapi.plugins['email'].services.email.send({
+      to: 'bbuijsen@gmail.com',
+      from: 'no-reply@serverbuijsen.nl',
+      replyTo: 'bbuijsen@gmail.com',
+      subject: 'Cron task execution results',
+      text: `Hey there! I updated ${updatedCount} entries and encountered the following errors ${errors}`,
+      html: 'Hello world!',
+    })
   }
 }
 
 async function getInfoForChunk(entries) {
+  var updatedEntries = 0
+  var errors = []
   let idListString = entries.map(entry => entry.imdb_id).join(",")
 
   const fetch = require('node-fetch')
@@ -171,10 +187,19 @@ async function getInfoForChunk(entries) {
       data.ProductionBudget = entry.productionBudget.budget.amount
     }
 
+    if(data != {}) {
+      updatedEntries += 1
+    }
+
     return strapi.entityService.update('api::mcu-project.mcu-project', entry.objectId, {
       data: data
     });
-  })).catch((err) => console.log(err))
+  })).catch((err) => errors.push(err))
+
+  return {
+    updatedCount: updatedEntries,
+    errors: errors
+  }
 }
 
 function decodeHtmlCharCodes(str) {
