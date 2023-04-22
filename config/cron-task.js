@@ -108,11 +108,11 @@ async function getAllRatings() {
   } finally {
     await strapi.plugins['email'].services.email.send({
       to: 'bbuijsen@gmail.com',
-      from: 'no-reply@serverbuijsen.nl',
+      from: 'noreply@serverbuijsen.nl',
       replyTo: 'bbuijsen@gmail.com',
       subject: 'Cron task execution results',
       text: `Hey there! I updated ${updatedCount} entries and encountered the following errors ${errors}`,
-      html: 'Hello world!',
+      html: `Hey there! <br />I updated <strong>${updatedCount}</strong> entries and encountered the following errors: <br />${errors}`,
     })
   }
 }
