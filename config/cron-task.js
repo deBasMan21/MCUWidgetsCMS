@@ -219,7 +219,7 @@ function createHTML(updatedCount, errors) {
           </div>
           <h1 style="width: 100%; text-align: center;">Hey there!</h1>
           <p style="width: 100%; text-align: center;">
-            The cron task succeeded at <strong>Datum</strong>
+            The cron task succeeded at <strong>${new Date().toString()}</strong>
             <br />
             A small overview of the task underneath here.
             <br />
@@ -227,7 +227,7 @@ function createHTML(updatedCount, errors) {
             Updated <strong>${updatedCount}</strong> entries today.
             <br />
             <br />
-            Encountered ${errors.length} errors
+            Encountered ${errors.length} errors.
             <br />
             <br />
             That was it for today. Have a nice day!
