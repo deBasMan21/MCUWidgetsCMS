@@ -219,7 +219,7 @@ function createHTML(updatedCount, errors) {
           </div>
           <h1 style="width: 100%; text-align: center;">Hey there!</h1>
           <p style="width: 100%; text-align: center;">
-            The cron task succeeded at <strong>${convertTZ(new Date(), 'Europe/Amsterdam').toDateString()}</strong>
+            The cron task succeeded at <strong>${convertTZ(new Date(), 'Europe/Amsterdam').toLocaleString()}</strong>
             <br />
             A small overview of the task underneath here.
             <br />
