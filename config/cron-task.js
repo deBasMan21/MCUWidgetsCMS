@@ -209,28 +209,31 @@ function decodeHtmlCharCodes(str) {
 }
 
 function createHTML(updatedCount, errors) {
-  return ```
-  <body style="margin: 0;">
-    <div style="width: 100%; height: 100%; background-color: #1C1C1E; color: #ffffff;">
-      <div style="width: 100%; display: flex; justify-content: center;">
-        <img src="https://serverbuijsen.nl/uploads/mcu_Widgets_Logo_Dark_3de3442c2b.png" style="width: 100px; height: 100px;">
+  return `
+    <body style="margin: 0;">
+      <div style="width: 100%; height: 100%; display: flex; justify-content: center; background-color: #EDEDEF;">
+        <div style="width: 400px; background-color: #1C1C1E; color: #ffffff; padding: 10px; margin: 20px; border-radius: 10px;">
+          <div style="width: 100%; display: flex; justify-content: center;">
+            <img src="https://serverbuijsen.nl/uploads/mcu_Widgets_Logo_Dark_3de3442c2b.png"
+              style="width: 100px; height: 100px;">
+          </div>
+          <h1 style="width: 100%; text-align: center;">Hey there!</h1>
+          <p style="width: 100%; text-align: center;">
+            The cron task succeeded at <strong>Datum</strong>
+            <br />
+            A small overview of the task underneath here.
+            <br />
+            <br />
+            Updated <strong>${updatedCount}</strong> entries today.
+            <br />
+            <br />
+            Encountered ${errors.length} errors
+            <br />
+            <br />
+            That was it for today. Have a nice day!
+          </p>
+        </div>
       </div>
-      <h1 style="width: 100%; text-align: center;">Hey there!</h1>
-      <p style="width: 100%; text-align: center;">
-        The cron task succeeded at <strong>${new Date().toDateString()}</strong>
-        <br />
-        A small overview of the task underneath here.
-        <br />
-        <br />
-        Updated <strong>${updatedCount}</strong> entries today.
-        <br />
-        <br />
-        Encountered ${errors.length} errors
-        <br />
-        <br />
-        That was it for today. Have a nice day!
-      </p>
-    </div>
-  </body>
-  ```
+    </body>
+  `
 }
