@@ -111,8 +111,8 @@ async function getAllRatings() {
       from: 'noreply@serverbuijsen.nl',
       replyTo: 'bbuijsen@gmail.com',
       subject: 'Cron task execution results',
-      text: `Hey there! I updated ${updatedCount} entries and encountered the following errors ${errors}`,
-      html: `Hey there! <br />I updated <strong>${updatedCount}</strong> entries and encountered the following errors: <br />${errors}`,
+      text: 'Cron task succeeded!',
+      html: createHTML(updatedCount, errors),
     })
   }
 }
@@ -206,4 +206,20 @@ function decodeHtmlCharCodes(str) {
   return str.replace(/(&#(\d+);)/g, function (match, capture, charCode) {
     return String.fromCharCode(charCode);
   });
+}
+
+function createHTML(updatedCount, errors) {
+  var htmlString = `Hey there! The cron task succeeded at <strong>${Date.now}</strong> <br />A small overview of the task underneath here. <br /><br />`
+
+  htmlString += `Updated <strong>${updatedCount}</strong> entries today. <br /><br />`
+
+  htmlString += `Encountered ${errors.length} errors`
+  if (errors.length > 0) {
+    let errorsString = errors.map((error) => `Error: ${error}`).join('<br />')
+    htmlString += errorsString
+  }
+
+  htmlString += '<br /><br />That was it for today. Have a nice day!'
+
+  return htmlString
 }
