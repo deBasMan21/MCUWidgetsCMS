@@ -83,12 +83,11 @@ async function getReviews() {
 }
 
 async function getAllRatings() {
-  var updatedCount = 0
+  var updatedCount = []
   var errors = []
 
   try {
     const entries = await strapi.entityService.findMany('api::mcu-project.mcu-project', {
-      fields: ['imdb_id'],
       filters: {
         imdb_id: {
           $notNull: true
@@ -100,12 +99,13 @@ async function getAllRatings() {
     for (let i = 0; i < entries.length; i += chunkSize) {
       const chunk = entries.slice(i, i + chunkSize);
       let result = await getInfoForChunk(chunk)
-      updatedCount += result.updatedCount
+      updatedCount.push(result.updatedCount)
       errors += result.errors
     }
   } catch (error) {
     console.log(error)
   } finally {
+    updatedCount = updatedCount.flat()
     await strapi.plugins['email'].services.email.send({
       to: 'bbuijsen@gmail.com',
       from: 'noreply@serverbuijsen.nl',
@@ -118,7 +118,7 @@ async function getAllRatings() {
 }
 
 async function getInfoForChunk(entries) {
-  var updatedEntries = 0
+  var updatedEntries = []
   var errors = []
   let idListString = entries.map(entry => entry.imdb_id).join(",")
 
@@ -145,6 +145,7 @@ async function getInfoForChunk(entries) {
 
   var mergedItems = entries.map(t1 => ({
     objectId: t1.id,
+    ...t1,
     ...result.find(t2 => t2.id === t1.imdb_id),
     ...resAwards.find(t2 => t2.id === t1.imdb_id),
     ...resBoxOffice.find(t2 => t2.id === t1.imdb_id)
@@ -153,42 +154,48 @@ async function getInfoForChunk(entries) {
   await Promise.all(mergedItems.map(entry => {
     var data = {}
 
-    if (entry.meterRanking) {
+    if (entry.meterRanking && entry.rankingCurrentRank != entry.meterRanking.currentRank) {
       data.rankingCurrentRank = `${entry.meterRanking.currentRank}`
-      if (entry.meterRanking.rankChange) {
+      if (entry.meterRanking.rankChange && (entry.rankingChangeDirection != entry.meterRanking.rankChange.changeDirection || entry.rankingDifference != entry.meterRanking.rankChange.difference)) {
         data.rankingDifference = `${entry.meterRanking.rankChange.difference}`
         data.rankingChangeDirection = `${entry.meterRanking.rankChange.changeDirection}`
       }
     }
 
-    if (entry.ratingsSummary) {
+    if (entry.ratingsSummary && (entry.Rating != entry.ratingsSummary.aggregateRating || entry.VoteCount != entry.ratingsSummary.voteCount)) {
       data.Rating = entry.ratingsSummary.aggregateRating
       data.VoteCount = entry.ratingsSummary.voteCount
     }
 
     if (entry.runtime) {
-      data.Duration = entry.runtime.seconds / 60
+      let duration = entry.runtime.seconds / 60
+      if(entry.Duration != duration) {
+        data.Duration = entry.runtime.seconds / 60
+      }
     }
 
     if (entry.genres) {
-      data.Categories = entry.genres.genres.map(genre => genre.text).join(', ')
+      let categories = entry.genres.genres.map(genre => genre.text).join(', ')
+      if (entry.Categories != categories) {
+        data.Categories = categories
+      }
     }
 
-    if (entry.prestigiousAwardSummary) {
+    if (entry.prestigiousAwardSummary && (entry.AwardsNominated != entry.prestigiousAwardSummary.nominations || entry.AwardsWon != entry.prestigiousAwardSummary.wins)) {
       data.AwardsNominated = entry.prestigiousAwardSummary.nominations
       data.AwardsWon = entry.prestigiousAwardSummary.wins
     }
 
-    if (entry.worldwideGross) {
+    if (entry.worldwideGross && entry.BoxOffice != entry.worldwideGross.total.amount) {
       data.BoxOffice = entry.worldwideGross.total.amount
     }
 
-    if (entry.productionBudget) {
+    if (entry.productionBudget && entry.ProductionBudget != entry.productionBudget.budget.amount) {
       data.ProductionBudget = entry.productionBudget.budget.amount
     }
 
-    if(data != {}) {
-      updatedEntries += 1
+    if(Object.keys(data).length > 0) {
+      updatedEntries.push({title: entry.Title, ...data})
     }
 
     return strapi.entityService.update('api::mcu-project.mcu-project', entry.objectId, {
@@ -209,10 +216,11 @@ function decodeHtmlCharCodes(str) {
 }
 
 function createHTML(updatedCount, errors) {
+  let totalData = updatedCount.map((entry) => getObjectProperties(entry)).join('<br /><br />')
   return `
     <body style="margin: 0;">
-      <div style="width: 100%; height: 100%; display: flex; justify-content: center; background-color: #EDEDEF;">
-        <div style="width: 400px; background-color: #1C1C1E; color: #ffffff; padding: 10px; margin: 20px; border-radius: 10px;">
+      <div style="width: 100%; min-height: 100%; display: flex; justify-content: center; background-color: #EDEDEF;">
+        <div style="width: 400px; background-color: #1C1C1E; color: #ffffff; padding: 10px; margin: 20px; border-radius: 10px; text-align: center;">
           <div style="width: 100%; display: flex; justify-content: center;">
             <img src="https://serverbuijsen.nl/uploads/mcu_Widgets_Logo_Dark_3de3442c2b.png"
               style="width: 100px; height: 100px;">
@@ -223,8 +231,10 @@ function createHTML(updatedCount, errors) {
             <br />
             A small overview of the task underneath here.
             <br />
+            <strong>Updated ${updatedCount.length} entries:</strong>
             <br />
-            Updated <strong>${updatedCount}</strong> entries today.
+            ${totalData}
+            <br />
             <br />
             <br />
             Encountered ${errors.length} errors.
@@ -240,4 +250,13 @@ function createHTML(updatedCount, errors) {
 
 function convertTZ(date, tzString) {
     return new Date(date.toLocaleString("en-US", {timeZone: tzString}));
+}
+
+function getObjectProperties(data) {
+  let title = data.title
+  delete data.title
+  let keys = Object.keys(data)
+  return `<h2>${title}</h2>` + keys.map(key => {
+    return `<strong>${key}: </strong>${data[key]}<br />`
+  }).join('');
 }
