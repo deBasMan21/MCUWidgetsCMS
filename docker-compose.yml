@@ -1,41 +1,33 @@
-version: '3'
+version: '2'
+
 services:
   mcuwidgets:
-    container_name: mcuwidgets
-    build: .
-    image: mcuwidgets:latest
-    restart: unless-stopped
-    env_file: .env
+    build:
+      context: .
+      dockerfile: ./Dockerfile
     environment:
-      DATABASE_CLIENT: ${DATABASE_CLIENT}
+      DATABASE_CLIENT: mysql
       DATABASE_HOST: mcuwidgetsDB
       DATABASE_NAME: ${DATABASE_NAME}
       DATABASE_USERNAME: ${DATABASE_USERNAME}
-      DATABASE_PORT: ${DATABASE_PORT}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
       JWT_SECRET: ${JWT_SECRET}
       ADMIN_JWT_SECRET: ${ADMIN_JWT_SECRET}
-      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
       NODE_ENV: ${NODE_ENV}
     volumes:
       - ./config:/opt/app/config
       - ./src:/opt/app/src
       - ./package.json:/opt/package.json
       - ./package-lock.json:/opt/package-lock.json
-
       - ./.env:/opt/app/.env
       - ./public/uploads:/opt/app/public/uploads
     ports:
       - '1337:1337'
-    networks:
-      - mcuwidgets
     depends_on:
-      - mcuwidgetsDB
+      mcuwidgetsDB:
+        condition: service_healthy
 
   mcuwidgetsDB:
-    container_name: mcuwidgetsDB
-    platform: linux/amd64
-    restart: unless-stopped
-    env_file: .env
     image: mysql:latest
     command: --default-authentication-plugin=mysql_native_password
     environment:
@@ -47,26 +39,10 @@ services:
       - mcuwidgets-data:/var/lib/mysql
     ports:
       - '3306:3306'
-    networks:
-      - mcuwidgets
-
-  mcuwidgetsAdminer:
-    container_name: mcuwidgetsAdminer
-    image: adminer
-    restart: unless-stopped
-    ports:
-      - '9090:8080'
-    environment:
-      - ADMINER_DEFAULT_SERVER=mcuwidgetsDB
-    networks:
-      - mcuwidgets
-    depends_on:
-      - mcuwidgetsDB
+    healthcheck:
+      test: ["CMD", 'mysqladmin', 'ping', '-h', 'localhost', '-u', 'root', '--password=${DATABASE_PASSWORD}' ]
+      timeout: 20s
+      retries: 10
 
 volumes:
   mcuwidgets-data:
-
-networks:
-  mcuwidgets:
-    name: Mcuwidgets
-    driver: bridge

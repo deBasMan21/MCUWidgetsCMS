@@ -3,7 +3,7 @@ const cronTasks = require("./cron-task.js");
 module.exports = ({ env }) => ({
   host: env('HOST', '0.0.0.0'),
   port: env.int('PORT', 1337),
-  url: 'https://serverbuijsen.nl',
+  url: 'https://mcuwidgets.buijsenserver.nl',
   app: {
     keys: env.array('APP_KEYS'),
   },
