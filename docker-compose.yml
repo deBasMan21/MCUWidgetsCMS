@@ -5,7 +5,6 @@ services:
     build: .
     image: mcuwidgets:latest
     restart: unless-stopped
-    env_file: .env
     environment:
       DATABASE_CLIENT: ${DATABASE_CLIENT}
       DATABASE_HOST: mcuwidgetsDB
@@ -35,7 +34,6 @@ services:
     container_name: mcuwidgetsDB
     platform: linux/amd64
     restart: unless-stopped
-    env_file: .env
     image: mysql:latest
     command: --default-authentication-plugin=mysql_native_password
     environment:
