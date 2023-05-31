@@ -2,6 +2,7 @@ version: '2'
 
 services:
   mcuwidgets:
+    container_name: mcuwidgetscms
     build:
       context: .
       dockerfile: ./Dockerfile
