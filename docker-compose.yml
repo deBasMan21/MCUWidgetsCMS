@@ -3,6 +3,7 @@ version: '2'
 services:
   mcuwidgets:
     container_name: mcuwidgetscms
+    pull_policy: build
     build:
       context: .
       dockerfile: ./Dockerfile
