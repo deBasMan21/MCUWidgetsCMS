@@ -10,7 +10,7 @@ export default {
     auth: {
       logo: AuthLogo,
     },
-   // Replace the favicon
+    // Replace the favicon
     head: {
       favicon: favicon,
     },
@@ -31,10 +31,10 @@ export default {
           buttonPrimary700: '#ff0006',
           buttonPrimary600: '#ff0006',
           buttonPrimary500: '#ff0006',
-          neutral0: '#454548',
+          neutral0: '#FFFFFF',
           neutral100: '#1c1c1e',
           neutral1000: '#ffffff',
-          neutral150: '#454548',
+          neutral150: '#FFFFFF',
           neutral200: '#ffffff',
           neutral300: '#666687',
           neutral400: '#a5a5ba',
@@ -60,9 +60,9 @@ export default {
         }
       }
     },
-   // Disable notifications about new Strapi releases
+    // Disable notifications about new Strapi releases
     notifications: { release: false },
   },
 
-  bootstrap() {},
+  bootstrap() { },
 };
