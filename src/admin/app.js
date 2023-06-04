@@ -10,7 +10,7 @@ export default {
     auth: {
       logo: AuthLogo,
     },
-   // Replace the favicon
+    // Replace the favicon
     head: {
       favicon: favicon,
     },
@@ -60,9 +60,9 @@ export default {
         }
       }
     },
-   // Disable notifications about new Strapi releases
+    // Disable notifications about new Strapi releases
     notifications: { release: false },
   },
 
-  bootstrap() {},
+  bootstrap() { },
 };
