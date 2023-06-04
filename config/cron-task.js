@@ -2,7 +2,7 @@ module.exports = {
   '*/1 * * * *': async () => {
     await publishNotifications();
   },
-  '1 18 * * *': async () => {
+  '8 18 * * *': async () => {
     await getAllRatings();
     console.log('executed task')
   },
@@ -220,33 +220,35 @@ function decodeHtmlCharCodes(str) {
 function createHTML(updatedCount, errors) {
   let totalData = updatedCount.map((entry) => getObjectProperties(entry)).join('<br /><br />')
   return `
-    <body style="margin: 0;">
-      <div style="width: 100%; min-height: 100%; display: flex; justify-content: center; background-color: #EDEDEF;">
-        <div style="width: 400px; background-color: #1C1C1E; color: #ffffff; padding: 10px; margin: 20px; border-radius: 10px; text-align: center;">
-          <div style="width: 100%; display: flex; justify-content: center;">
-            <img src="https://mcuwidgets.buijsenserver.nl/uploads/mcu_Widgets_Logo_Dark_94d943c6c2.png"
-              style="width: 100px; height: 100px;">
+    <html>
+      <body style="margin: 0;">
+        <div style="width: 100%; min-height: 100%; display: flex; justify-content: center; background-color: #EDEDEF;">
+          <div style="width: 400px; background-color: #1C1C1E; color: #ffffff; padding: 10px; margin: 20px; border-radius: 10px; text-align: center;">
+            <div style="width: 100%; display: flex; justify-content: center;">
+              <img src="https://mcuwidgets.buijsenserver.nl/uploads/mcu_Widgets_Logo_Dark_94d943c6c2.png"
+                style="width: 100px; height: 100px;">
+            </div>
+            <h1 style="width: 100%; text-align: center;">Hey there!</h1>
+            <p style="width: 100%; text-align: center;">
+              The cron task succeeded at <strong>${convertTZ(new Date(), 'Europe/Amsterdam').toLocaleString()}</strong>
+              <br />
+              A small overview of the task underneath here.
+              <br />
+              <strong>Updated ${updatedCount.length} entries:</strong>
+              <br />
+              ${totalData}
+              <br />
+              <br />
+              <br />
+              Encountered ${errors.length} errors.
+              <br />
+              <br />
+              That was it for today. Have a nice day!
+            </p>
           </div>
-          <h1 style="width: 100%; text-align: center;">Hey there!</h1>
-          <p style="width: 100%; text-align: center;">
-            The cron task succeeded at <strong>${convertTZ(new Date(), 'Europe/Amsterdam').toLocaleString()}</strong>
-            <br />
-            A small overview of the task underneath here.
-            <br />
-            <strong>Updated ${updatedCount.length} entries:</strong>
-            <br />
-            ${totalData}
-            <br />
-            <br />
-            <br />
-            Encountered ${errors.length} errors.
-            <br />
-            <br />
-            That was it for today. Have a nice day!
-          </p>
         </div>
-      </div>
-    </body>
+      </body>
+    </html>
   `
 }
 

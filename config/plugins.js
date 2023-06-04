@@ -18,6 +18,7 @@ module.exports = ({ env }) => ({
         provider: 'sendmail',
         providerOptions: {
           dkim: {
+            name: 'mcuwidgets.buijsenserver.nl',
             privateKey: env('PRIV_DKIM'),
             keySelector: 'default',
           }
