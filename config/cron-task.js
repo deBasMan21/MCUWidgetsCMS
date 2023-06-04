@@ -2,7 +2,7 @@ module.exports = {
   '*/1 * * * *': async () => {
     await publishNotifications();
   },
-  '56 17 * * *': async () => {
+  '1 18 * * *': async () => {
     await getAllRatings();
     console.log('executed task')
   },
@@ -107,6 +107,7 @@ async function getAllRatings() {
     console.log(error)
   } finally {
     updatedCount = updatedCount.flat()
+    console.log(updatedCount)
     await strapi.plugins['email'].services.email.send({
       to: 'bbuijsen@gmail.com',
       from: 'noreply@mcuwidgets.buijsenserver.nl',
