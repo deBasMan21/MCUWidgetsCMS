@@ -18,13 +18,13 @@ module.exports = ({ env }) => ({
         provider: 'sendmail',
         providerOptions: {
           dkim: {
-            name: 'mcuwidgets.buijsenserver.nl',
+            name: 'buijsenserver.nl',
             privateKey: env('PRIV_DKIM'),
             keySelector: 'default',
           }
         },
         settings: {
-          defaultFrom: 'noreply@mcuwidgets.buijsenserver.nl',
+          defaultFrom: 'noreply@buijsenserver.nl',
           defaultReplyTo: 'bbuijsen@gmail.com'
         }
       }

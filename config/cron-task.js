@@ -2,7 +2,7 @@ module.exports = {
   '*/1 * * * *': async () => {
     await publishNotifications();
   },
-  '8 18 * * *': async () => {
+  '17 18 * * *': async () => {
     await getAllRatings();
     console.log('executed task')
   },
@@ -110,7 +110,7 @@ async function getAllRatings() {
     console.log(updatedCount)
     await strapi.plugins['email'].services.email.send({
       to: 'bbuijsen@gmail.com',
-      from: 'noreply@mcuwidgets.buijsenserver.nl',
+      from: 'noreply@buijsenserver.nl',
       replyTo: 'bbuijsen@gmail.com',
       subject: 'Cron task execution results',
       text: 'Cron task succeeded!',
