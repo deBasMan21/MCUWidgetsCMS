@@ -5,7 +5,7 @@ services:
     container_name: mcuwidgetscms
     pull_policy: build
     build:
-      context: .
+      context: ./CMS
       dockerfile: ./Dockerfile
     environment:
       MYSQL_HOST: mcuwidgetsDB
@@ -51,6 +51,19 @@ services:
       timeout: 20s
       retries: 10
 
+  mcu-widgets-recommendations-api:
+    container_name: mcu-widgets-recommendations-api
+    pull_policy: build
+    build:
+      context: ./recommendations-api
+      dockerfile: ./Dockerfile
+    ports:
+      - '3000:3000'
+    depends_on:
+      mcuwidgetsDB:
+        condition: service_healthy
+      
+
 volumes:
   mcuwidgets-data:
 
@@ -58,4 +71,4 @@ volumes:
 networks:
   default:
     name: nginxproxymanager_default
-    external: true
+    external: false
