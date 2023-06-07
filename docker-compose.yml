@@ -1,71 +1,29 @@
-version: '2'
+version: '3.4'
 
 services:
   mcuwidgets:
-    container_name: mcuwidgetscms
-    pull_policy: build
-    build:
-      context: ./CMS
-      dockerfile: ./Dockerfile
-    environment:
-      MYSQL_HOST: mcuwidgetsDB
-      MYSQL_DB: ${DATABASE_NAME}
-      MYSQL_USER: ${DATABASE_USERNAME}
-      MYSQL_PWD: ${DATABASE_PASSWORD}
-      JWT_SECRET: ${JWT_SECRET}
-      ADMIN_JWT_SECRET: ${ADMIN_JWT_SECRET}
-      API_TOKEN_SALT: ${API_TOKEN_SALT}
-      NODE_ENV: ${NODE_ENV}
-      APP_KEYS: ${APP_KEYS}
-      PRIV_DKIM: ${PRIV_DKIM}
-    ports:
-      - '1337:1337'
-    depends_on:
-      mcuwidgetsDB:
-        condition: service_healthy
+    extends:
+      file: CMS/docker/docker-services.yml
+      service: mcuwidgets
 
   mcuwidgetsDB:
-    image: mysql:latest
-    command: --default-authentication-plugin=mysql_native_password
-    environment:
-      MYSQL_USER: ${DATABASE_USERNAME}
-      MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
-      MYSQL_PASSWORD: ${DATABASE_PASSWORD}
-      MYSQL_DATABASE: ${DATABASE_NAME}
-    volumes:
-      - mcuwidgets-data:/var/lib/mysql
-    ports:
-      - '3306:3306'
-    healthcheck:
-      test:
-        [
-          "CMD",
-          'mysqladmin',
-          'ping',
-          '-h',
-          'localhost',
-          '-u',
-          'root',
-          '--password=${DATABASE_PASSWORD}'
-        ]
-      timeout: 20s
-      retries: 10
-
-  mcu-widgets-recommendations-api:
-    container_name: mcu-widgets-recommendations-api
-    pull_policy: build
-    build:
-      context: ./recommendations-api
-      dockerfile: ./Dockerfile
-    ports:
-      - '3000:3000'
-    depends_on:
-      mcuwidgetsDB:
-        condition: service_healthy
+    extends:
+      file: CMS/docker/docker-services.yml
+      service: mcuwidgetsDB
       
+  mcu-widgets-recommendations-api:
+    extends:
+      file: recommendations-api/docker/docker-services.yml
+      service: mcu-widgets-recommendations-api
+
+  mcu-widgets-recommendations-db:
+    extends:
+      file: recommendations-api/docker/docker-services.yml
+      service: mcu-widgets-recommendations-db
 
 volumes:
   mcuwidgets-data:
+  mcu-widgets-recommendations-db:
 
 
 networks:
