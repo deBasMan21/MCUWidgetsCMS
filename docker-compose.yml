@@ -1,6 +1,7 @@
 version: '3.4'
 
 services:
+  ##### CMS
   mcuwidgets:
     extends:
       file: CMS/docker/docker-services.yml
@@ -11,6 +12,7 @@ services:
       file: CMS/docker/docker-services.yml
       service: mcuwidgetsDB
       
+  ##### RECOMMENDATIONS
   mcu-widgets-recommendations-api:
     extends:
       file: recommendations-api/docker/docker-services.yml
@@ -20,6 +22,7 @@ services:
     extends:
       file: recommendations-api/docker/docker-services.yml
       service: mcu-widgets-recommendations-db
+
 
 volumes:
   mcuwidgets-data:
