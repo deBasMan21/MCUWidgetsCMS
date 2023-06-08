@@ -4,34 +4,39 @@ import { ProjectEntity } from './project.entity/project.entity';
 import { Repository } from 'typeorm';
 import { ProjectService } from './project.service';
 import { get } from 'http';
+import { ApiParam, ApiTags } from '@nestjs/swagger';
+import { ActorEntity } from '../actor/actor.entity/actor.entity';
 
+@ApiTags('Project')
 @Controller('project')
 export class ProjectController {
     
     constructor(private projectService: ProjectService) { }
 
     @Get()
-    getAll() {
-        return this.projectService.getAll();
+    async getAll() {
+        return await this.projectService.getAll();
     }
 
     @Get(':id')
-    getById(@Param() params) {
-        return this.projectService.getById(params.id);
+    @ApiParam({name: 'id', required: true, schema: { type: 'integer' }})
+    async getById(@Param() params) {
+        return await this.projectService.getById(params.id);
     }
 
     @Post()
-    create(@Body() project: ProjectEntity) {
-        return this.projectService.create(project);
+    async create(@Body() project: ProjectEntity) {
+        return await this.projectService.update(project);
     }
 
     @Put()
-    update(@Body() project: ProjectEntity) {
-        return this.projectService.update(project);
+    async update(@Body() project: ProjectEntity) {
+        return await this.projectService.update(project);
     }
 
     @Delete(':id')
-    delete(@Param() params) {
-        return this.projectService.delete(params.id);
+    @ApiParam({name: 'id', required: true, schema: { type: 'integer' }})
+    async delete(@Param() params) {
+        return await this.projectService.delete(params.id);
     }
 }

@@ -2,6 +2,8 @@ import { Module } from '@nestjs/common';
 import { RecommendationsModule } from './recommendations/recommendations.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProjectEntity } from './recommendations/project/project.entity/project.entity';
+import { DirectorEntity } from './recommendations/director/director.entity/director.entity';
+import { ActorEntity } from './recommendations/actor/actor.entity/actor.entity';
 
 @Module({
   imports: [
@@ -13,7 +15,7 @@ import { ProjectEntity } from './recommendations/project/project.entity/project.
       username: process.env.MYSQL_USER,
       password: process.env.MYSQL_PASSWORD,
       database: 'MCUWidgetsRecommendationsDB',
-      entities: [ProjectEntity],
+      entities: [ProjectEntity, ActorEntity, DirectorEntity],
       synchronize: true,
     })
   ],
