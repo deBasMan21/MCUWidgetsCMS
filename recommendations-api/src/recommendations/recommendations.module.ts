@@ -11,10 +11,13 @@ import { ActorService } from './actor/actor.service';
 import { ActorController } from './actor/actor.controller';
 import { DirectorEntity } from './director/director.entity/director.entity';
 import { ActorEntity } from './actor/actor.entity/actor.entity';
+import { TrackingController } from './tracking/tracking.controller';
+import { TrackingService } from './tracking/tracking.service';
+import { ClickEntity } from './tracking/click.entity/click.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([ProjectEntity, ActorEntity, DirectorEntity])],
-  providers: [RecommendationsService, ProjectService, DirectorService, ActorService],
-  controllers: [RecommendationsController, ProjectController, DirectorController, ActorController],
+  imports: [TypeOrmModule.forFeature([ProjectEntity, ActorEntity, DirectorEntity, ClickEntity])],
+  providers: [RecommendationsService, ProjectService, DirectorService, ActorService, TrackingService],
+  controllers: [RecommendationsController, ProjectController, DirectorController, ActorController, TrackingController],
 })
 export class RecommendationsModule {}

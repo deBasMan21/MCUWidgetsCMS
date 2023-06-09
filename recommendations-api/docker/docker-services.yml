@@ -24,8 +24,6 @@ services:
       MYSQL_DATABASE: MCUWidgetsRecommendationsDB
     volumes:
       - mcu-widgets-recommendations-db:/var/lib/mysql
-    ports:
-      - '3306:3306'
     healthcheck:
       test:
         [
