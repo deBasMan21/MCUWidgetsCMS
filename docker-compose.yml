@@ -23,16 +23,11 @@ services:
       file: recommendations-api/docker/docker-services.yml
       service: mcu-widgets-recommendations-db
 
-  adminer:
-    image: adminer
-    restart: always
-    ports:
-      - 8080:8080
-
 
 volumes:
   mcuwidgets-data:
   mcu-widgets-recommendations-db:
+  mcuwidgets-cms-data:
 
 
 # networks:

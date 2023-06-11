@@ -10,7 +10,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 export class TrackingService {
     constructor(
         @InjectRepository(ClickEntity) 
-        private clickRepsository: Repository<ClickEntity>,
+        private clickRepository: Repository<ClickEntity>,
 
         @InjectRepository(DirectorEntity) 
         private directorRepository: Repository<DirectorEntity>,
@@ -40,6 +40,24 @@ export class TrackingService {
 
         console.log(click)
 
-        this.clickRepsository.save(click);
+        this.clickRepository.save(click);
+    }
+
+    async getAll(): Promise<ClickEntity[]> {
+        return this.clickRepository.find({
+            relations: {
+                actor: {
+                    projects: true
+                },
+                director: {
+                    projects: true
+                },
+                project: {
+                    relatedProjects: true,
+                    actors: true,
+                    directors: true
+                }
+            }
+        });
     }
 }

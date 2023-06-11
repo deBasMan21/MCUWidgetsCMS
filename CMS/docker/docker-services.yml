@@ -19,6 +19,8 @@ services:
       BASE_URL: ${BASE_URL}
     ports:
       - "1337:1337"
+    volumes:
+      - mcuwidgets-cms-data:/opt/app/public/uploads
     depends_on:
       mcuwidgetsDB:
         condition: service_healthy

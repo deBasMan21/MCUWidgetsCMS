@@ -1,10 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { ActorEntity } from 'src/recommendations/actor/actor.entity/actor.entity';
-import { DirectorEntity } from 'src/recommendations/director/director.entity/director.entity';
+import { DirectorEntity, Identifiable } from 'src/recommendations/director/director.entity/director.entity';
 import { Column, Entity, JoinTable, ManyToMany, PrimaryColumn } from 'typeorm';
 
 @Entity()
-export class ProjectEntity {
+export class ProjectEntity implements Identifiable  {
     @ApiProperty()
     @PrimaryColumn()
     id: number;

@@ -3,7 +3,7 @@ import { ProjectEntity } from 'src/recommendations/project/project.entity/projec
 import { Column, Entity, ManyToMany, PrimaryColumn } from 'typeorm';
 
 @Entity()
-export class DirectorEntity {
+export class DirectorEntity implements Identifiable {
     @ApiProperty()
     @PrimaryColumn()
     id: number;
@@ -27,4 +27,9 @@ export class DirectorEntity {
     @ApiProperty()
     @ManyToMany(() => ProjectEntity, (project) => project.directors)
     projects: ProjectEntity[]
+}
+
+
+export interface Identifiable {
+    id: number;
 }
