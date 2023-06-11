@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { ActorEntity } from 'src/recommendations/actor/actor.entity/actor.entity';
 import { DirectorEntity, Identifiable } from 'src/recommendations/director/director.entity/director.entity';
+import { ClickPageType } from 'src/recommendations/tracking/click.entity/click.entity';
 import { Column, Entity, JoinTable, ManyToMany, PrimaryColumn } from 'typeorm';
 
 @Entity()
@@ -36,6 +37,9 @@ export class ProjectEntity implements Identifiable  {
     @ApiProperty()
     @Column()
     type: ProjectType
+    
+    @Column()
+    pageType: ClickPageType
 
     @ApiProperty()
     @ManyToMany(() => ActorEntity, (actor) => actor.projects)

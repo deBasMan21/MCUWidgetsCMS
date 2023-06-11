@@ -5,6 +5,7 @@ import { ProjectEntity } from './recommendations/project/project.entity/project.
 import { DirectorEntity } from './recommendations/director/director.entity/director.entity';
 import { ActorEntity } from './recommendations/actor/actor.entity/actor.entity';
 import { ClickEntity } from './recommendations/tracking/click.entity/click.entity';
+import { CacheModule } from '@nestjs/cache-manager';
 
 @Module({
   imports: [
@@ -18,6 +19,10 @@ import { ClickEntity } from './recommendations/tracking/click.entity/click.entit
       database: 'MCUWidgetsRecommendationsDB',
       entities: [ProjectEntity, ActorEntity, DirectorEntity, ClickEntity],
       synchronize: true,
+    }),
+    CacheModule.register({
+      ttl: 1800000,
+      isGlobal: true
     })
   ],
   controllers: [],

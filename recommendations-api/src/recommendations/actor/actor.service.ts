@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ActorEntity } from './actor.entity/actor.entity';
 import { Repository } from 'typeorm';
+import { ClickPageType } from '../tracking/click.entity/click.entity';
 
 @Injectable()
 export class ActorService {
@@ -25,6 +26,7 @@ export class ActorService {
     }
 
     async update(actor: ActorEntity) {
+        actor.pageType = ClickPageType.ACTOR
         this.actorRepository.save(actor);
     }
 

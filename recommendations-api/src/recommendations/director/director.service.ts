@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DirectorEntity } from './director.entity/director.entity';
 import { Repository } from 'typeorm';
+import { ClickPageType } from '../tracking/click.entity/click.entity';
 
 @Injectable()
 export class DirectorService {
@@ -25,6 +26,7 @@ export class DirectorService {
     }
 
     async update(director: DirectorEntity) {
+        director.pageType = ClickPageType.DIRECTOR
         this.directorRepository.save(director);
     }
 

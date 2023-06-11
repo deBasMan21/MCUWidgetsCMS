@@ -1,19 +1,48 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ClickEntity } from './tracking/click.entity/click.entity';
-import { MoreThanOrEqual, Repository } from 'typeorm';
+import { MoreThan, MoreThanOrEqual, Repository } from 'typeorm';
 import { ProjectEntity } from './project/project.entity/project.entity';
 import { ActorEntity } from './actor/actor.entity/actor.entity';
 import { DirectorEntity, Identifiable } from './director/director.entity/director.entity';
+import { response } from 'express';
 
 @Injectable()
 export class RecommendationsService {
     constructor(
         @InjectRepository(ClickEntity) 
-        private clickRepository: Repository<ClickEntity>,
-        @InjectRepository(ProjectEntity)
-        private projectRepository: Repository<ProjectEntity>
+        private clickRepository: Repository<ClickEntity>
     ) { }
+
+    async getMostPopular(page: number, pageSize: number): Promise<(ProjectEntity | ActorEntity | DirectorEntity)[]> {
+        let date = new Date()
+        date.setDate(date.getDate() - 30)
+
+        let result = await this.clickRepository.find({
+            relations: {
+                project: true,
+                actor: true,
+                director: true
+            },
+            where: {
+                timeStamp: MoreThan(date)
+            }
+        })
+
+        let sortedResult = this.groupBy(result)
+
+        let response: (ProjectEntity | ActorEntity | DirectorEntity)[] = sortedResult.flatMap((item: { product: ClickEntity, amount: number }) => {
+            if (item.product.actor != null) {
+                return item.product.actor
+            } else if (item.product.director != null) {
+                return item.product.director
+            } else if (item.product.project != null) {
+                return item.product.project
+            }
+        })
+
+        return response.slice((page - 1) * pageSize, page * pageSize)
+    }
 
     async getRecommendations(userId: string): Promise<(ProjectEntity | ActorEntity | DirectorEntity)[]> {
         // Get last 50 clicks of user, include relations
@@ -50,8 +79,6 @@ export class RecommendationsService {
                 return item.product.director
             } else if (item.product.project != null) {
                 return item.product.project
-            } else {
-                return null
             }
         })
 

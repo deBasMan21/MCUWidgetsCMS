@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ProjectEntity } from './project.entity/project.entity';
 import { Entity, Repository } from 'typeorm';
+import { ClickPageType } from '../tracking/click.entity/click.entity';
 
 @Injectable()
 export class ProjectService {
@@ -27,6 +28,7 @@ export class ProjectService {
     }
 
     async update(project: ProjectEntity) {
+        project.pageType = ClickPageType.PROJECT
         this.projectRepository.save(project);
     }
 
