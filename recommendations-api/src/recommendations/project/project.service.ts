@@ -28,7 +28,13 @@ export class ProjectService {
     }
 
     async update(project: ProjectEntity) {
+        project.overview = project.overview ?? "No overview"
+        project.categories = project.categories ?? "No categories"
+        project.imdb_id = project.imdb_id ?? "imdb id undefined"
+        project.releaseDate = new Date()
+
         project.pageType = ClickPageType.PROJECT
+
         this.projectRepository.save(project);
     }
 
