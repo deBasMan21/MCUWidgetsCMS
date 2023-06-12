@@ -8,7 +8,7 @@ module.exports = {
   '0 10 * * * ': async () => {
     await getReviews();
   },
-  '0 10 * * *': async () => {
+  '40 10 * * *': async () => {
     await saveEntitiesToTrackingService()
   }
 };

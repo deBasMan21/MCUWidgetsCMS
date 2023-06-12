@@ -19,7 +19,7 @@ export class ProjectEntity implements Identifiable  {
     releaseDate: Date
     
     @ApiProperty()
-    @Column()
+    @Column({ type: 'longtext' })
     overview: string;
 
     @ApiProperty()
