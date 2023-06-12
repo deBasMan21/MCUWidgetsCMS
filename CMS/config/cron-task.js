@@ -8,7 +8,7 @@ module.exports = {
   '0 10 * * * ': async () => {
     await getReviews();
   },
-  '10 11 * * *': async () => {
+  '20 11 * * *': async () => {
     await saveEntitiesToTrackingService()
   }
 };
@@ -270,20 +270,8 @@ function getObjectProperties(data) {
 async function saveEntitiesToTrackingService() {
   const fetch = require('node-fetch')
 
-  const actors = await strapi.entityService.findMany('api::actor.actor')
-  console.log(actors)
-  actors.forEach(async (actor) => {
-    await createActor(actor, fetch)
-  })
-
-  const directors = await strapi.entityService.findMany('api::director.director')
-  console.log(directors)
-  directors.forEach(async (director) => {
-    await createDirector(director, fetch)
-  })
-
   const projects = await strapi.entityService.findMany('api::mcu-project.mcu-project', {
-    populate: ['actors', 'directors', 'Posters']
+    populate: ['actors', 'directors', 'Posters', 'related_projects']
   });
   console.log(projects)
   projects.forEach(async (project) => {
@@ -305,7 +293,7 @@ async function createProject(proj, fetch) {
     type: Type,
     actors: actors.map((actor) => { return { id: actor.id } }),
     directors: directors.map((director) => { return { id: director.id } }),
-    relatedProjects: []
+    relatedProjects: related_projects.map((project) => { return { id: project.id } })
   }
 
   console.log(project)
