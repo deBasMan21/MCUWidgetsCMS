@@ -20,6 +20,7 @@
     "cross-env": "^7.0.3",
     "mysql": "^2.18.1",
     "node-fetch": "^2.6.9",
+    "sharp": "^0.32.1",
     "strapi-chatgpt": "^1.0.2",
     "strapi-middleware-cache": "^2.1.8",
     "strapi-plugin-custom-api": "^1.0.4",
