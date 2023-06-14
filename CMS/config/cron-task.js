@@ -7,9 +7,6 @@ module.exports = {
   },
   '0 10 * * * ': async () => {
     await getReviews();
-  },
-  '55 18 * * *': async () => {
-    await updateSource();
   }
 };
 
@@ -119,24 +116,6 @@ async function getAllRatings() {
       html: createHTML(updatedCount, errors),
     })
   }
-}
-
-async function updateSource() {
-  const entries = await strapi.entityService.findMany('api::mcu-project.mcu-project');
-  entries.forEach(async (entry) => {
-    let data = {}
-    let type = entry.Type
-    if (type == "Movie" || type == "Serie" || type == "Special") {
-      data.Source = "MCU"
-    } else {
-      data.Source = type ?? "Fox"
-      data.Type = "Movie"
-    }
-
-    await strapi.entityService.update("api::mcu-project.mcu-project", entry.id, {
-      data: data
-    })
-  })
 }
 
 async function getInfoForChunk(entries) {
