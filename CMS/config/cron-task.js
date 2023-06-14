@@ -7,6 +7,9 @@ module.exports = {
   },
   '0 10 * * * ': async () => {
     await getReviews();
+  },
+  '0 10 * * *': async () => {
+    await updateAllSeries()
   }
 };
 
@@ -262,4 +265,99 @@ function getObjectProperties(data) {
   return `<h2>${title}</h2>` + keys.map(key => {
     return `<strong>${key}: </strong>${data[key]}<br />`
   }).join('');
+}
+
+async function updateAllSeries() {
+  const entries = await strapi.entityService.findMany('api::mcu-project.mcu-project', {
+    fields: ['id', 'imdb_id', 'seasonNumber'],
+    filters: {
+      imdb_id: {
+        $notNull: true
+      },
+      type: {
+        $eq: 'Serie'
+      }
+    }
+  });
+
+  const fetch = require('node-fetch')
+  console.log(entries)
+
+  entries.forEach(async (entry) => {
+    await retrieveSeriesEpisodes(entry, fetch)
+  })
+}
+
+async function retrieveSeriesEpisodes(result, fetch) {
+  const { id, imdb_id, seasonNumber } = result
+  const options = {
+    method: 'GET',
+    headers: {
+      'X-RapidAPI-Key': '994d69b14amsha92971d9137b5fap10df27jsn63fc46abced3',
+      'X-RapidAPI-Host': 'moviesdatabase.p.rapidapi.com'
+    }
+  };
+
+  let seasonInfo = await fetch(`https://moviesdatabase.p.rapidapi.com/titles/series/${imdb_id}/${seasonNumber}`, options)
+    .then((res) => res.json())
+    .then((res) => res.results)
+
+  let episodes = seasonInfo.map((episode) => {
+    return { imdb_id: episode.tconst, episodeNumber: episode.episodeNumber }
+  })
+
+  let episodeData = await Promise.all(episodes.map(async (episode) => {
+    let imdbData = await fetch(`https://moviesdatabase.p.rapidapi.com/titles/episode/${episode.imdb_id}?info=base_info`, options)
+      .then((res) => res.json())
+      .then((res) => res.results)
+
+    let episodeObject = {
+      imdb_id: episode.imdb_id,
+      EpisodeNumber: episode.episodeNumber,
+      PostCreditScenes: 0
+    }
+
+    if (imdbData.releaseDate) {
+      let date = new Date()
+      date.setFullYear(imdbData.releaseDate.year)
+      date.setMonth(imdbData.releaseDate.month)
+      date.setDate(imdbData.releaseDate.day)
+
+      episodeObject.EpisodeReleaseDate = date.toISOString()
+    }
+
+    if (imdbData.ratingsSummary) {
+      episodeObject.Rating = imdbData.ratingsSummary.aggregateRating
+      episodeObject.voteCount = imdbData.ratingsSummary.voteCount
+    }
+
+    if (imdbData.primaryImage) {
+      episodeObject.imageUrl = imdbData.primaryImage.url
+      episodeObject.imageCaption = imdbData.primaryImage.caption.plainText
+    }
+
+    if (imdbData.genres) {
+      episodeObject.categories = imdbData.genres.genres.map(genre => genre.text).join(', ')
+    }
+
+    if (imdbData.titleText) {
+      episodeObject.Title = imdbData.titleText.text
+    }
+
+    if (imdbData.plot) {
+      episodeObject.Description = imdbData.plot.plotText.plainText
+    }
+
+    if (imdbData.runtime) {
+      episodeObject.Duration = imdbData.runtime.seconds / 60
+    }
+
+    return episodeObject
+  }))
+
+  await strapi.entityService.update('api::mcu-project.mcu-project', id, {
+    data: {
+      episodes: episodeData
+    }
+  })
 }
