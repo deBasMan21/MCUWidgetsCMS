@@ -12,15 +12,15 @@
     },
     "Description": {
       "type": "richtext",
-      "required": true
+      "required": false
     },
     "PostCreditScenes": {
       "type": "integer",
-      "required": true
+      "required": false
     },
     "EpisodeReleaseDate": {
       "type": "date",
-      "required": true
+      "required": false
     },
     "EpisodeNumber": {
       "type": "integer",
@@ -28,7 +28,26 @@
     },
     "Duration": {
       "type": "integer",
+      "required": false
+    },
+    "imdb_id": {
+      "type": "string",
       "required": true
+    },
+    "Rating": {
+      "type": "decimal"
+    },
+    "voteCount": {
+      "type": "integer"
+    },
+    "imageUrl": {
+      "type": "string"
+    },
+    "imageCaption": {
+      "type": "string"
+    },
+    "categories": {
+      "type": "string"
     }
   }
 }

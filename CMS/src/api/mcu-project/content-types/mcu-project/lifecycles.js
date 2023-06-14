@@ -16,6 +16,8 @@ async function createProject(event) {
   const { result } = event
   const { id, Title, ReleaseDate, Type, Posters, Overview, imdb_id, Categories, actors, directors, related_projects, Source } = result
 
+  if (!Posters || Posters.length == 0) { return }
+
   let project = {
     id: id,
     title: Title,
@@ -25,15 +27,15 @@ async function createProject(event) {
     categories: Categories,
     type: Type,
     source: Source,
-    actors: actors.map((actor) => { return { id: actor.id } }),
-    directors: directors.map((director) => { return { id: director.id } }),
-    relatedProjects: related_projects.map((project) => { return { id: project.id } })
+    actors: actors?.map((actor) => { return { id: actor.id } }),
+    directors: directors?.map((director) => { return { id: director.id } }),
+    relatedProjects: related_projects?.map((project) => { return { id: project.id } })
   }
 
   if (Posters && Posters.length > 0) {
     project.posterUrl = Posters[0].PosterUrl
   } else {
-    let posters = strapi.entityService.findOne(id, {
+    let posters = strapi.entityService.findOne('api::mcu-project.mcu-project', id, {
       fields: ['Posters'],
       populate: {
         Posters: true
