@@ -23,12 +23,24 @@ async function createProject(event) {
     overview: Overview,
     imdb_id: imdb_id,
     categories: Categories,
-    posterUrl: Posters[0].PosterUrl,
     type: Type,
     source: Source,
     actors: actors.map((actor) => { return { id: actor.id } }),
     directors: directors.map((director) => { return { id: director.id } }),
     relatedProjects: related_projects.map((project) => { return { id: project.id } })
+  }
+
+  if (Posters && Posters.length > 0) {
+    project.posterUrl = Posters[0].PosterUrl
+  } else {
+    let posters = strapi.entityService.findOne(id, {
+      fields: ['Posters'],
+      populate: {
+        Posters: true
+      }
+    })
+
+    project.posterUrl = posters[0].PosterUrl
   }
 
   try {

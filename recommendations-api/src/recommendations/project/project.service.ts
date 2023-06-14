@@ -28,10 +28,13 @@ export class ProjectService {
     }
 
     async update(project: ProjectEntity) {
-        project.overview = project.overview ?? "No overview"
-        project.categories = project.categories ?? "No categories"
-        project.imdb_id = project.imdb_id ?? "imdb id undefined"
-        project.releaseDate = new Date()
+        let oldVersion = await this.getById(project.id)
+
+        project.overview = project.overview ?? oldVersion.overview ?? "No overview"
+        project.categories = project.categories ?? oldVersion.categories ?? "No categories"
+        project.imdb_id = project.imdb_id ?? oldVersion.imdb_id ?? "imdb id undefined"
+        project.posterUrl = project.posterUrl ?? oldVersion.posterUrl ?? "https://mcuwidgets.buijsenserver.nl/uploads/mcu_Widgets_Logo_Dark_3de3442c2b_86a938dd99.png"
+        project.releaseDate = project.releaseDate ?? oldVersion.releaseDate ?? new Date()
 
         project.pageType = ClickPageType.PROJECT
 
