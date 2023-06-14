@@ -37,6 +37,10 @@ export class ProjectEntity implements Identifiable  {
     @ApiProperty()
     @Column()
     type: ProjectType
+
+    @ApiProperty()
+    @Column()
+    source: ProjectSource
     
     @Column()
     pageType: ClickPageType
@@ -71,6 +75,10 @@ export enum ProjectType {
     SERIE = "Serie",
     MOVIE = "Movie",
     SPECIAL = "Special",
+}
+
+export enum ProjectSource {
+    MCU = "MCU",
     FOX = "Fox",
     MARVELTELEVISION = "MarvelTelevision",
     MARVELOTHER = "MarvelOther",

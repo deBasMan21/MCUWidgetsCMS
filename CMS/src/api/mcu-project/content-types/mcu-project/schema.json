@@ -40,21 +40,11 @@
     },
     "Phase": {
       "type": "enumeration",
-      "enum": [
-        "Phase 1",
-        "Phase 2",
-        "Phase 3",
-        "Phase 4",
-        "Phase 5",
-        "Phase 6"
-      ]
+      "enum": ["Phase 1", "Phase 2", "Phase 3", "Phase 4", "Phase 5", "Phase 6"]
     },
     "Saga": {
       "type": "enumeration",
-      "enum": [
-        "Infinity Saga",
-        "Multiverse Saga"
-      ]
+      "enum": ["Infinity Saga", "Multiverse Saga"]
     },
     "Overview": {
       "type": "richtext",
@@ -87,10 +77,13 @@
     },
     "Type": {
       "type": "enumeration",
+      "enum": ["Serie", "Movie", "Special"],
+      "required": true
+    },
+    "Source": {
+      "type": "enumeration",
       "enum": [
-        "Serie",
-        "Movie",
-        "Special",
+        "MCU",
         "Fox",
         "MarvelTelevision",
         "MarvelOther",
@@ -162,19 +155,10 @@
     },
     "rankingChangeDirection": {
       "type": "enumeration",
-      "enum": [
-        "UP",
-        "DOWN",
-        "FLAT"
-      ]
+      "enum": ["UP", "DOWN", "FLAT"]
     },
     "chronology": {
       "type": "integer"
-    },
-    "isMCUProject": {
-      "type": "boolean",
-      "default": true,
-      "required": true
     },
     "episodes": {
       "type": "component",

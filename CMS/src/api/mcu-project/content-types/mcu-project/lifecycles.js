@@ -1,22 +1,10 @@
 module.exports = {
-  beforeCreate(event) {
-    if (event.params.data.Type) {
-      event.params.data.isMCUProject = isMcuProject(event.params.data.Type)
-    }
-  },
-  beforeUpdate(event) {
-    if (event.params.data.Type) {
-      event.params.data.isMCUProject = isMcuProject(event.params.data.Type)
-    }
-  },
   afterCreate(event) {
     createNotifications(event)
-
     createProject(event)
   },
   afterUpdate(event) {
     updateNotifications(event)
-
     createProject(event)
   },
   afterDelete(event) {
@@ -26,7 +14,7 @@ module.exports = {
 
 async function createProject(event) {
   const { result } = event
-  const { id, Title, ReleaseDate, Type, Posters, Overview, imdb_id, Categories, actors, directors, related_projects } = result
+  const { id, Title, ReleaseDate, Type, Posters, Overview, imdb_id, Categories, actors, directors, related_projects, Source } = result
 
   let project = {
     id: id,
@@ -35,24 +23,34 @@ async function createProject(event) {
     overview: Overview,
     imdb_id: imdb_id,
     categories: Categories,
-    posterUrl: Posters[0].PosterUrl,
     type: Type,
+    source: Source,
     actors: actors.map((actor) => { return { id: actor.id } }),
     directors: directors.map((director) => { return { id: director.id } }),
     relatedProjects: related_projects.map((project) => { return { id: project.id } })
   }
 
-  console.log(project)
+  if (Posters && Posters.length > 0) {
+    project.posterUrl = Posters[0].PosterUrl
+  } else {
+    let posters = strapi.entityService.findOne(id, {
+      fields: ['Posters'],
+      populate: {
+        Posters: true
+      }
+    })
+
+    project.posterUrl = posters[0].PosterUrl
+  }
+
   try {
     const fetch = require('node-fetch')
 
-    const result = await fetch(`http://mcu-widgets-recommendations-api:3000/api/project`, {
+    await fetch(`http://mcu-widgets-recommendations-api:3000/api/project`, {
       method: 'post',
       body: JSON.stringify(project),
       headers: { 'Content-Type': 'application/json' }
     })
-
-    console.log(result)
   } catch (error) {
     console.log(error)
   }
@@ -62,41 +60,37 @@ async function deleteProject(event) {
   const { result } = event
   const { id } = result
 
-  console.log(id)
   try {
     const fetch = require('node-fetch')
 
-    const result = await fetch(`http://mcu-widgets-recommendations-api:3000/api/project/${id}`, { method: 'delete' })
-
-    console.log(result)
+    await fetch(`http://mcu-widgets-recommendations-api:3000/api/project/${id}`, { method: 'delete' })
   } catch (error) {
     console.log(error)
   }
 }
 
 /// HELPERS
-function isMcuProject(type) {
-  return type == 'Serie' || type == 'Movie' || type == 'Special'
-}
-
-function getTopicName(type) {
-  return isMcuProject(type) ? type : 'Related'
+function getTopicName(type, source) {
+  if (source == 'MCU') {
+    return type
+  } else {
+    return 'Related'
+  }
 }
 
 /// NOTIFICATIONS
 function createNotifications(event) {
   const { result } = event;
 
-  const { id, Title, ReleaseDate, Type, Posters } = result
+  const { id, Title, ReleaseDate, Type, Posters, Source } = result
 
   if (ReleaseDate && ReleaseDate > new Date().toISOString()) {
-    console.log("in here so creating")
     strapi.entityService.create('plugin::strapi-plugin-fcm.fcm-notification', {
       data: {
         title: Title,
         body: `${Title} (${Type}) releases today!`,
         targetType: 'topics',
-        target: getTopicName(Type),
+        target: getTopicName(Type, Source),
         publish_at: `${ReleaseDate}T08:00:00.000Z`,
         mcu_project: [id],
         image: Posters[0].PosterUrl,
@@ -113,7 +107,7 @@ function createNotifications(event) {
 
 function updateNotifications(event) {
   const { result } = event;
-  const { id, Title, ReleaseDate, Type, Posters, notifications } = result
+  const { id, Title, ReleaseDate, Type, Posters, notifications, Source } = result
 
   if (!notifications) { return }
 
@@ -138,11 +132,11 @@ function updateNotifications(event) {
       data.title = Title
     }
 
-    if (notification.target != getTopicName(Type)) {
-      data.target = getTopicName(Type)
+    if (notification.target != getTopicName(Type, Source)) {
+      data.target = getTopicName(Type, Source)
     }
 
-    if (notification.title != Title || notification.target != Type) {
+    if (notification.title != Title || notification.target != getTopicName(Type, Source)) {
       data.body = `${Title} (${Type}) releases today!`
     }
 
