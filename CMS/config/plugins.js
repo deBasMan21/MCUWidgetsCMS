@@ -57,5 +57,6 @@ module.exports = ({ env }) => ({
           }
         }
       }
-    }
+    },
+    'duplicate-button': true
 });

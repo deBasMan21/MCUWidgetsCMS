@@ -24,6 +24,7 @@
     "strapi-chatgpt": "^1.0.2",
     "strapi-middleware-cache": "^2.1.8",
     "strapi-plugin-custom-api": "^1.0.4",
+    "strapi-plugin-duplicate-button": "^1.1.11",
     "strapi-plugin-fcm": "itisnajim/strapi-plugin-fcm#main",
     "strapi-plugin-notes": "^1.0.1",
     "strapi-plugin-populate-deep": "^1.1.2",
