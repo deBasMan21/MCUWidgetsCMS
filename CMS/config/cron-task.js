@@ -2,7 +2,7 @@ module.exports = {
   '*/1 * * * *': async () => {
     await publishNotifications();
   },
-  '0 10 * * *': async () => {
+  '03 13 * * *': async () => {
     await getAllRatings();
   },
   '0 10 * * * ': async () => {
