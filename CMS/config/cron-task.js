@@ -11,7 +11,7 @@ module.exports = {
   '10 10 * * *': async () => {
     await updateAllSeries()
   },
-  '15 10 * * *': async () => {
+  '45 13 * * *': async () => {
     await updateSeasons()
   }
 };
