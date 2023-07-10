@@ -86,44 +86,29 @@ async function getReviews() {
 }
 
 async function getAllRatings() {
-  var updatedCount = []
-  var errors = []
-
   try {
     const entries = await strapi.entityService.findMany('api::mcu-project.mcu-project', {
       filters: {
         imdb_id: {
           $notNull: true
         }
-      }
+      },
+      fields: ['imdb_id', 'id']
     });
+
+    console.log(entries)
 
     const chunkSize = 25;
     for (let i = 0; i < entries.length; i += chunkSize) {
       const chunk = entries.slice(i, i + chunkSize);
-      let result = await getInfoForChunk(chunk)
-      updatedCount.push(result.updatedCount)
-      errors += result.errors
+      await getInfoForChunk(chunk)
     }
   } catch (error) {
     console.log(error)
-  } finally {
-    updatedCount = updatedCount.flat()
-    console.log(updatedCount)
-    await strapi.plugins['email'].services.email.send({
-      to: 'bbuijsen@gmail.com',
-      from: 'noreply@buijsenserver.nl',
-      replyTo: 'bbuijsen@gmail.com',
-      subject: 'Cron task execution results',
-      text: 'Cron task succeeded!',
-      html: createHTML(updatedCount, errors),
-    })
   }
 }
 
 async function getInfoForChunk(entries) {
-  var updatedEntries = []
-  var errors = []
   let idListString = entries.map(entry => entry.imdb_id).join(",")
 
   const fetch = require('node-fetch')
@@ -158,59 +143,46 @@ async function getInfoForChunk(entries) {
   await Promise.all(mergedItems.map(entry => {
     var data = {}
 
-    if (entry.meterRanking && entry.rankingCurrentRank != entry.meterRanking.currentRank) {
+    if (entry.meterRanking) {
       data.rankingCurrentRank = `${entry.meterRanking.currentRank}`
-      if (entry.meterRanking.rankChange && (entry.rankingChangeDirection != entry.meterRanking.rankChange.changeDirection || entry.rankingDifference != entry.meterRanking.rankChange.difference)) {
+      if (entry.meterRanking.rankChange) {
         data.rankingDifference = `${entry.meterRanking.rankChange.difference}`
         data.rankingChangeDirection = `${entry.meterRanking.rankChange.changeDirection}`
       }
     }
 
-    if (entry.ratingsSummary && (entry.Rating != entry.ratingsSummary.aggregateRating || entry.VoteCount != entry.ratingsSummary.voteCount)) {
+    if (entry.ratingsSummary) {
       data.Rating = entry.ratingsSummary.aggregateRating
       data.VoteCount = entry.ratingsSummary.voteCount
     }
 
     if (entry.runtime) {
-      let duration = entry.runtime.seconds / 60
-      if(entry.Duration != duration) {
-        data.Duration = entry.runtime.seconds / 60
-      }
+      data.Duration = entry.runtime.seconds / 60
     }
 
     if (entry.genres) {
-      let categories = entry.genres.genres.map(genre => genre.text).join(', ')
-      if (entry.Categories != categories) {
-        data.Categories = categories
-      }
+      data.Categories = entry.genres.genres.map(genre => genre.text).join(', ')
     }
 
-    if (entry.prestigiousAwardSummary && (entry.AwardsNominated != entry.prestigiousAwardSummary.nominations || entry.AwardsWon != entry.prestigiousAwardSummary.wins)) {
+    if (entry.prestigiousAwardSummary) {
       data.AwardsNominated = entry.prestigiousAwardSummary.nominations
       data.AwardsWon = entry.prestigiousAwardSummary.wins
     }
 
-    if (entry.worldwideGross && entry.BoxOffice != entry.worldwideGross.total.amount) {
+    if (entry.worldwideGross) {
       data.BoxOffice = entry.worldwideGross.total.amount
     }
 
-    if (entry.productionBudget && entry.ProductionBudget != entry.productionBudget.budget.amount) {
-      data.ProductionBudget = entry.productionBudget.budget.amount
-    }
-
-    if(Object.keys(data).length > 0) {
-      updatedEntries.push({title: entry.Title, ...data})
+    if (entry.productionBudget) {
+      if (entry.productionBudget.budget.amount) {
+        data.ProductionBudget = entry.productionBudget.budget.amount
+      }
     }
 
     return strapi.entityService.update('api::mcu-project.mcu-project', entry.objectId, {
-      data: data
-    });
-  })).catch((err) => errors.push(err))
-
-  return {
-    updatedCount: updatedEntries,
-    errors: errors
-  }
+        data: data
+      });
+  })).catch((err) => console.log(err))
 }
 
 function decodeHtmlCharCodes(str) {
