@@ -2,14 +2,17 @@ module.exports = {
   '*/1 * * * *': async () => {
     await publishNotifications();
   },
-  '10 13 * * *': async () => {
+  '0 10 * * *': async () => {
     await getAllRatings();
   },
-  '0 10 * * * ': async () => {
+  '5 10 * * * ': async () => {
     await getReviews();
   },
-  '0 10 * * *': async () => {
+  '10 10 * * *': async () => {
     await updateAllSeries()
+  },
+  '15 10 * * *': async () => {
+    await updateSeasons()
   }
 };
 
@@ -246,7 +249,7 @@ async function updateAllSeries() {
       imdb_id: {
         $notNull: true
       },
-      type: {
+      Type: {
         $eq: 'Serie'
       }
     }
@@ -331,5 +334,47 @@ async function retrieveSeriesEpisodes(result, fetch) {
     data: {
       episodes: episodeData
     }
+  })
+}
+
+async function updateSeasons() {
+  let series = await strapi.entityService.findMany('api::mcu-project.mcu-project', {
+    filters: {
+      Type: {
+        $eq: 'Serie'
+      }
+    },
+    populate: {
+      Seasons: {
+        populate: {
+          seasonProject: {
+            populate: {
+              Posters: true,
+              episodes: true
+            }
+          }
+        }
+      }
+    }
+  })
+
+  series.forEach(async (serie) => {
+    let updatedSeasons = serie.Seasons.map((season) => {
+      if (season.seasonProject.episodes) {
+        season.NumberOfEpisodes = season.seasonProject.episodes.length
+      }
+
+      if (season.seasonProject.Posters) {
+        season.imageUrl = season.seasonProject.Posters[0].PosterUrl
+      }
+
+      return season
+    })
+
+    await strapi.entityService.update('api::mcu-project.mcu-project', serie.id, {
+      data: {
+        Seasons: updatedSeasons
+      }
+    })
   })
 }
