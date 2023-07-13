@@ -228,17 +228,22 @@ async function retrieveSeriesEpisodes(result, fetch, config) {
   }).then((res) => res.json())
 
   let episodes = seasonInfo.episodes.map((episode) => {
-    return {
+    let episodeData = {
       EpisodeNumber: episode.episode_number,
       Title: episode.name,
       Description: episode.overview,
       Duration: episode.runtime,
-      imageUrl: `${config.images.secure_base_url}[INSERT_SIZE]${episode.still_path}`,
       voteCount: episode.vote_count,
       Rating: episode.vote_average,
       EpisodeReleaseDate: episode.air_date,
       tmdb_id: `${episode.id}`
     }
+
+    if (episode.still_path) {
+      episodeData.imageUrl = `${config.images.secure_base_url}[INSERT_SIZE]${episode.still_path}`
+    }
+
+    return episodeData
   })
 
   await strapi.entityService.update('api::mcu-project.mcu-project', id, {
