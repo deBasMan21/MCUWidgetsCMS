@@ -8,8 +8,7 @@ module.exports = {
   '5 10 * * * ': async () => {
     await getReviews();
   },
-  '35 13 * * *': async () => {
-    await retrieveTmdbIds();
+  '39 13 * * *': async () => {
     await updateAllSeries()
   },
   '15 10 * * *': async () => {
@@ -293,33 +292,4 @@ async function updateSeasons() {
       }
     })
   })
-}
-
-async function retrieveTmdbIds() {
-  const entries = await strapi.entityService.findMany('api::mcu-project.mcu-project', {
-    fields: ['id', 'imdb_id', 'tmdb_id'],
-    filters: {
-      Type: {
-        $eq: 'Serie'
-      }
-    }
-  });
-
-  const fetch = require('node-fetch')
-
-  await Promise.all(entries.forEach(async (entry) => {
-    let tmdbRes = await fetch(`https://api.themoviedb.org/3/find/${entry.imdb_id}?language=en-US&external_source=imdb_id`, {
-      headers: {
-        Authorization: `Bearer ${process.env.TMDB_API_KEY}`
-      }
-    }).then((res) => res.json())
-
-    console.log(tmdbRes)
-
-    await strapi.entityService.update('api::mcu-project.mcu-project', entry.id, {
-      data: {
-        tmdb_id: `${tmdbRes.movie_results[0]?.id ?? tmdbRes.tv_results[0]?.id}`
-      }
-    })
-  }))
 }
