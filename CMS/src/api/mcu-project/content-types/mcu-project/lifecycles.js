@@ -1,4 +1,10 @@
 module.exports = {
+  async beforeCreate(event) {
+    await retrieveTmdbId(event)
+  },
+  async beforeUpdate(event) {
+    await retrieveTmdbId(event)
+  },
   afterCreate(event) {
     createNotifications(event)
     createProject(event)
@@ -68,6 +74,23 @@ async function deleteProject(event) {
     await fetch(`http://mcu-widgets-recommendations-api:3000/api/project/${id}`, { method: 'delete' })
   } catch (error) {
     console.log(error)
+  }
+}
+
+async function retrieveTmdbId(event) {
+  const imdb_id = event.params.data.imdb_id
+  if (event.params.data.tmdb_id) { return }
+
+  if (imdb_id) {
+    const fetch = require('node-fetch')
+
+    let tmdbRes = await fetch(`https://api.themoviedb.org/3/find/${imdb_id}?language=en-US&external_source=imdb_id`, {
+      headers: {
+        Authorization: `Bearer ${process.env.TMDB_API_KEY}`
+      }
+    }).then((res) => res.json())
+
+    event.params.data.tmdb_id = tmdbRes.movie_results[0]?.id ?? tmdbRes.tv_results[0]?.id
   }
 }
 
