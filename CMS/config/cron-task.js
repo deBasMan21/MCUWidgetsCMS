@@ -8,7 +8,7 @@ module.exports = {
   '5 10 * * * ': async () => {
     await getReviews();
   },
-  '21 13 * * *': async () => {
+  '25 13 * * *': async () => {
     await updateAllSeries()
   },
   '15 10 * * *': async () => {
@@ -228,6 +228,8 @@ async function retrieveSeriesEpisodes(result, fetch, config) {
       Authorization: `Bearer ${process.env.TMDB_API_KEY}`
     }
   }).then((res) => res.json())
+
+  console.log(seasonInfo)
 
   let episodes = seasonInfo.episodes.map((episode) => {
     return {
