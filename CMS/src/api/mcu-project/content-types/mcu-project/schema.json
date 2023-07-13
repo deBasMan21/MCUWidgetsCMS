@@ -121,7 +121,7 @@
     },
     "imdb_id": {
       "type": "string",
-      "required": false,
+      "required": true,
       "unique": false,
       "private": true
     },
@@ -185,6 +185,10 @@
     },
     "seasonNumber": {
       "type": "integer"
+    },
+    "tmdb_id": {
+      "type": "string",
+      "private": true
     }
   }
 }

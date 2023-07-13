@@ -11,8 +11,17 @@ module.exports = {
   '10 10 * * *': async () => {
     await updateAllSeries()
   },
-  '45 13 * * *': async () => {
+  '15 10 * * *': async () => {
     await updateSeasons()
+  },
+  '15 15 * * *': async () => {
+    await retrieveTmdbIds("Movie")
+    console.log("Movies")
+  },
+  '16 15 * * *': async () => {
+    await retrieveTmdbIds("Serie")
+    await retrieveTmdbIds("Special")
+    console.log("Series")
   }
 };
 
@@ -194,59 +203,11 @@ function decodeHtmlCharCodes(str) {
   });
 }
 
-function createHTML(updatedCount, errors) {
-  let totalData = updatedCount.map((entry) => getObjectProperties(entry)).join('<br /><br />')
-  return `
-    <html>
-      <body style="margin: 0;">
-        <div style="width: 100%; min-height: 100%; display: flex; justify-content: center; background-color: #EDEDEF;">
-          <div style="width: 400px; background-color: #1C1C1E; color: #ffffff; padding: 10px; margin: 20px; border-radius: 10px; text-align: center;">
-            <div style="width: 100%; display: flex; justify-content: center;">
-              <img src="https://mcuwidgets.buijsenserver.nl/uploads/mcu_Widgets_Logo_Dark_94d943c6c2.png"
-                style="width: 100px; height: 100px;">
-            </div>
-            <h1 style="width: 100%; text-align: center;">Hey there!</h1>
-            <p style="width: 100%; text-align: center;">
-              The cron task succeeded at <strong>${convertTZ(new Date(), 'Europe/Amsterdam').toLocaleString()}</strong>
-              <br />
-              A small overview of the task underneath here.
-              <br />
-              <strong>Updated ${updatedCount.length} entries:</strong>
-              <br />
-              ${totalData}
-              <br />
-              <br />
-              <br />
-              Encountered ${errors.length} errors.
-              <br />
-              <br />
-              That was it for today. Have a nice day!
-            </p>
-          </div>
-        </div>
-      </body>
-    </html>
-  `
-}
-
-function convertTZ(date, tzString) {
-    return new Date(date.toLocaleString("en-US", {timeZone: tzString}));
-}
-
-function getObjectProperties(data) {
-  let title = data.title
-  delete data.title
-  let keys = Object.keys(data)
-  return `<h2>${title}</h2>` + keys.map(key => {
-    return `<strong>${key}: </strong>${data[key]}<br />`
-  }).join('');
-}
-
 async function updateAllSeries() {
   const entries = await strapi.entityService.findMany('api::mcu-project.mcu-project', {
-    fields: ['id', 'imdb_id', 'seasonNumber'],
+    fields: ['id', 'tmdb_id', 'seasonNumber'],
     filters: {
-      imdb_id: {
+      tmdb_id: {
         $notNull: true
       },
       Type: {
@@ -256,83 +217,44 @@ async function updateAllSeries() {
   });
 
   const fetch = require('node-fetch')
-  console.log(entries)
+
+  const config = await fetch(`https://api.themoviedb.org/3/configuration`, {
+    headers: {
+      Authorization: `Bearer ${process.env.TMDB_API_KEY}`
+    }
+  }).then((res) => res.json())
 
   entries.forEach(async (entry) => {
-    await retrieveSeriesEpisodes(entry, fetch)
+    await retrieveSeriesEpisodes(entry, fetch, config)
   })
 }
 
-async function retrieveSeriesEpisodes(result, fetch) {
-  const { id, imdb_id, seasonNumber } = result
-  const options = {
-    method: 'GET',
+async function retrieveSeriesEpisodes(result, fetch, config) {
+  const { id, tmdb_id, seasonNumber } = result
+
+  let seasonInfo = await fetch(`https://api.themoviedb.org/3/tv/${tmdb_id}/season/${seasonNumber}?language=en-US`, {
     headers: {
-      'X-RapidAPI-Key': '994d69b14amsha92971d9137b5fap10df27jsn63fc46abced3',
-      'X-RapidAPI-Host': 'moviesdatabase.p.rapidapi.com'
+      Authorization: `Bearer ${process.env.TMDB_API_KEY}`
     }
-  };
+  }).then((res) => res.json())
 
-  let seasonInfo = await fetch(`https://moviesdatabase.p.rapidapi.com/titles/series/${imdb_id}/${seasonNumber}`, options)
-    .then((res) => res.json())
-    .then((res) => res.results)
-
-  let episodes = seasonInfo.map((episode) => {
-    return { imdb_id: episode.tconst, episodeNumber: episode.episodeNumber }
+  let episodes = seasonInfo.episodes.map((episode) => {
+    return {
+      EpisodeNumber: episode.episode_number,
+      Title: episode.name,
+      Description: episode.overview,
+      Duration: episode.runtime,
+      imageUrl: `${config.images.secure_base_url}[INSERT_SIZE]${episode.still_path}`,
+      voteCount: episode.vote_count,
+      Rating: episode.vote_average,
+      EpisodeReleaseDate: episode.air_date,
+      tmdb_id: `${episode.id}`
+    }
   })
-
-  let episodeData = await Promise.all(episodes.map(async (episode) => {
-    let imdbData = await fetch(`https://moviesdatabase.p.rapidapi.com/titles/episode/${episode.imdb_id}?info=base_info`, options)
-      .then((res) => res.json())
-      .then((res) => res.results)
-
-    let episodeObject = {
-      imdb_id: episode.imdb_id,
-      EpisodeNumber: episode.episodeNumber,
-      PostCreditScenes: 0
-    }
-
-    if (imdbData.releaseDate) {
-      let date = new Date()
-      date.setFullYear(imdbData.releaseDate.year)
-      date.setMonth(imdbData.releaseDate.month)
-      date.setDate(imdbData.releaseDate.day)
-
-      episodeObject.EpisodeReleaseDate = date.toISOString()
-    }
-
-    if (imdbData.ratingsSummary) {
-      episodeObject.Rating = imdbData.ratingsSummary.aggregateRating
-      episodeObject.voteCount = imdbData.ratingsSummary.voteCount
-    }
-
-    if (imdbData.primaryImage) {
-      episodeObject.imageUrl = imdbData.primaryImage.url
-      episodeObject.imageCaption = imdbData.primaryImage.caption.plainText
-    }
-
-    if (imdbData.genres) {
-      episodeObject.categories = imdbData.genres.genres.map(genre => genre.text).join(', ')
-    }
-
-    if (imdbData.titleText) {
-      episodeObject.Title = imdbData.titleText.text
-    }
-
-    if (imdbData.plot) {
-      episodeObject.Description = imdbData.plot.plotText.plainText
-    }
-
-    if (imdbData.runtime) {
-      episodeObject.Duration = imdbData.runtime.seconds / 60
-    }
-
-    return episodeObject
-  }))
 
   await strapi.entityService.update('api::mcu-project.mcu-project', id, {
     data: {
-      episodes: episodeData
+      episodes
     }
   })
 }
@@ -374,6 +296,38 @@ async function updateSeasons() {
     await strapi.entityService.update('api::mcu-project.mcu-project', serie.id, {
       data: {
         Seasons: updatedSeasons
+      }
+    })
+  })
+}
+
+async function retrieveTmdbIds(type) {
+  const entries = await strapi.entityService.findMany('api::mcu-project.mcu-project', {
+    fields: ['id', 'imdb_id', 'tmdb_id'],
+    filters: {
+      tmdb_id: {
+        $null: true
+      },
+      Type: {
+        $eq: type
+      }
+    }
+  });
+
+  const fetch = require('node-fetch')
+
+  entries.forEach(async (entry) => {
+    let tmdbRes = await fetch(`https://api.themoviedb.org/3/find/${entry.imdb_id}?language=en-US&external_source=imdb_id`, {
+      headers: {
+        Authorization: `Bearer ${process.env.TMDB_API_KEY}`
+      }
+    }).then((res) => res.json())
+
+    console.log(tmdbRes)
+
+    await strapi.entityService.update('api::mcu-project.mcu-project', entry.id, {
+      data: {
+        tmdb_id: `${tmdbRes.movie_results[0]?.id}` ?? `${tmdbRes.tv_results[0]?.id}`
       }
     })
   })

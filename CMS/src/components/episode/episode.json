@@ -14,10 +14,6 @@
       "type": "richtext",
       "required": false
     },
-    "PostCreditScenes": {
-      "type": "integer",
-      "required": false
-    },
     "EpisodeReleaseDate": {
       "type": "date",
       "required": false
@@ -30,7 +26,7 @@
       "type": "integer",
       "required": false
     },
-    "imdb_id": {
+    "tmdb_id": {
       "type": "string",
       "required": true
     },
@@ -41,12 +37,6 @@
       "type": "integer"
     },
     "imageUrl": {
-      "type": "string"
-    },
-    "imageCaption": {
-      "type": "string"
-    },
-    "categories": {
       "type": "string"
     }
   }
