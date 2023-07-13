@@ -14,11 +14,11 @@ module.exports = {
   '15 10 * * *': async () => {
     await updateSeasons()
   },
-  '15 15 * * *': async () => {
+  '17 13 * * *': async () => {
     await retrieveTmdbIds("Movie")
     console.log("Movies")
   },
-  '16 15 * * *': async () => {
+  '18 13 * * *': async () => {
     await retrieveTmdbIds("Serie")
     await retrieveTmdbIds("Special")
     console.log("Series")
