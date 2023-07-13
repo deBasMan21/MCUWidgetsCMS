@@ -5,13 +5,13 @@ module.exports = {
   '0 10 * * *': async () => {
     await getAllRatings();
   },
-  '5 10 * * * ': async () => {
+  '1 10 * * * ': async () => {
     await getReviews();
   },
-  '39 13 * * *': async () => {
+  '2 10 * * *': async () => {
     await updateAllSeries()
   },
-  '15 10 * * *': async () => {
+  '3 10 * * *': async () => {
     await updateSeasons()
   }
 };
