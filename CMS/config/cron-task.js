@@ -8,7 +8,7 @@ module.exports = {
   '5 10 * * * ': async () => {
     await getReviews();
   },
-  '31 13 * * *': async () => {
+  '35 13 * * *': async () => {
     await retrieveTmdbIds();
     await updateAllSeries()
   },
@@ -318,7 +318,7 @@ async function retrieveTmdbIds() {
 
     await strapi.entityService.update('api::mcu-project.mcu-project', entry.id, {
       data: {
-        tmdb_id: `${tmdbRes.movie_results[0]?.id}` ?? `${tmdbRes.tv_results[0]?.id}`
+        tmdb_id: `${tmdbRes.movie_results[0]?.id ?? tmdbRes.tv_results[0]?.id}`
       }
     })
   }))
