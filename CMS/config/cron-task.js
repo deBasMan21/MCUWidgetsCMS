@@ -99,8 +99,6 @@ async function getAllRatings() {
       fields: ['imdb_id', 'id']
     });
 
-    console.log(entries)
-
     const chunkSize = 25;
     for (let i = 0; i < entries.length; i += chunkSize) {
       const chunk = entries.slice(i, i + chunkSize);
@@ -118,7 +116,7 @@ async function getInfoForChunk(entries) {
   const options = {
     method: 'GET',
     headers: {
-      'X-RapidAPI-Key': '994d69b14amsha92971d9137b5fap10df27jsn63fc46abced3',
+      'X-RapidAPI-Key': process.env.RAPID_API_KEY,
       'X-RapidAPI-Host': 'moviesdatabase.p.rapidapi.com'
     }
   };
@@ -228,8 +226,6 @@ async function retrieveSeriesEpisodes(result, fetch, config) {
       Authorization: `Bearer ${process.env.TMDB_API_KEY}`
     }
   }).then((res) => res.json())
-
-  console.log(seasonInfo)
 
   let episodes = seasonInfo.episodes.map((episode) => {
     return {

@@ -18,6 +18,7 @@ services:
       PRIV_DKIM: ${PRIV_DKIM}
       BASE_URL: ${BASE_URL}
       TMDB_API_KEY: ${TMDB_API_KEY}
+      RAPID_API_KEY: ${RAPID_API_KEY}
     ports:
       - "1337:1337"
     volumes:
