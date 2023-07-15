@@ -23,6 +23,12 @@ services:
       - "1337:1337"
     volumes:
       - mcuwidgets-cms-data:/opt/app/public/uploads
+      - type: bind
+        source: ../src
+        target: /opt/app/src
+      - type: bind
+        source: ../config
+        target: /opt/app/config
     depends_on:
       mcuwidgetsDB:
         condition: service_healthy
