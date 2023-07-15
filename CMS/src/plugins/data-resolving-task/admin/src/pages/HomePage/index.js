@@ -17,22 +17,18 @@ const HomePage = () => {
   const client = useFetchClient();
 
   const getRatings = async () => {
-    console.log("getting ratings test")
     await client.post(`/${pluginId}/updateProjectData`)
   }
 
   const getReviews = async () => {
-    console.log("getting reviews")
     await client.post(`/${pluginId}/updateReviews`)
   }
 
   const updateAllSeries = async () => {
-    console.log("updating all series")
     await client.post(`/${pluginId}/updateAllSeries`)
   }
 
   const updateSeasons = async () => {
-    console.log("updating seasons")
     await client.post(`/${pluginId}/updateSeasons`)
   }
 
@@ -69,109 +65,29 @@ const HomePage = () => {
               justifyContent: 'space-around',
             }}
           >
-            <div style={{
-              display: 'flex',
-              justifyContent: 'left',
-              alignItems: 'center',
-              gap: '16px',
-            }}>
-              <Button
-                onClick={getRatings}
-                size="S"
-                variant="secondary"
-                style={{
-                  width: '200px',
-                  justifyContent: 'center',
-                }}
-              >
-                Update project information
-              </Button>
+            <TaskButton
+              buttonText="Update project information"
+              explanationText="Update information like: Box office, Runtime, Categories and Ratings."
+              onClick={getRatings}
+            />
 
-              <Typography
-                variant="omega"
-                textColor="neutral1000"
-              >
-                Update information like: Box office, Runtime, Categories and Ratings.
-              </Typography>
-            </div>
-
-            <div style={{
-              display: 'flex',
-              justifyContent: 'left',
-              alignItems: 'center',
-              gap: '16px',
-            }}>
-             <Button
+            <TaskButton
+              buttonText="Update project reviews"
+              explanationText="Update information like: The review, the subtitle of the review and the copyright text."
               onClick={getReviews}
-              size="S"
-              variant="secondary"
-              style={{
-                width: '200px',
-                justifyContent: 'center',
-              }}
-              >
-                Update project reviews
-              </Button>
+            />
 
-              <Typography
-                variant="omega"
-                textColor="neutral1000"
-              >
-                Update information like: The review, the subtitle of the review and the copyright text.
-              </Typography>
-            </div>
-
-            <div style={{
-              display: 'flex',
-              justifyContent: 'left',
-              alignItems: 'center',
-              gap: '16px',
-            }}>
-              <Button
+            <TaskButton
+              buttonText="Update series"
+              explanationText="Update information like: The image, episode count and name of the series."
               onClick={updateAllSeries}
-              size="S"
-              variant="secondary"
-              style={{
-                width: '200px',
-                justifyContent: 'center',
-              }}
-              >
-                Update series episodes
-              </Button>
+            />
 
-              <Typography
-                variant="omega"
-                textColor="neutral1000"
-              >
-                Update information like: The episodes of every series.
-              </Typography>
-            </div>
-
-            <div style={{
-              display: 'flex',
-              justifyContent: 'left',
-              alignItems: 'center',
-              gap: '16px',
-            }}>
-              <Button
+            <TaskButton
+              buttonText="Update season relations"
+              explanationText="Update information like: The image, episode count and name of the season relations."
               onClick={updateSeasons}
-              size="S"
-              variant="secondary"
-              style={{
-                width: '200px',
-                justifyContent: 'center',
-              }}
-              >
-                Update season relations
-              </Button>
-
-              <Typography
-                variant="omega"
-                textColor="neutral1000"
-              >
-                Update information like: The image, episode count and name of the season relations.
-              </Typography>
-            </div>
+            />
           </Stack>
         </Box>
       </Box>
@@ -180,3 +96,33 @@ const HomePage = () => {
 };
 
 export default HomePage;
+
+const TaskButton = (props) => {
+  return (
+    <div style={{
+      display: 'flex',
+      justifyContent: 'left',
+      alignItems: 'center',
+      gap: '16px',
+    }}>
+      <Button
+      onClick={props.onClick}
+      size="S"
+      variant="secondary"
+      style={{
+        width: '200px',
+        justifyContent: 'center',
+      }}
+      >
+        {props.buttonText}
+      </Button>
+
+      <Typography
+        variant="omega"
+        textColor="neutral1000"
+      >
+        props.explanationText
+      </Typography>
+    </div>
+  )
+}
