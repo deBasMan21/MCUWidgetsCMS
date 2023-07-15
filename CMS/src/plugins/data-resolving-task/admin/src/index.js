@@ -5,6 +5,7 @@ import Initializer from './components/Initializer';
 import PluginIcon from './components/PluginIcon';
 import ImageRetrieverButton from './components/ImageRetrieverButton';
 import ProjectUpdateButton from './components/ProjectUpdateButton';
+import SerieUpdateButton from './components/SerieUpdateButton';
 
 const name = pluginPkg.strapi.name;
 
@@ -41,6 +42,11 @@ export default {
     app.injectContentManagerComponent("editView", "right-links", {
       name: "update-data-task",
       Component: ProjectUpdateButton
+    })
+
+    app.injectContentManagerComponent("editView", "right-links", {
+      name: "update-serie-task",
+      Component: SerieUpdateButton
     })
   },
 

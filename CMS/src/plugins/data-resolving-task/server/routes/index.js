@@ -46,5 +46,13 @@ module.exports = [
     config: {
       policies: [],
     },
-  }
+  },
+  {
+    method: 'POST',
+    path: '/updateSingleSerie',
+    handler: 'seriesController.updateSingleSerie',
+    config: {
+      policies: [],
+    },
+  },
 ];

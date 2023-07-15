@@ -121,7 +121,7 @@ const TaskButton = (props) => {
         variant="omega"
         textColor="neutral1000"
       >
-        props.explanationText
+        {props.explanationText}
       </Typography>
     </div>
   )

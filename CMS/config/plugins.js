@@ -10,31 +10,6 @@ module.exports = ({ env }) => ({
     'todo': {
       enabled: true,
     },
-    'random-sort': {
-      enabled: true,
-    },
-    email: {
-      config: {
-        provider: 'sendmail',
-        providerOptions: {
-          dkim: {
-            name: 'buijsenserver.nl',
-            privateKey: env('PRIV_DKIM'),
-            keySelector: 'default',
-          }
-        },
-        settings: {
-          defaultFrom: 'noreply@buijsenserver.nl',
-          defaultReplyTo: 'bbuijsen@gmail.com'
-        }
-      }
-    },
-    'custom-api': {
-      enabled: true
-    },
-    'strapi-chatgpt': {
-      enabled: true
-    },
     'rest-cache': {
       config: {
         provider: {

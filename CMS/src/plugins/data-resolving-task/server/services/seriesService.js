@@ -27,6 +27,30 @@ module.exports = ({ strapi }) => ({
     })
   },
 
+  async updateSingleSerie(id) {
+    const entry = await strapi.entityService.findOne('api::mcu-project.mcu-project', id, {
+      fields: ['id', 'tmdb_id', 'seasonNumber'],
+      filters: {
+        tmdb_id: {
+          $notNull: true
+        },
+        Type: {
+          $eq: 'Serie'
+        }
+      }
+    });
+
+    const fetch = require('node-fetch')
+
+    const config = await fetch(`https://api.themoviedb.org/3/configuration`, {
+      headers: {
+        Authorization: `Bearer ${process.env.TMDB_API_KEY}`
+      }
+    }).then((res) => res.json())
+
+    await retrieveSeriesEpisodes(entry, fetch, config)
+  },
+
   async updateSeasons() {
     let series = await strapi.entityService.findMany('api::mcu-project.mcu-project', {
       filters: {
