@@ -1,11 +1,11 @@
 import React from 'react';
 import { Button } from '@strapi/design-system/Button';
-import Picture from '@strapi/icons/Picture';
+import Cloud from '@strapi/icons/Cloud';
 import { useCMEditViewDataManager } from '@strapi/helper-plugin';
 import { useFetchClient } from '@strapi/helper-plugin'
 import pluginId from '../../pluginId'
 
-const ImageRetrieverButton = () => {
+const ProjectUpdateButton = () => {
   // Get page context
   const {
     slug,
@@ -17,16 +17,16 @@ const ImageRetrieverButton = () => {
   const client = useFetchClient();
 
   // Handler for button click
-  const retrieveImages = async () => {
-    // Call backend to retrieve images
-    await client.post(`/${pluginId}/retrieveImages`, { id: initialData.id })
+  const updateData = async () => {
+    // Call backend to update data
+    await client.post(`/${pluginId}/updateSingleProject`, { id: initialData.id })
 
-    // Reload after images are retrieved to show them on the page
+    // Reload after the data is updated
     window.location.reload()
   }
 
   // Check if we are on the correct page
-  if (slug !== 'api::mcu-project.mcu-project' || isCreatingEntry || isSingleType || !initialData.tmdb_id) {
+  if (slug !== 'api::mcu-project.mcu-project' || isCreatingEntry || isSingleType || !initialData.imdb_id) {
     return null;
   }
 
@@ -34,15 +34,15 @@ const ImageRetrieverButton = () => {
   return (
     <>
       <Button
-        onClick={retrieveImages}
+        onClick={updateData}
         size="S"
-        startIcon={<Picture />}
+        startIcon={<Cloud />}
         variant="secondary"
       >
-        Retrieve Images
+        Update imdb data
       </Button>
     </>
   );
 };
 
-export default ImageRetrieverButton;
+export default ProjectUpdateButton;
