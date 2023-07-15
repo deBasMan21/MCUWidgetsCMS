@@ -4,6 +4,8 @@ import pluginId from './pluginId';
 import Initializer from './components/Initializer';
 import PluginIcon from './components/PluginIcon';
 import ImageRetrieverButton from './components/ImageRetrieverButton';
+import ProjectUpdateButton from './components/ProjectUpdateButton';
+import SerieUpdateButton from './components/SerieUpdateButton';
 
 const name = pluginPkg.strapi.name;
 
@@ -17,17 +19,11 @@ export default {
         defaultMessage: name,
       },
       Component: async () => {
-        const component = await import(/* webpackChunkName: "[request]" */ './pages/App');
+        const component = await import('./pages/App');
 
         return component;
       },
-      permissions: [
-        // Uncomment to set the permissions of the plugin here
-        // {
-        //   action: '', // the action name should be plugin::plugin-name.actionType
-        //   subject: null,
-        // },
-      ],
+      permissions: [],
     });
     app.registerPlugin({
       id: pluginId,
@@ -42,14 +38,22 @@ export default {
       name: "image-task",
       Component: ImageRetrieverButton
     })
+
+    app.injectContentManagerComponent("editView", "right-links", {
+      name: "update-data-task",
+      Component: ProjectUpdateButton
+    })
+
+    app.injectContentManagerComponent("editView", "right-links", {
+      name: "update-serie-task",
+      Component: SerieUpdateButton
+    })
   },
 
   async registerTrads({ locales }) {
     const importedTrads = await Promise.all(
       locales.map((locale) => {
-        return import(
-          /* webpackChunkName: "translation-[request]" */ `./translations/${locale}.json`
-        )
+        return import(`./translations/${locale}.json`)
           .then(({ default: data }) => {
             return {
               data: prefixPluginTranslations(data, pluginId),

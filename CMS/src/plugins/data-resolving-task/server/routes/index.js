@@ -39,4 +39,20 @@ module.exports = [
       policies: [],
     },
   },
+  {
+    method: 'POST',
+    path: '/updateSingleProject',
+    handler: 'projectController.updateSingleProject',
+    config: {
+      policies: [],
+    },
+  },
+  {
+    method: 'POST',
+    path: '/updateSingleSerie',
+    handler: 'seriesController.updateSingleSerie',
+    config: {
+      policies: [],
+    },
+  },
 ];

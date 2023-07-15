@@ -20,8 +20,17 @@ module.exports = ({ strapi }) => ({
     } catch (error) {
       console.log(error)
     }
+  },
+  async updateSingleProject(id) {
+    const entry = await strapi.entityService.findOne('api::mcu-project.mcu-project', id, {
+      fields: ['imdb_id', 'id']
+    })
+
+    await getInfoForChunk([entry])
   }
 });
+
+
 
 async function getInfoForChunk(entries) {
   let idListString = entries.map(entry => entry.imdb_id).join(",")
