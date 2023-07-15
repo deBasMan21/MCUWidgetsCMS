@@ -32,7 +32,7 @@ module.exports = ({ strapi }) => ({
     }).then((res) => res.json())
 
     // Get images from tmdb
-    const res = await fetch(`https://api.themoviedb.org/3/${urlPrefix}/${entry.tmdb_id}/images`, {
+    const res = await fetch(`https://api.themoviedb.org/3/${urlPrefix}/${entry.tmdb_id}/images?language=en`, {
       headers: {
         Authorization: `Bearer ${process.env.TMDB_API_KEY}`
       }
