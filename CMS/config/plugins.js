@@ -58,5 +58,9 @@ module.exports = ({ env }) => ({
         }
       }
     },
-    'duplicate-button': true
+    'duplicate-button': true,
+    'data-resolving-task': {
+      enabled: true,
+      resolve: './src/plugins/data-resolving-task'
+    },
 });
