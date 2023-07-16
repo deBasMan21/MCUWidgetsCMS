@@ -6,6 +6,7 @@ import PluginIcon from './components/PluginIcon';
 import ImageRetrieverButton from './components/ImageRetrieverButton';
 import ProjectUpdateButton from './components/ProjectUpdateButton';
 import SerieUpdateButton from './components/SerieUpdateButton';
+import VideoRetrieverButton from './components/VideoRetrieverButton';
 
 const name = pluginPkg.strapi.name;
 
@@ -37,6 +38,11 @@ export default {
     app.injectContentManagerComponent("editView", "right-links", {
       name: "image-task",
       Component: ImageRetrieverButton
+    })
+
+    app.injectContentManagerComponent("editView", "right-links", {
+      name: "video-task",
+      Component: VideoRetrieverButton
     })
 
     app.injectContentManagerComponent("editView", "right-links", {

@@ -1,11 +1,11 @@
 import React from 'react';
 import { Button } from '@strapi/design-system/Button';
-import BulletList from '@strapi/icons/BulletList';
+import Play from '@strapi/icons/Play';
 import { useCMEditViewDataManager } from '@strapi/helper-plugin';
 import { useFetchClient } from '@strapi/helper-plugin'
 import pluginId from '../../pluginId'
 
-const SerieUpdateButton = () => {
+const VideoRetrieverButton = () => {
   // Get page context
   const {
     slug,
@@ -17,16 +17,20 @@ const SerieUpdateButton = () => {
   const client = useFetchClient();
 
   // Handler for button click
-  const updateSerie = async () => {
-    // Call backend to update data
-    await client.post(`/${pluginId}/updateSingleSerie`, { id: initialData.id })
+  const retrieveVideos = async () => {
+    // Call backend to retrieve images
+    try {
+      await client.post(`/${pluginId}/retrieveVideos`, { id: initialData.id })
 
-    // Reload after the data is updated
-    window.location.reload()
+      // Reload after images are retrieved to show them on the page
+      window.location.reload()
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   // Check if we are on the correct page
-  if (slug !== 'api::mcu-project.mcu-project' || isCreatingEntry || isSingleType || !initialData.tmdb_id || initialData.Type !== 'Serie') {
+  if (slug !== 'api::mcu-project.mcu-project' || isCreatingEntry || isSingleType || !initialData.tmdb_id) {
     return null;
   }
 
@@ -34,15 +38,15 @@ const SerieUpdateButton = () => {
   return (
     <>
       <Button
-        onClick={updateSerie}
+        onClick={retrieveVideos}
         size="S"
-        startIcon={<BulletList />}
+        startIcon={<Play />}
         variant="secondary"
       >
-        Update episode data
+        Retrieve Videos
       </Button>
     </>
   );
 };
 
-export default SerieUpdateButton;
+export default VideoRetrieverButton;

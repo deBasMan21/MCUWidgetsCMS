@@ -12,24 +12,67 @@ import { Stack } from '@strapi/design-system/Stack';
 import { Button } from '@strapi/design-system/Button';
 import { Typography } from '@strapi/design-system/Typography';
 import { useFetchClient } from '@strapi/helper-plugin'
+import { Loader } from '@strapi/design-system/Loader';
+import { Alert } from '@strapi/design-system/Alert';
 
 const HomePage = () => {
   const client = useFetchClient();
 
+  const [showAlert, setShowAlert] = React.useState(false)
+  const [alertMessage, setAlertMessage] = React.useState('')
+  const [alertType, setAlertType] = React.useState('')
+
   const getRatings = async () => {
-    await client.post(`/${pluginId}/updateProjectData`)
+    try {
+      await client.post(`/${pluginId}/updateProjectData`)
+      openAlert('success', 'Project data updated')
+    } catch (error) {
+      console.log(error)
+      openAlert('danger', 'Updating project data failed')
+    }
   }
 
   const getReviews = async () => {
-    await client.post(`/${pluginId}/updateReviews`)
+    try {
+      await client.post(`/${pluginId}/updateReviews`)
+      openAlert('success', 'Reviews updated')
+    } catch (error) {
+      console.log(error)
+      openAlert('danger', 'Updating reviews failed')
+    }
   }
 
   const updateAllSeries = async () => {
-    await client.post(`/${pluginId}/updateAllSeries`)
+    try {
+      await client.post(`/${pluginId}/updateAllSeries`)
+      openAlert('success', 'Series updated')
+    } catch (error) {
+      console.log(error)
+      openAlert('danger', 'Updating series failed')
+    }
   }
 
   const updateSeasons = async () => {
-    await client.post(`/${pluginId}/updateSeasons`)
+    try {
+      await client.post(`/${pluginId}/updateSeasons`)
+      openAlert('success', 'Seasons updated')
+    } catch (error) {
+      console.log(error)
+      openAlert('danger', 'Updating seasons failed')
+    }
+  }
+
+  const openAlert = async (type, message) => {
+    setAlertMessage(message)
+    setAlertType(type)
+    setShowAlert(true)
+
+    await new Promise(resolve => setTimeout(resolve, 5000));
+    closeAlert()
+  }
+
+  const closeAlert = () => {
+    setShowAlert(false)
   }
 
   return (
@@ -91,6 +134,19 @@ const HomePage = () => {
           </Stack>
         </Box>
       </Box>
+
+      { showAlert &&
+        <Alert
+          title="Task is executed!"
+          variant={alertType}
+          onClose={closeAlert}
+          style={{
+            marginTop: '16px',
+          }}
+        >
+          {alertMessage}
+        </Alert>
+      }
     </Box>
   );
 };
@@ -98,6 +154,14 @@ const HomePage = () => {
 export default HomePage;
 
 const TaskButton = (props) => {
+  const [showLoader, setShowLoader] = React.useState(false)
+
+  const onClick = async () => {
+    setShowLoader(true)
+    await props.onClick()
+    setShowLoader(false)
+  }
+
   return (
     <div style={{
       display: 'flex',
@@ -106,9 +170,10 @@ const TaskButton = (props) => {
       gap: '16px',
     }}>
       <Button
-      onClick={props.onClick}
+      onClick={onClick}
       size="S"
       variant="secondary"
+      disabled={showLoader}
       style={{
         width: '200px',
         justifyContent: 'center',
@@ -116,6 +181,8 @@ const TaskButton = (props) => {
       >
         {props.buttonText}
       </Button>
+
+      { showLoader && <Loader small /> }
 
       <Typography
         variant="omega"

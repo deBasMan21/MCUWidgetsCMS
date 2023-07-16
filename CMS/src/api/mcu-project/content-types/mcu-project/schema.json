@@ -189,6 +189,9 @@
     "tmdb_id": {
       "type": "string",
       "private": true
+    },
+    "spotifyEmbed": {
+      "type": "text"
     }
   }
 }
