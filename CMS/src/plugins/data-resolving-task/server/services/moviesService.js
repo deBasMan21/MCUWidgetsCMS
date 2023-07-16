@@ -30,21 +30,34 @@ module.exports = ({ strapi }) => ({
       const fetch = require('node-fetch')
       const apiKey = process.env.NYT_TOKEN
 
-      entries.forEach(async (entry) => {
-        const resReviews = await fetch(`https://api.nytimes.com/svc/movies/v2/reviews/search.json?query=${entry.Title}&api-key=${apiKey}`).then((res) => res.json())
+      var interval = 12000; // how much time should the delay between two iterations be (in milliseconds)?
+      var promise = Promise.resolve();
+      entries.forEach(function (entry) {
+        promise = promise.then(async function () {
+          const resReviews = await fetch(`https://api.nytimes.com/svc/movies/v2/reviews/search.json?query=${entry.Title}&api-key=${apiKey}`).then((res) => res.json())
 
-        if (resReviews.results?.length > 0) {
-          let review = resReviews.results.filter(review => review.display_title == entry.Title)[0]
+          console.log(resReviews, entry)
 
-          strapi.entityService.update('api::mcu-project.mcu-project', entry.id, {
-            data: {
-              reviewTitle: decodeHtmlCharCodes(review?.headline ?? ""),
-              reviewSummary: decodeHtmlCharCodes(review?.summary_short ?? ""),
-              reviewCopyright: resReviews.copyright
-            }
+          if (resReviews.results?.length > 0) {
+            let review = resReviews.results.filter(review => review.display_title == entry.Title)[0]
+
+            strapi.entityService.update('api::mcu-project.mcu-project', entry.id, {
+              data: {
+                reviewTitle: decodeHtmlCharCodes(review?.headline ?? ""),
+                reviewSummary: decodeHtmlCharCodes(review?.summary_short ?? ""),
+                reviewCopyright: resReviews.copyright
+              }
+            });
+          }
+
+          return new Promise(function (resolve) {
+            setTimeout(resolve, interval);
           });
-        }
-      })
+        });
+      });
+
+      await promise;
+      console.log('Reviews updated')
     } catch (error) {
       console.log(error)
     }

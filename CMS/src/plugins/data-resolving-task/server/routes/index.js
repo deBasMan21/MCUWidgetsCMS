@@ -9,6 +9,14 @@ module.exports = [
   },
   {
     method: 'POST',
+    path: '/retrieveVideos',
+    handler: 'videoController.retrieve',
+    config: {
+      policies: [],
+    }
+  },
+  {
+    method: 'POST',
     path: '/updateProjectData',
     handler: 'projectController.updateProjectData',
     config: {
