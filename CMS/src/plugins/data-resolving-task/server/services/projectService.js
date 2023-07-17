@@ -52,7 +52,6 @@ module.exports = ({ strapi }) => ({
 
     let arrayUniqueByKey = [...new Map(collections.map(item => [item?.id, item])).values()].filter(collection => collection);
 
-    console.log(arrayUniqueByKey)
     await Promise.all(
       arrayUniqueByKey.map(async (collection) => {
         const existingCollection = await strapi.entityService.findMany('api::collection.collection', {

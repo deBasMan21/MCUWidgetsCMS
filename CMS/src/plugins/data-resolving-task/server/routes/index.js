@@ -65,26 +65,10 @@ module.exports = [
   },
   {
     method: 'POST',
-    path: '/getCollections',
-    handler: 'projectController.getCollections',
+    path: '/updateCollections',
+    handler: 'projectController.updateCollections',
     config: {
       policies: [],
     },
   },
-  {
-    method: 'POST',
-    path: '/updateCollectionRelations',
-    handler: 'projectController.updateCollectionRelations',
-    config: {
-      policies: [],
-    },
-  },
-  {
-    method: 'POST',
-    path: '/retrieveBackdrops',
-    handler: 'imageController.retrieveBackdrops',
-    config: {
-      policies: [],
-    },
-  }
 ];
