@@ -192,6 +192,12 @@
     },
     "spotifyEmbed": {
       "type": "text"
+    },
+    "collection": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::collection.collection",
+      "inversedBy": "projects"
     }
   }
 }

@@ -39,7 +39,7 @@ module.exports = ({ strapi }) => ({
       const videos = res.results.filter(vid => vid.type == "Trailer").slice(0, 5).map((video) => {
         return {
           TrailerName: video.name,
-          YoutubeLink: `https://www.youtube.com/watch?v=${video.key}`,
+          YoutubeLink: `https://youtu.be/${video.key}`,
         }
       })
 
