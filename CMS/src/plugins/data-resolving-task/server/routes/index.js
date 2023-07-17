@@ -63,4 +63,20 @@ module.exports = [
       policies: [],
     },
   },
+  {
+    method: 'POST',
+    path: '/getCollections',
+    handler: 'projectController.getCollections',
+    config: {
+      policies: [],
+    },
+  },
+  {
+    method: 'POST',
+    path: '/updateCollectionRelations',
+    handler: 'projectController.updateCollectionRelations',
+    config: {
+      policies: [],
+    },
+  },
 ];

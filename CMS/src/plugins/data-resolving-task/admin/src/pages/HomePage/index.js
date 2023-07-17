@@ -62,6 +62,26 @@ const HomePage = () => {
     }
   }
 
+  const getCollection = async () => {
+    try {
+      await client.post(`/${pluginId}/getCollections`)
+      openAlert('success', 'Collections updated')
+    } catch (error) {
+      console.log(error)
+      openAlert('danger', 'Getting collections failed')
+    }
+  }
+
+  const updateCollectionRelations = async () => {
+    try {
+      await client.post(`/${pluginId}/updateCollectionRelations`)
+      openAlert('success', 'Collection relations updated')
+    } catch (error) {
+      console.log(error)
+      openAlert('danger', 'Updating collection relations failed')
+    }
+  }
+
   const openAlert = async (type, message) => {
     setAlertMessage(message)
     setAlertType(type)
@@ -130,6 +150,18 @@ const HomePage = () => {
               buttonText="Update season relations"
               explanationText="Update information like: The image, episode count and name of the season relations."
               onClick={updateSeasons}
+            />
+
+            <TaskButton
+              buttonText="Get collections"
+              explanationText="Get all collections from TMDB."
+              onClick={getCollection}
+            />
+
+            <TaskButton
+              buttonText="Update collection relations"
+              explanationText="Update the collection relations."
+              onClick={updateCollectionRelations}
             />
           </Stack>
         </Box>

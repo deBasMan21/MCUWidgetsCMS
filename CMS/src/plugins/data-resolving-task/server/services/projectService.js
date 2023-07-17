@@ -27,10 +27,103 @@ module.exports = ({ strapi }) => ({
     })
 
     await getInfoForChunk([entry])
+  },
+  async getCollections() {
+    const entries = await strapi.entityService.findMany('api::mcu-project.mcu-project', {
+      filters: {
+        tmdb_id: {
+          $notNull: true
+        }
+      },
+      fields: ['tmdb_id', 'id', 'Type']
+    })
+
+    const fetch = require('node-fetch')
+
+    const config = await fetch(`https://api.themoviedb.org/3/configuration`, {
+      headers: {
+        Authorization: `Bearer ${process.env.TMDB_API_KEY}`
+      }
+    }).then((res) => res.json())
+
+    let collections = await Promise.all(entries.map(async (entry) => {
+      return await getCollectionForEntry(entry, fetch)
+    }))
+
+    let arrayUniqueByKey = [...new Map(collections.map(item => [item?.id, item])).values()].filter(collection => collection);
+
+    console.log(arrayUniqueByKey)
+    await Promise.all(
+      arrayUniqueByKey.map(async (collection) => {
+        await strapi.entityService.create('api::collection.collection', {
+          data: {
+            tmdb_id: `${collection.id}`,
+            name: collection.name,
+            backdrop_url: `${config.images.secure_base_url}[INSERT_SIZE]${collection.backdrop_path}`,
+          }
+        })
+        return collection
+      })
+    )
+  },
+  async updateCollectionRelations() {
+    const entries = await strapi.entityService.findMany('api::collection.collection', {
+      fields: ['tmdb_id', 'id']
+    })
+
+    const fetch = require('node-fetch')
+
+    await Promise.all(entries.map(async (entry) => {
+      const res = await fetch(`https://api.themoviedb.org/3/collection/${entry.tmdb_id}?language=en`, {
+        headers: {
+          Authorization: `Bearer ${process.env.TMDB_API_KEY}`
+        }
+      }).then((res) => res.json())
+
+      let projects = await Promise.all(res.parts.map(async part => {
+        let tmdbId = part.id
+        let projects = await strapi.entityService.findMany('api::mcu-project.mcu-project', {
+          filters: {
+            tmdb_id: {
+              $eq: tmdbId
+            }
+          },
+          fields: ['id']
+        })
+
+        return projects[0]?.id
+      }))
+
+
+      let data = {
+        tmdb_id: `${res.id}`,
+        name: res.name,
+        overview: res.overview,
+        projects: projects.filter(project => project)
+      }
+
+      console.log(data)
+
+      await strapi.entityService.update('api::collection.collection', entry.id, {
+        data: data
+      });
+    }))
   }
 });
 
+async function getCollectionForEntry(entry, fetch) {
+  const urlPrefix = entry.Type === "Serie" ? "tv" : "movie"
 
+  const res = await fetch(`https://api.themoviedb.org/3/${urlPrefix}/${entry.tmdb_id}?language=en`, {
+    headers: {
+      Authorization: `Bearer ${process.env.TMDB_API_KEY}`
+    }
+  }).then((res) => res.json())
+
+  if (res.belongs_to_collection) {
+    return res.belongs_to_collection
+  }
+}
 
 async function getInfoForChunk(entries) {
   let idListString = entries.map(entry => entry.imdb_id).join(",")
