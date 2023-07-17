@@ -82,6 +82,16 @@ const HomePage = () => {
     }
   }
 
+  const updateBackdrops = async () => {
+    try {
+      await client.post(`/${pluginId}/retrieveBackdrops`)
+      openAlert('success', 'Backdrops updated')
+    } catch (error) {
+      console.log(error)
+      openAlert('danger', 'Updating backdrops failed')
+    }
+  }
+
   const openAlert = async (type, message) => {
     setAlertMessage(message)
     setAlertType(type)
@@ -154,14 +164,20 @@ const HomePage = () => {
 
             <TaskButton
               buttonText="Get collections"
-              explanationText="Get all collections from TMDB."
+              explanationText="Checks all projects for collections at tmdb and creates them if they don't exist yet."
               onClick={getCollection}
             />
 
             <TaskButton
               buttonText="Update collection relations"
-              explanationText="Update the collection relations."
+              explanationText="Update the collection relations so every collection has the correct projects."
               onClick={updateCollectionRelations}
+            />
+
+            <TaskButton
+              buttonText="Update backdrops"
+              explanationText="Update backdrops of projects that do not have them yet."
+              onClick={updateBackdrops}
             />
           </Stack>
         </Box>
