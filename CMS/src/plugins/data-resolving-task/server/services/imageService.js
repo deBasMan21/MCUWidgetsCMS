@@ -43,7 +43,7 @@ module.exports = ({ strapi }) => ({
       let data = {}
 
       // Map the first 10 posters to poster objects
-      data.posters = res.posters.slice(0, 10).map((poster) => {
+      data.Posters = res.posters.slice(0, 10).map((poster) => {
         return {
           PosterUrl: `${config.images.secure_base_url}[INSERT_SIZE]${poster.file_path}`,
         }
