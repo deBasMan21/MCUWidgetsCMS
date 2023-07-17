@@ -198,6 +198,9 @@
       "relation": "manyToOne",
       "target": "api::collection.collection",
       "inversedBy": "projects"
+    },
+    "backdropUrl": {
+      "type": "string"
     }
   }
 }

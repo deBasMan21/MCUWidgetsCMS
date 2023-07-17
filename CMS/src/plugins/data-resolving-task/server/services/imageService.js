@@ -40,19 +40,72 @@ module.exports = ({ strapi }) => ({
 
     // Check if there are posters
     if (res.posters) {
+      let data = {}
+
       // Map the first 10 posters to poster objects
-      const posters = res.posters.slice(0, 10).map((poster) => {
+      data.posters = res.posters.slice(0, 10).map((poster) => {
         return {
           PosterUrl: `${config.images.secure_base_url}[INSERT_SIZE]${poster.file_path}`,
         }
       })
 
+      if (res.backdrops[0]) {
+        const url = `${config.images.secure_base_url}[INSERT_SIZE]${res.backdrops[0]?.file_path}`
+        data.backdropUrl = url
+      }
+
       // Update the entry with the new posters
       await strapi.entityService.update('api::mcu-project.mcu-project', id, {
-        data: {
-          Posters: posters
-        }
+        data
       })
     }
   },
+  async getBackdrops() {
+    const entries = await strapi.entityService.findMany('api::mcu-project.mcu-project', {
+      filter: {
+        backdropUrl: {
+          $null: true
+        },
+        tmdb_id: {
+          $notNull: true
+        }
+      },
+      fields: ['tmdb_id', 'id', 'Type']
+    })
+
+    const fetch = require('node-fetch')
+
+    // Get configuration from tmdb (imageurl etc)
+    const config = await fetch(`https://api.themoviedb.org/3/configuration`, {
+      headers: {
+        Authorization: `Bearer ${process.env.TMDB_API_KEY}`
+      }
+    }).then((res) => res.json())
+
+    await Promise.all(entries.map(async (entry) => {
+      const urlPrefix = entry.Type === "Serie" ? "tv" : "movie"
+
+      const res = await fetch(`https://api.themoviedb.org/3/${urlPrefix}/${entry.tmdb_id}/images?language=en`, {
+        headers: {
+          Authorization: `Bearer ${process.env.TMDB_API_KEY}`
+        }
+      }).then((res) => res.json())
+
+      if(!res.backdrops) {
+        return
+      }
+
+      if (!res.backdrops[0]) {
+        return
+      }
+
+      const backdropUrl = `${config.images.secure_base_url}[INSERT_SIZE]${res.backdrops[0]?.file_path}`
+      console.log(backdropUrl)
+      await strapi.entityService.update('api::mcu-project.mcu-project', entry.id, {
+        data: {
+          backdropUrl
+        }
+      });
+    }))
+  }
 });

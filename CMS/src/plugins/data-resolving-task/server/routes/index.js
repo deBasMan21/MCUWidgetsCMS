@@ -79,4 +79,12 @@ module.exports = [
       policies: [],
     },
   },
+  {
+    method: 'POST',
+    path: '/retrieveBackdrops',
+    handler: 'imageController.retrieveBackdrops',
+    config: {
+      policies: [],
+    },
+  }
 ];

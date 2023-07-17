@@ -55,6 +55,18 @@ module.exports = ({ strapi }) => ({
     console.log(arrayUniqueByKey)
     await Promise.all(
       arrayUniqueByKey.map(async (collection) => {
+        const existingCollection = await strapi.entityService.findMany('api::collection.collection', {
+          filters: {
+            tmdb_id: {
+              $eq: `${collection.id}`
+            }
+          },
+        })
+
+        if (existingCollection.length > 0) {
+          return
+        }
+
         await strapi.entityService.create('api::collection.collection', {
           data: {
             tmdb_id: `${collection.id}`,
