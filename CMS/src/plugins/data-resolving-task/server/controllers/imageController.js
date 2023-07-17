@@ -16,12 +16,4 @@ module.exports = ({ strapi }) => ({
     // Set response text
     ctx.body = "Images retrieved"
   },
-  async retrieveBackdrops(ctx) {
-    await strapi
-      .plugin('data-resolving-task')
-      .service('imageService')
-      .getBackdrops();
-
-    ctx.body = "Backdrops retrieved"
-  }
 });

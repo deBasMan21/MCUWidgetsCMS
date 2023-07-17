@@ -23,20 +23,17 @@ module.exports = ({ strapi }) => ({
 
       ctx.body = "Project data updated"
   },
-  async getCollections(ctx) {
+  async updateCollections(ctx) {
     await strapi
       .plugin('data-resolving-task')
       .service('projectService')
       .getCollections();
 
-    ctx.body = "Collections updated"
-  },
-  async updateCollectionRelations(ctx) {
     await strapi
       .plugin('data-resolving-task')
       .service('projectService')
       .updateCollectionRelations();
 
-    ctx.body = "Collection relations updated"
-  }
+    ctx.body = "Collections updated"
+  },
 });
