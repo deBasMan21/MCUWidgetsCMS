@@ -1,15 +1,14 @@
 services:
   mcu-widgets-recommendations-api:
-    container_name: mcu-widgets-recommendations-api
     pull_policy: build
     build:
-      context: ../
+      context: ../MCUWidgetsRecommendationsApi/
       dockerfile: ./Dockerfile
     environment:
-      MYSQL_USER: ${DATABASE_USERNAME}
-      MYSQL_PASSWORD: ${DATABASE_PASSWORD}
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
     ports:
-      - '3000:3000'
+      - "8000:80"
     depends_on:
       mcu-widgets-recommendations-db:
         condition: service_healthy
@@ -27,14 +26,14 @@ services:
     healthcheck:
       test:
         [
-          'CMD',
-          'mysqladmin',
-          'ping',
-          '-h',
-          'localhost',
-          '-u',
-          'root',
-          '--password=${DATABASE_PASSWORD}',
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-h",
+          "localhost",
+          "-u",
+          "root",
+          "--password=${DATABASE_PASSWORD}",
         ]
       timeout: 20s
       retries: 10
