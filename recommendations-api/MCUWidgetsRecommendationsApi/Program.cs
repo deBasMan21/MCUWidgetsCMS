@@ -41,6 +41,8 @@ builder.Services.AddHostedService<CMSEntityEventHandler>();
 
 // Dependency injection
 builder.Services.AddSingleton<IProjectRepository, ProjectRepository>();
+builder.Services.AddSingleton<IActorRepository, ActorRepository>();
+builder.Services.AddSingleton<IDirectorRepository, DirectorRepository>();
 
 var app = builder.Build();
 

@@ -16,6 +16,9 @@ namespace MCUWidgetsRecommendationsApi.Infrastructure.Repositories
 
         public async Task Create(Project project)
         {
+            project.uniqueId = Guid.NewGuid().ToString();
+            project.pageType = Models.Enums.ClickPageType.PROJECT;
+
             _context.Projects.Add(project);
             await _context.SaveChangesAsync();
         }

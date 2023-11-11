@@ -27,6 +27,8 @@ services:
       MYSQL_ROOT_PASSWORD: ${RECOMMENDATIONS_DATABASE_PASSWORD}
       MYSQL_PASSWORD: ${RECOMMENDATIONS_DATABASE_PASSWORD}
       MYSQL_DATABASE: ${RECOMMENDATIONS_DATABASE_NAME}
+    ports:
+      - "3306:3306"
     volumes:
       - mcu-widgets-recommendations-db:/var/lib/mysql
     healthcheck:

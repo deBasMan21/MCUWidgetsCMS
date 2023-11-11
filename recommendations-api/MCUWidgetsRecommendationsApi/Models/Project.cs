@@ -1,10 +1,13 @@
 ﻿using System;
 using MCUWidgetsRecommendationsApi.Models.Enums;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace MCUWidgetsRecommendationsApi.Models
 {
-	public class Project
+    public class Project
 	{
+		public string uniqueId { get; set; }
 		public int id { get; set; }
 		public string title { get; set; }
 		public DateTime releaseDate { get; set; }
@@ -18,7 +21,6 @@ namespace MCUWidgetsRecommendationsApi.Models
 
 		public List<Actor> actors { get; set; }
 		public List<Director> directors { get; set; }
-		public List<Project> relatedProjects { get; set; }
 
         public Project()
 		{

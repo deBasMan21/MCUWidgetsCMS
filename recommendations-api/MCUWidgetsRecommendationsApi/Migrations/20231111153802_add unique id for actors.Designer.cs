@@ -3,6 +3,7 @@ using System;
 using MCUWidgetsRecommendationsApi.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MCUWidgetsRecommendationsApi.Migrations
 {
     [DbContext(typeof(GeneralDbContext))]
-    partial class GeneralDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231111153802_add unique id for actors")]
+    partial class adduniqueidforactors
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -74,7 +77,7 @@ namespace MCUWidgetsRecommendationsApi.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int>("pageType")
+                    b.Property<int>("pageTypee")
                         .HasColumnType("int");
 
                     b.Property<string>("uniqueId")
@@ -109,10 +112,6 @@ namespace MCUWidgetsRecommendationsApi.Migrations
 
                     b.Property<int>("pageType")
                         .HasColumnType("int");
-
-                    b.Property<string>("uniqueId")
-                        .IsRequired()
-                        .HasColumnType("longtext");
 
                     b.HasKey("id");
 

@@ -1,5 +1,3 @@
-import amqp from 'amqplib'
-
 module.exports = {
   async beforeCreate(event) {
     await retrieveTmdbId(event)
@@ -64,6 +62,7 @@ async function createProject(event) {
 
     console.log("in here")
 
+    const amqp = require("amqplib")
     amqp.connect('amqp://mcu-widgets-recommendations-api', function (error0, connection) {
       if (error0) {
         throw error0

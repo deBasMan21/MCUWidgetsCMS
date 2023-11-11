@@ -1,11 +1,11 @@
 ﻿using System;
 namespace MCUWidgetsRecommendationsApi.EventHandlers.Events
 {
-	public class DeleteProjectEvent
+	public class DeleteEvent
 	{
 		public int id { get; set; }
 
-		public DeleteProjectEvent()
+		public DeleteEvent()
 		{
 		}
 	}

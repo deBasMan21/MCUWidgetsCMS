@@ -22,7 +22,15 @@ namespace MCUWidgetsRecommendationsApi.Infrastructure.Context
 			string? dbName = Environment.GetEnvironmentVariable("RECOMMENDATIONS_DATABASE_NAME");
 			string connectionString = $"server=mcu-widgets-recommendations-db;database={dbName};user=root;password={pwd}";
 
-            optionsBuilder.UseMySql(connectionString, new MySqlServerVersion(new Version(10, 1, 40)));
+			optionsBuilder.UseMySql(connectionString, new MySqlServerVersion(new Version(10, 1, 40)));
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+			modelBuilder.Entity<Project>().HasMany(p => p.actors).WithMany(a => a.projects);
+			modelBuilder.Entity<Project>().HasMany(p => p.directors).WithMany(d => d.projects);
         }
     }
 }

@@ -37,7 +37,6 @@
     <None Remove="Models\Enums\" />
     <None Remove="Infrastructure\Repositories\" />
     <None Remove="Events\Configuration\" />
-    <None Remove="Events\obj\" />
     <None Remove="EventHandlers\" />
     <None Remove="EventHandlers\Events\" />
   </ItemGroup>
@@ -49,7 +48,6 @@
     <Folder Include="Models\Enums\" />
     <Folder Include="Infrastructure\Repositories\" />
     <Folder Include="Events\Configuration\" />
-    <Folder Include="Events\obj\" />
     <Folder Include="EventHandlers\" />
     <Folder Include="EventHandlers\Events\" />
   </ItemGroup>
