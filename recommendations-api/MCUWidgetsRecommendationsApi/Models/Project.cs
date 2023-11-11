@@ -14,7 +14,7 @@ namespace MCUWidgetsRecommendationsApi.Models
 		public string posterUrl { get; set; }
 		public ProjectType type { get; set; }
 		public ProjectSource source { get; set; }
-		public ClickPageType pageTypee { get; set; }
+		public ClickPageType pageType { get; set; }
 
 		public List<Actor> actors { get; set; }
 		public List<Director> directors { get; set; }

@@ -9,11 +9,15 @@ services:
       ASPNETCORE_URLS: http://+:80
       RECOMMENDATIONS_DATABASE_PASSWORD: ${RECOMMENDATIONS_DATABASE_PASSWORD}
       RECOMMENDATIONS_DATABASE_NAME: ${RECOMMENDATIONS_DATABASE_NAME}
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PWD}
     ports:
       - "8000:80"
     depends_on:
       mcu-widgets-recommendations-db:
         condition: service_healthy
+      messageQueue:
+        condition: service_started
 
   mcu-widgets-recommendations-db:
     image: mysql:latest

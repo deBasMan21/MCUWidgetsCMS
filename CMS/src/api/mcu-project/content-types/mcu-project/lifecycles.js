@@ -1,3 +1,5 @@
+import amqp from 'amqplib'
+
 module.exports = {
   async beforeCreate(event) {
     await retrieveTmdbId(event)
@@ -52,12 +54,39 @@ async function createProject(event) {
   }
 
   try {
-    const fetch = require('node-fetch')
+    // const fetch = require('node-fetch')
 
-    await fetch(`http://mcu-widgets-recommendations-api:3000/api/project`, {
-      method: 'post',
-      body: JSON.stringify(project),
-      headers: { 'Content-Type': 'application/json' }
+    // await fetch(`http://mcu-widgets-recommendations-api:3000/api/project`, {
+    //   method: 'post',
+    //   body: JSON.stringify(project),
+    //   headers: { 'Content-Type': 'application/json' }
+    // })
+
+    console.log("in here")
+
+    amqp.connect('amqp://mcu-widgets-recommendations-api', function (error0, connection) {
+      if (error0) {
+        throw error0
+      }
+      connection.createChannel(function (error1, channel) {
+        if (error1) {
+          throw error1
+        }
+
+        const queue = 'RecommendationsAPIQueue'
+
+        channel.assertQueue(queue, {
+          durable: false
+        })
+
+        channel.sendToQueue(queue, Buffer.from(JSON.stringify(project)))
+
+        console.log(' [x] Sent %s', project)
+      })
+
+      setTimeout(function () {
+        connection.close()
+      }, 500)
     })
   } catch (error) {
     console.log(error)

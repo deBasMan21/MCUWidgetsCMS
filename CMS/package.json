@@ -16,6 +16,7 @@
     "@strapi/plugin-users-permissions": "^4.9.0",
     "@strapi/provider-email-sendmail": "^4.9.0",
     "@strapi/strapi": "^4.9.0",
+    "amqplib": "^0.10.3",
     "better-sqlite3": "7.4.6",
     "cross-env": "^7.0.3",
     "mysql": "^2.18.1",

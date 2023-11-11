@@ -33,6 +33,8 @@ services:
     depends_on:
       mcuwidgetsDB:
         condition: service_healthy
+      messageQueue:
+        condition: service_started
 
   mcuwidgetsDB:
     image: mysql:latest

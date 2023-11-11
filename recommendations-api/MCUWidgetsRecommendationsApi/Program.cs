@@ -1,5 +1,9 @@
 ﻿using System.Text.Json.Serialization;
+using Infrastructure.Configuration;
+using MCUWidgetsRecommendationsApi.EventHandlers;
 using MCUWidgetsRecommendationsApi.Infrastructure.Context;
+using MCUWidgetsRecommendationsApi.Infrastructure.Interfaces;
+using MCUWidgetsRecommendationsApi.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,7 +21,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Setup Database
-builder.Services.AddDbContext<GeneralDbContext>();
+builder.Services.AddDbContext<GeneralDbContext>(ServiceLifetime.Singleton);
 
 // Allow Cors
 var MyAllowSpecificOrigins = "";
@@ -31,8 +35,12 @@ builder.Services.AddCors(options =>
                       });
 });
 
-// Dependency injection
+// Add RabbitMQHandlers
+builder.Services.UseRabbitMQMessageHandler(builder.Configuration);
+builder.Services.AddHostedService<CMSEntityEventHandler>();
 
+// Dependency injection
+builder.Services.AddSingleton<IProjectRepository, ProjectRepository>();
 
 var app = builder.Build();
 
