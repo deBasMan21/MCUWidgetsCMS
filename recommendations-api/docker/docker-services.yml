@@ -5,8 +5,10 @@ services:
       context: ../MCUWidgetsRecommendationsApi/
       dockerfile: ./Dockerfile
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://+:80
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:80
+      RECOMMENDATIONS_DATABASE_PASSWORD: ${RECOMMENDATIONS_DATABASE_PASSWORD}
+      RECOMMENDATIONS_DATABASE_NAME: ${RECOMMENDATIONS_DATABASE_NAME}
     ports:
       - "8000:80"
     depends_on:
@@ -17,10 +19,10 @@ services:
     image: mysql:latest
     command: --default-authentication-plugin=mysql_native_password
     environment:
-      MYSQL_USER: ${DATABASE_USERNAME}
-      MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
-      MYSQL_PASSWORD: ${DATABASE_PASSWORD}
-      MYSQL_DATABASE: MCUWidgetsRecommendationsDB
+      MYSQL_USER: ${RECOMMENDATIONS_DATABASE_USER}
+      MYSQL_ROOT_PASSWORD: ${RECOMMENDATIONS_DATABASE_PASSWORD}
+      MYSQL_PASSWORD: ${RECOMMENDATIONS_DATABASE_PASSWORD}
+      MYSQL_DATABASE: ${RECOMMENDATIONS_DATABASE_NAME}
     volumes:
       - mcu-widgets-recommendations-db:/var/lib/mysql
     healthcheck:
@@ -33,7 +35,7 @@ services:
           "localhost",
           "-u",
           "root",
-          "--password=${DATABASE_PASSWORD}",
+          "--password=${RECOMMENDATIONS_DATABASE_PASSWORD}",
         ]
       timeout: 20s
       retries: 10
