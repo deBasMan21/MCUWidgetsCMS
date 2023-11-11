@@ -8,7 +8,7 @@
     "name": "A Strapi developer"
   },
   "scripts": {
-    "build": "strapi build --debug",
+    "build": "strapi build",
     "build:win": "cross-env NODE_ENV=production npm run build",
     "develop": "strapi develop",
     "start": "strapi start",
@@ -16,10 +16,10 @@
     "strapi": "strapi"
   },
   "dependencies": {
-    "@strapi/plugin-i18n": "^4.15.4",
-    "@strapi/plugin-users-permissions": "^4.15.4",
-    "@strapi/provider-email-sendmail": "^4.15.4",
-    "@strapi/strapi": "^4.15.4",
+    "@strapi/plugin-i18n": "4.12.7",
+    "@strapi/plugin-users-permissions": "4.12.7",
+    "@strapi/provider-email-sendmail": "4.12.7",
+    "@strapi/strapi": "4.12.7",
     "amqplib": "^0.10.3",
     "better-sqlite3": "7.4.6",
     "cross-env": "^7.0.3",
@@ -35,8 +35,7 @@
     "strapi-plugin-notes": "^1.0.1",
     "strapi-plugin-populate-deep": "^1.1.2",
     "strapi-plugin-rest-cache": "^4.2.7",
-    "strapi-plugin-todo": "^0.0.9",
-    "styled-components": "^5.3.11"
+    "strapi-plugin-todo": "^0.0.9"
   },
   "engines": {
     "node": ">=14.19.1 <=18.x.x",
