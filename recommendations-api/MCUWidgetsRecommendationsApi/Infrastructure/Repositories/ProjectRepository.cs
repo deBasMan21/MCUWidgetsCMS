@@ -5,14 +5,14 @@ using MCUWidgetsRecommendationsApi.Models;
 
 namespace MCUWidgetsRecommendationsApi.Infrastructure.Repositories
 {
-	public class ProjectRepository: IProjectRepository
-	{
+    public class ProjectRepository : IProjectRepository
+    {
         private readonly GeneralDbContext _context;
 
-		public ProjectRepository(GeneralDbContext context)
-		{
+        public ProjectRepository(GeneralDbContext context)
+        {
             _context = context;
-		}
+        }
 
         public async Task Create(Project project)
         {
@@ -49,6 +49,11 @@ namespace MCUWidgetsRecommendationsApi.Infrastructure.Repositories
 
             _context.Update(oldProject);
             await _context.SaveChangesAsync();
+        }
+
+        public bool Exists(int projectId)
+        {
+            return _context.Projects.Any(p => p.id == projectId);
         }
     }
 }

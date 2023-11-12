@@ -7,7 +7,7 @@ using Newtonsoft.Json.Linq;
 
 namespace MCUWidgetsRecommendationsApi.EventHandlers
 {
-	public class CMSEntityEventHandler: IHostedService, IMessageHandlerCallback
+    public class CMSEntityEventHandler : IHostedService, IMessageHandlerCallback
     {
         private readonly IMessageHandler _messageHandler;
         private readonly IProjectRepository _projectRepository;
@@ -19,12 +19,13 @@ namespace MCUWidgetsRecommendationsApi.EventHandlers
             IProjectRepository projectRepository,
             IActorRepository actorRepository,
             IDirectorRepository directorRepository
-        ) {
+        )
+        {
             this._messageHandler = messageHandler;
             this._projectRepository = projectRepository;
             this._actorRepository = actorRepository;
             this._directorRepository = directorRepository;
-		}
+        }
 
         public async Task<bool> HandleMessageAsync(string messageType, string message)
         {
@@ -47,7 +48,16 @@ namespace MCUWidgetsRecommendationsApi.EventHandlers
                         Project? updateProjectEvent = messageObject.ToObject<Project>();
                         if (updateProjectEvent == null) { return false; }
 
-                        await _projectRepository.Update(updateProjectEvent);
+                        bool projectExists = _projectRepository.Exists(updateProjectEvent.id);
+                        if (projectExists)
+                        {
+                            await _projectRepository.Update(updateProjectEvent);
+                        }
+                        else
+                        {
+                            await _projectRepository.Create(updateProjectEvent);
+                        }
+
                         break;
 
                     case "DeleteProjectEvent":
@@ -89,7 +99,7 @@ namespace MCUWidgetsRecommendationsApi.EventHandlers
 
                     case "UpdateDirectorEvent":
                         Director? updateDirectorEvent = messageObject.ToObject<Director>();
-                        if(updateDirectorEvent == null) { return false; }
+                        if (updateDirectorEvent == null) { return false; }
 
                         await _directorRepository.Update(updateDirectorEvent);
                         break;
@@ -106,7 +116,8 @@ namespace MCUWidgetsRecommendationsApi.EventHandlers
                         Console.WriteLine($"Event {messageType} not handled because there was no handler found.");
                         return false;
                 }
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 Console.WriteLine($"Error while handling {messageType} event with message: {message}. Errormessage: {e.Message}");
                 return false;

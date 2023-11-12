@@ -5,16 +5,16 @@ module.exports = {
   async beforeUpdate(event) {
     await retrieveTmdbId(event)
   },
-  afterCreate(event) {
-    createNotifications(event)
-    createProject(event)
+  async afterCreate(event) {
+    await createNotifications(event)
+    await createProject(event)
   },
-  afterUpdate(event) {
-    updateNotifications(event)
-    createProject(event)
+  async afterUpdate(event) {
+    await updateNotifications(event)
+    await createProject(event)
   },
-  afterDelete(event) {
-    deleteProject(event)
+  async afterDelete(event) {
+    await deleteProject(event)
   }
 };
 
@@ -52,41 +52,25 @@ async function createProject(event) {
   }
 
   try {
-    // const fetch = require('node-fetch')
-
-    // await fetch(`http://mcu-widgets-recommendations-api:3000/api/project`, {
-    //   method: 'post',
-    //   body: JSON.stringify(project),
-    //   headers: { 'Content-Type': 'application/json' }
-    // })
-
-    console.log("in here")
+    logEvent('Starting connection', 'update', project.id)
 
     const amqp = require("amqplib")
-    amqp.connect('amqp://mcu-widgets-recommendations-api', function (error0, connection) {
-      if (error0) {
-        throw error0
-      }
-      connection.createChannel(function (error1, channel) {
-        if (error1) {
-          throw error1
-        }
+    const options = { credentials: amqp.credentials.plain(process.env.RABBITMQ_USER, process.env.RABBITMQ_PWD)}
+    let connection = await amqp.connect('amqp://messageQueue', options)
+    logEvent('Connection opened', 'update', project.id)
 
-        const queue = 'RecommendationsAPIQueue'
+    let channel = await connection.createChannel()
+    let queue = 'RecommendationsAPIQueue'
+    channel.assertQueue(queue, { durable: true })
+    logEvent("Queue exists", 'update', project.id)
 
-        channel.assertQueue(queue, {
-          durable: false
-        })
+    channel.sendToQueue(queue, Buffer.from(JSON.stringify(project)), { headers: { MessageType: "CreateProjectEvent" }})
+    logEvent('Sent %s for updating project', 'update', project.id)
 
-        channel.sendToQueue(queue, Buffer.from(JSON.stringify(project)))
-
-        console.log(' [x] Sent %s', project)
-      })
-
-      setTimeout(function () {
-        connection.close()
-      }, 500)
-    })
+    setTimeout(function () {
+      connection.close()
+      logEvent('Closed connection', 'update', project.id)
+    }, 500)
   } catch (error) {
     console.log(error)
   }
@@ -132,13 +116,13 @@ function getTopicName(type, source) {
 }
 
 /// NOTIFICATIONS
-function createNotifications(event) {
+async function createNotifications(event) {
   const { result } = event;
 
   const { id, Title, ReleaseDate, Type, Posters, Source } = result
 
   if (ReleaseDate && ReleaseDate > new Date().toISOString()) {
-    strapi.entityService.create('plugin::strapi-plugin-fcm.fcm-notification', {
+    await strapi.entityService.create('plugin::strapi-plugin-fcm.fcm-notification', {
       data: {
         title: Title,
         body: `${Title} (${Type}) releases today!`,
@@ -158,7 +142,7 @@ function createNotifications(event) {
   }
 }
 
-function updateNotifications(event) {
+async function updateNotifications(event) {
   const { result } = event;
   const { id, Title, ReleaseDate, Type, Posters, notifications, Source } = result
 
@@ -170,7 +154,7 @@ function updateNotifications(event) {
     .filter((not) => not.publish_at != null)
     .filter((not) => not.publish_at > new Date().toISOString())
 
-  updateNotifications.forEach((notification) => {
+  await Promise.all(updateNotifications.map(async (notification) => {
     let data = {}
 
     if (!notification.publish_at.startsWith(`${ReleaseDate}`)) {
@@ -199,8 +183,12 @@ function updateNotifications(event) {
       }
     }
 
-    strapi.entityService.update('plugin::strapi-plugin-fcm.fcm-notification', notification.id, {
+    await strapi.entityService.update('plugin::strapi-plugin-fcm.fcm-notification', notification.id, {
       data
     })
-  })
+  }))
+}
+
+function logEvent(message, eventType, projectId) {
+  console.log("MESSAGEQUEUE: " + message + " for " + eventType + " project " + projectId)
 }

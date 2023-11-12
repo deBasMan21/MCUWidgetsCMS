@@ -16,10 +16,10 @@
     "strapi": "strapi"
   },
   "dependencies": {
-    "@strapi/plugin-i18n": "4.12.7",
-    "@strapi/plugin-users-permissions": "4.12.7",
-    "@strapi/provider-email-sendmail": "4.12.7",
-    "@strapi/strapi": "4.12.7",
+    "@strapi/plugin-i18n": "4.9.0",
+    "@strapi/plugin-users-permissions": "4.9.0",
+    "@strapi/provider-email-sendmail": "4.9.0",
+    "@strapi/strapi": "4.9.0",
     "amqplib": "^0.10.3",
     "better-sqlite3": "7.4.6",
     "cross-env": "^7.0.3",
@@ -28,7 +28,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^5.3.4",
-    "sharp": "^0.32.1",
+    "sharp": "^0.32.6",
     "strapi-middleware-cache": "^2.1.8",
     "strapi-plugin-duplicate-button": "^1.1.11",
     "strapi-plugin-fcm": "^1.0.8",
