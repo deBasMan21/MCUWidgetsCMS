@@ -5,7 +5,7 @@ using Newtonsoft.Json.Converters;
 
 namespace MCUWidgetsRecommendationsApi.Models
 {
-	public class Director
+	public class Director : IIdentifiable
 	{
 		public string uniqueId { get; set; }
 		public int id { get; set; }

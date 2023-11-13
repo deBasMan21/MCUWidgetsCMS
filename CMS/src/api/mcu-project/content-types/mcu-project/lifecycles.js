@@ -7,18 +7,18 @@ module.exports = {
   },
   async afterCreate(event) {
     await createNotifications(event)
-    await createProject(event)
+    await createOrdUpdateProject(event)
   },
   async afterUpdate(event) {
     await updateNotifications(event)
-    await createProject(event)
+    await createOrdUpdateProject(event)
   },
   async afterDelete(event) {
     await deleteProject(event)
   }
 };
 
-async function createProject(event) {
+async function createOrdUpdateProject(event) {
   const { result } = event
   const { id, Title, ReleaseDate, Type, Posters, Overview, imdb_id, Categories, actors, directors, related_projects, Source } = result
 
@@ -51,42 +51,16 @@ async function createProject(event) {
     project.posterUrl = posters[0].PosterUrl
   }
 
-  try {
-    logEvent('Starting connection', 'update', project.id)
-
-    const amqp = require("amqplib")
-    const options = { credentials: amqp.credentials.plain(process.env.RABBITMQ_USER, process.env.RABBITMQ_PWD)}
-    let connection = await amqp.connect('amqp://messageQueue', options)
-    logEvent('Connection opened', 'update', project.id)
-
-    let channel = await connection.createChannel()
-    let queue = 'RecommendationsAPIQueue'
-    channel.assertQueue(queue, { durable: true })
-    logEvent("Queue exists", 'update', project.id)
-
-    channel.sendToQueue(queue, Buffer.from(JSON.stringify(project)), { headers: { MessageType: "CreateProjectEvent" }})
-    logEvent('Sent %s for updating project', 'update', project.id)
-
-    setTimeout(function () {
-      connection.close()
-      logEvent('Closed connection', 'update', project.id)
-    }, 500)
-  } catch (error) {
-    console.log(error)
-  }
+  const helpers = require('./../../../../helpers/rabbitMQHelper')
+  await helpers.default.sendEvent(project, 'UpdateProjectEvent')
 }
 
 async function deleteProject(event) {
   const { result } = event
   const { id } = result
 
-  try {
-    const fetch = require('node-fetch')
-
-    await fetch(`http://mcu-widgets-recommendations-api:3000/api/project/${id}`, { method: 'delete' })
-  } catch (error) {
-    console.log(error)
-  }
+  const helpers = require('./../../../../helpers/rabbitMQHelper')
+  await helpers.default.sendEvent({ id }, 'DeleteProjectEvent')
 }
 
 async function retrieveTmdbId(event) {
@@ -187,8 +161,4 @@ async function updateNotifications(event) {
       data
     })
   }))
-}
-
-function logEvent(message, eventType, projectId) {
-  console.log("MESSAGEQUEUE: " + message + " for " + eventType + " project " + projectId)
 }

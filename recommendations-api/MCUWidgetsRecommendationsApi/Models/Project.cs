@@ -5,7 +5,7 @@ using Newtonsoft.Json.Converters;
 
 namespace MCUWidgetsRecommendationsApi.Models
 {
-    public class Project
+	public class Project : IIdentifiable
 	{
 		public string uniqueId { get; set; }
 		public int id { get; set; }
@@ -22,7 +22,7 @@ namespace MCUWidgetsRecommendationsApi.Models
 		public List<Actor> actors { get; set; }
 		public List<Director> directors { get; set; }
 
-        public Project()
+		public Project()
 		{
 		}
 	}

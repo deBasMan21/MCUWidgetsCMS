@@ -5,14 +5,14 @@ using MCUWidgetsRecommendationsApi.Models;
 
 namespace MCUWidgetsRecommendationsApi.Infrastructure.Repositories
 {
-	public class ActorRepository: IActorRepository
-	{
+    public class ActorRepository : IActorRepository
+    {
         private readonly GeneralDbContext _context;
 
-		public ActorRepository(GeneralDbContext context)
-		{
+        public ActorRepository(GeneralDbContext context)
+        {
             _context = context;
-		}
+        }
 
         public async Task Create(Actor actor)
         {
@@ -46,6 +46,11 @@ namespace MCUWidgetsRecommendationsApi.Infrastructure.Repositories
 
             _context.Actors.Update(oldActor);
             await _context.SaveChangesAsync();
+        }
+
+        public bool Exists(int actorId)
+        {
+            return _context.Actors.Any(a => a.id == actorId);
         }
     }
 }

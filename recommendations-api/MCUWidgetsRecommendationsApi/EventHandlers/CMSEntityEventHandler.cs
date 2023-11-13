@@ -36,14 +36,7 @@ namespace MCUWidgetsRecommendationsApi.EventHandlers
                 JObject messageObject = MessageSerializer.Deserialize(message);
                 switch (messageType)
                 {
-                    // PROJECT EVENTS
-                    case "CreateProjectEvent":
-                        Project? createProjectEvent = messageObject.ToObject<Project>();
-                        if (createProjectEvent == null) { return false; }
-
-                        await _projectRepository.Create(createProjectEvent);
-                        break;
-
+                    // Project EVENTS
                     case "UpdateProjectEvent":
                         Project? updateProjectEvent = messageObject.ToObject<Project>();
                         if (updateProjectEvent == null) { return false; }
@@ -68,18 +61,20 @@ namespace MCUWidgetsRecommendationsApi.EventHandlers
                         break;
 
                     // ACTOR EVENTS
-                    case "CreateActorEvent":
-                        Actor? createActorEvent = messageObject.ToObject<Actor>();
-                        if (createActorEvent == null) { return false; }
-
-                        await _actorRepository.Create(createActorEvent);
-                        break;
-
                     case "UpdateActorEvent":
                         Actor? updateActorEvent = messageObject.ToObject<Actor>();
                         if (updateActorEvent == null) { return false; }
 
-                        await _actorRepository.Update(updateActorEvent);
+                        bool actorExists = _actorRepository.Exists(updateActorEvent.id);
+                        if (!actorExists)
+                        {
+                            await _actorRepository.Create(updateActorEvent);
+                        }
+                        else
+                        {
+                            await _actorRepository.Update(updateActorEvent);
+                        }
+
                         break;
 
                     case "DeleteActorEvent":
@@ -90,18 +85,20 @@ namespace MCUWidgetsRecommendationsApi.EventHandlers
                         break;
 
                     // DIRECTOR EVENTS
-                    case "CreateDirectorEvent":
-                        Director? createDirectorEvent = messageObject.ToObject<Director>();
-                        if (createDirectorEvent == null) { return false; }
-
-                        await _directorRepository.Create(createDirectorEvent);
-                        break;
-
                     case "UpdateDirectorEvent":
                         Director? updateDirectorEvent = messageObject.ToObject<Director>();
                         if (updateDirectorEvent == null) { return false; }
 
-                        await _directorRepository.Update(updateDirectorEvent);
+                        bool directorExists = _directorRepository.Exists(updateDirectorEvent.id);
+                        if (directorExists)
+                        {
+                            await _directorRepository.Update(updateDirectorEvent);
+                        }
+                        else
+                        {
+                            await _directorRepository.Create(updateDirectorEvent);
+                        }
+
                         break;
 
                     case "DeleteDirectorEvent":

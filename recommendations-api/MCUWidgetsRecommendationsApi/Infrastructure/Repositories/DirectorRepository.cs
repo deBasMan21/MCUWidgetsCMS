@@ -6,14 +6,14 @@ using MCUWidgetsRecommendationsApi.Models;
 
 namespace MCUWidgetsRecommendationsApi.Infrastructure.Repositories
 {
-	public class DirectorRepository: IDirectorRepository
-	{
+    public class DirectorRepository : IDirectorRepository
+    {
         private readonly GeneralDbContext _context;
 
-		public DirectorRepository(GeneralDbContext context)
-		{
+        public DirectorRepository(GeneralDbContext context)
+        {
             _context = context;
-		}
+        }
 
         public async Task Create(Director director)
         {
@@ -46,6 +46,11 @@ namespace MCUWidgetsRecommendationsApi.Infrastructure.Repositories
 
             _context.Directors.Update(oldDirector);
             await _context.SaveChangesAsync();
+        }
+
+        public bool Exists(int directorId)
+        {
+            return _context.Directors.Any(d => d.id == directorId);
         }
     }
 }

@@ -1,16 +1,16 @@
 module.exports = {
   afterCreate(event) {
-    createActor(event)
+    createOrUpdateActor(event)
   },
   afterUpdate(event) {
-    createActor(event)
+    createOrUpdateActor(event)
   },
   afterDelete(event) {
     deleteActor(event)
   }
 };
 
-async function createActor(event) {
+async function createOrUpdateActor(event) {
   const { result } = event
   const { id, FirstName, LastName, ImageUrl, DateOfBirth, Character, mcu_projects } = result
 
@@ -24,34 +24,14 @@ async function createActor(event) {
     projects: mcu_projects.map((project) => { return { id: project.id } })
   }
 
-  console.log(actor)
-  try {
-    const fetch = require('node-fetch')
-
-    const result = await fetch(`http://mcu-widgets-recommendations-api:3000/api/actor`, {
-      method: 'post',
-      body: JSON.stringify(actor),
-      headers: { 'Content-Type': 'application/json' }
-    })
-
-    console.log(result)
-  } catch (error) {
-    console.log(error)
-  }
+  const helpers = require('./../../../../helpers/rabbitMQHelper')
+  await helpers.default.sendEvent(actor, 'UpdateActorEvent')
 }
 
 async function deleteActor(event) {
   const { result } = event
   const { id } = result
 
-  console.log(id)
-  try {
-    const fetch = require('node-fetch')
-
-    const result = await fetch(`http://mcu-widgets-recommendations-api:3000/api/actor/${id}`, { method: 'delete' })
-
-    console.log(result)
-  } catch (error) {
-    console.log(error)
-  }
+  const helpers = require('./../../../../helpers/rabbitMQHelper')
+  await helpers.default.sendEvent({ id }, 'DeleteActorEvent')
 }

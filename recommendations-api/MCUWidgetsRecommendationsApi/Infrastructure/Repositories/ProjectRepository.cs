@@ -2,6 +2,7 @@
 using MCUWidgetsRecommendationsApi.Infrastructure.Context;
 using MCUWidgetsRecommendationsApi.Infrastructure.Interfaces;
 using MCUWidgetsRecommendationsApi.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace MCUWidgetsRecommendationsApi.Infrastructure.Repositories
 {
@@ -34,8 +35,34 @@ namespace MCUWidgetsRecommendationsApi.Infrastructure.Repositories
 
         public async Task Update(Project project)
         {
-            Project? oldProject = _context.Projects.FirstOrDefault(p => p.id == project.id);
+            Project? oldProject = _context.Projects
+                .Include(p => p.actors)
+                .Include(p => p.directors)
+                .FirstOrDefault(p => p.id == project.id);
             if (oldProject == null) { return; }
+
+            project.directors.ForEach(d =>
+            {
+                try
+                {
+                    _context.Attach(d);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine($"Error occured while attaching director {d.id} to db: {e.Message}");
+                }
+            });
+            project.actors.ForEach(a =>
+            {
+                try
+                {
+                    _context.Attach(a);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine($"Error occured while attaching actor {a.id} to db: {e.Message}");
+                }
+            });
 
             oldProject.imdb_id = project.imdb_id;
             oldProject.overview = project.overview;
@@ -46,8 +73,9 @@ namespace MCUWidgetsRecommendationsApi.Infrastructure.Repositories
             oldProject.title = project.title;
             oldProject.type = project.type;
             oldProject.categories = project.categories;
+            oldProject.actors = project.actors;
+            oldProject.directors = project.directors;
 
-            _context.Update(oldProject);
             await _context.SaveChangesAsync();
         }
 
@@ -56,5 +84,14 @@ namespace MCUWidgetsRecommendationsApi.Infrastructure.Repositories
             return _context.Projects.Any(p => p.id == projectId);
         }
     }
-}
 
+    static class Extensions
+    {
+        public static bool Exists<TContext, TEntity>(this TContext context, TEntity entity)
+            where TContext : DbContext
+            where TEntity : class, IIdentifiable
+        {
+            return context.Set<TEntity>().Local.Any(e => e.id == entity.id);
+        }
+    }
+}
