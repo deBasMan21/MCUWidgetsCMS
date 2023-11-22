@@ -3,6 +3,7 @@ using System.Numerics;
 using MCUWidgetsRecommendationsApi.Infrastructure.Context;
 using MCUWidgetsRecommendationsApi.Infrastructure.Interfaces;
 using MCUWidgetsRecommendationsApi.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace MCUWidgetsRecommendationsApi.Infrastructure.Repositories
 {
@@ -17,8 +18,8 @@ namespace MCUWidgetsRecommendationsApi.Infrastructure.Repositories
 
         public async Task Create(Director director)
         {
-            director.uniqueId = Guid.NewGuid().ToString();
             director.pageType = Models.Enums.ClickPageType.DIRECTOR;
+            director.projects = GetProjects(director.projects);
 
             _context.Directors.Add(director);
             await _context.SaveChangesAsync();
@@ -35,7 +36,9 @@ namespace MCUWidgetsRecommendationsApi.Infrastructure.Repositories
 
         public async Task Update(Director director)
         {
-            Director? oldDirector = _context.Directors.FirstOrDefault(d => d.id == director.id);
+            Director? oldDirector = _context.Directors
+                .Include(d => d.projects)
+                .FirstOrDefault(d => d.id == director.id);
             if (oldDirector == null) { return; }
 
             oldDirector.firstName = director.firstName;
@@ -43,6 +46,7 @@ namespace MCUWidgetsRecommendationsApi.Infrastructure.Repositories
             oldDirector.dateOfBirth = director.dateOfBirth;
             oldDirector.imageUrl = director.imageUrl;
             oldDirector.pageType = director.pageType;
+            oldDirector.projects = GetProjects(director.projects);
 
             _context.Directors.Update(oldDirector);
             await _context.SaveChangesAsync();
@@ -51,6 +55,15 @@ namespace MCUWidgetsRecommendationsApi.Infrastructure.Repositories
         public bool Exists(int directorId)
         {
             return _context.Directors.Any(d => d.id == directorId);
+        }
+
+        private List<Project> GetProjects(List<Project> projects)
+        {
+            return _context.Projects
+                .Where(p => projects
+                    .Select(project => project.id)
+                    .Contains(p.id)
+                ).ToList();
         }
     }
 }

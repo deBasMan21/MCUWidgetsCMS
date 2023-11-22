@@ -17,8 +17,10 @@ namespace MCUWidgetsRecommendationsApi.Infrastructure.Repositories
 
         public async Task Create(Project project)
         {
-            project.uniqueId = Guid.NewGuid().ToString();
             project.pageType = Models.Enums.ClickPageType.PROJECT;
+
+            project.actors = GetActors(project.actors);
+            project.directors = GetDirectors(project.directors);
 
             _context.Projects.Add(project);
             await _context.SaveChangesAsync();
@@ -41,29 +43,6 @@ namespace MCUWidgetsRecommendationsApi.Infrastructure.Repositories
                 .FirstOrDefault(p => p.id == project.id);
             if (oldProject == null) { return; }
 
-            project.directors.ForEach(d =>
-            {
-                try
-                {
-                    _context.Attach(d);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine($"Error occured while attaching director {d.id} to db: {e.Message}");
-                }
-            });
-            project.actors.ForEach(a =>
-            {
-                try
-                {
-                    _context.Attach(a);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine($"Error occured while attaching actor {a.id} to db: {e.Message}");
-                }
-            });
-
             oldProject.imdb_id = project.imdb_id;
             oldProject.overview = project.overview;
             oldProject.pageType = project.pageType;
@@ -73,8 +52,8 @@ namespace MCUWidgetsRecommendationsApi.Infrastructure.Repositories
             oldProject.title = project.title;
             oldProject.type = project.type;
             oldProject.categories = project.categories;
-            oldProject.actors = project.actors;
-            oldProject.directors = project.directors;
+            oldProject.actors = GetActors(project.actors);
+            oldProject.directors = GetDirectors(project.directors);
 
             await _context.SaveChangesAsync();
         }
@@ -82,6 +61,24 @@ namespace MCUWidgetsRecommendationsApi.Infrastructure.Repositories
         public bool Exists(int projectId)
         {
             return _context.Projects.Any(p => p.id == projectId);
+        }
+
+        private List<Actor> GetActors(List<Actor> actors)
+        {
+            return _context.Actors
+                .Where(a => actors
+                    .Select(actor => actor.id)
+                    .Contains(a.id)
+                ).ToList();
+        }
+
+        private List<Director> GetDirectors(List<Director> directors)
+        {
+            return _context.Directors
+                .Where(d => directors
+                    .Select(director => director.id)
+                    .Contains(d.id)
+                ).ToList();
         }
     }
 
