@@ -43,6 +43,7 @@ builder.Services.AddHostedService<CMSEntityEventHandler>();
 builder.Services.AddSingleton<IProjectRepository, ProjectRepository>();
 builder.Services.AddSingleton<IActorRepository, ActorRepository>();
 builder.Services.AddSingleton<IDirectorRepository, DirectorRepository>();
+builder.Services.AddSingleton<ITrackingRepository, TrackingRepository>();
 
 var app = builder.Build();
 
