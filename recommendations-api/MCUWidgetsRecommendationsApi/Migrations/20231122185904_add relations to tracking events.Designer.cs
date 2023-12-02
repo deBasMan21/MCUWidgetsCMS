@@ -3,6 +3,7 @@ using System;
 using MCUWidgetsRecommendationsApi.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MCUWidgetsRecommendationsApi.Migrations
 {
     [DbContext(typeof(GeneralDbContext))]
-    partial class GeneralDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231122185904_add relations to tracking events")]
+    partial class addrelationstotrackingevents
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -217,12 +220,6 @@ namespace MCUWidgetsRecommendationsApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int?>("actorId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("directorId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("eventDateTime")
                         .HasColumnType("datetime(6)");
 
@@ -230,9 +227,6 @@ namespace MCUWidgetsRecommendationsApi.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("pageType")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("projectId")
                         .HasColumnType("int");
 
                     b.Property<int>("swipeDirection")
@@ -243,12 +237,6 @@ namespace MCUWidgetsRecommendationsApi.Migrations
                         .HasColumnType("longtext");
 
                     b.HasKey("id");
-
-                    b.HasIndex("actorId");
-
-                    b.HasIndex("directorId");
-
-                    b.HasIndex("projectId");
 
                     b.ToTable("TrackingSwipeEvents");
                 });
@@ -284,27 +272,6 @@ namespace MCUWidgetsRecommendationsApi.Migrations
                 });
 
             modelBuilder.Entity("MCUWidgetsRecommendationsApi.Models.Tracking.TrackingPageOpenEvent", b =>
-                {
-                    b.HasOne("MCUWidgetsRecommendationsApi.Models.Actor", "actor")
-                        .WithMany()
-                        .HasForeignKey("actorId");
-
-                    b.HasOne("MCUWidgetsRecommendationsApi.Models.Director", "director")
-                        .WithMany()
-                        .HasForeignKey("directorId");
-
-                    b.HasOne("MCUWidgetsRecommendationsApi.Models.Project", "project")
-                        .WithMany()
-                        .HasForeignKey("projectId");
-
-                    b.Navigation("actor");
-
-                    b.Navigation("director");
-
-                    b.Navigation("project");
-                });
-
-            modelBuilder.Entity("MCUWidgetsRecommendationsApi.Models.Tracking.TrackingSwipeEvent", b =>
                 {
                     b.HasOne("MCUWidgetsRecommendationsApi.Models.Actor", "actor")
                         .WithMany()

@@ -44,6 +44,7 @@ builder.Services.AddSingleton<IProjectRepository, ProjectRepository>();
 builder.Services.AddSingleton<IActorRepository, ActorRepository>();
 builder.Services.AddSingleton<IDirectorRepository, DirectorRepository>();
 builder.Services.AddSingleton<ITrackingRepository, TrackingRepository>();
+builder.Services.AddSingleton<IRecommendationsRepository, RecommendationsRepository>();
 
 var app = builder.Build();
 
