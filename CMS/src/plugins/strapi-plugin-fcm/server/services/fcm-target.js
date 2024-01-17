@@ -1,13 +1,6 @@
 'use strict';
 
-const {
-    getPaginationInfo,
-    convertPagedToStartLimit,
-    shouldCount,
-    transformPaginationResponse,
-} = require('@strapi/strapi/lib/core-api/service/pagination');
-
-const { getFetchParams } = require('@strapi/strapi/lib/core-api/service');
+const { getFetchParams } = require('@strapi/strapi');
 
 
 // we will use this for now, until we have a better way.
@@ -49,8 +42,6 @@ module.exports = ({ strapi }) => ({
     async find(params = {}) {
 
         const fetchParams = getFetchParams(params);
-        const paginationInfo = getPaginationInfo(fetchParams);
-        const startLimit = convertPagedToStartLimit(paginationInfo);
         // console.log('startLimit', startLimit, 'paginationInfo', paginationInfo);
 
         const knex = strapi.db.connection;
@@ -80,20 +71,9 @@ module.exports = ({ strapi }) => ({
             break;
           }
         }
-        // console.log('fcm-target results', rows);
-        if (shouldCount(fetchParams)) {
-            const countResult = await knex.raw(countQuery(devicesTokensCollectionName, deviceTokenFieldName, deviceLabelFieldName));
-            const count = (countResult.rows || countResult[0])?.[0]?.count;
-            // console.log('fcm-target countResult', count);
-            return {
-                data: rows,
-                pagination: transformPaginationResponse(paginationInfo, Number(count)),
-            };
-        }
 
         return {
-            data: rows,
-            pagination: paginationInfo,
+            data: rows
         };
 
     },
