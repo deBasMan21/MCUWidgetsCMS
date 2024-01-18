@@ -26,6 +26,15 @@ services:
       - "1338:8000"
     volumes:
       - mcuwidgets-cms-data:/opt/app/public/uploads
+      - type: bind
+        source: ../src
+        target: /opt/app/src
+      - type: bind
+        source: ../config
+        target: /opt/app/config
+    networks:
+      - internal_network
+      - nginx
     depends_on:
       mcuwidgetsDB:
         condition: service_healthy
@@ -42,6 +51,8 @@ services:
       MYSQL_DATABASE: ${DATABASE_NAME}
     volumes:
       - mcuwidgets-data:/var/lib/mysql
+    networks:
+      - internal_network
     healthcheck:
       test:
         [

@@ -13,6 +13,9 @@ services:
       RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PWD}
     ports:
       - "8000:80"
+    networks:
+      - internal_network
+      - nginx
     depends_on:
       mcu-widgets-recommendations-db:
         condition: service_healthy
@@ -29,6 +32,8 @@ services:
       MYSQL_DATABASE: ${RECOMMENDATIONS_DATABASE_NAME}
     volumes:
       - mcu-widgets-recommendations-db:/var/lib/mysql
+    networks:
+      - internal_network
     healthcheck:
       test:
         [

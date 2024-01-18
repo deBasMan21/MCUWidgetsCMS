@@ -31,6 +31,9 @@ services:
     environment:
       RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
       RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PWD}
+    networks:
+      - internal_network
+      - nginx
 
 
 volumes:
@@ -40,6 +43,8 @@ volumes:
 
 
 networks:
-  default:
+  internal_network:
+    name: internal_network
+  nginx:
     name: nginxproxymanager_default
     external: true
