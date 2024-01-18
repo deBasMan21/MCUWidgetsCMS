@@ -1,4 +1,4 @@
-import rabbitMQHelper from "@helpers/rabbitMQHelper";
+import rabbitMQHelper, { EventType } from "@helpers/rabbitMQHelper";
 
 export default {
   afterCreate(event) {
@@ -26,12 +26,12 @@ async function createOrUpdateActor(event) {
     projects: mcu_projects.map((project) => { return { id: project.id } })
   }
 
-  await rabbitMQHelper.sendEvent(actor, 'UpdateActorEvent')
+  await rabbitMQHelper.sendEvent(actor, EventType.UPDATE_ACTOR)
 }
 
 async function deleteActor(event) {
   const { result } = event
   const { id } = result
 
-  await rabbitMQHelper.sendEvent({ id }, 'DeleteActorEvent')
+  await rabbitMQHelper.sendEvent({ id }, EventType.DELETE_ACTOR)
 }

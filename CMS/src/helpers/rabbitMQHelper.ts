@@ -1,7 +1,7 @@
 import amqp from "amqplib"
 
 export default {
-  sendEvent: async (project, type) => {
+  sendEvent: async (project, type: EventType) => {
     try {
       logEvent('Starting connection', type, project.id)
 
@@ -25,6 +25,17 @@ export default {
       logEvent('Error sending event ' + error, type, project.id)
     }
   }
+}
+
+export enum EventType {
+  UPDATE_ACTOR = "UpdateActorEvent",
+  DELETE_ACTOR = "DeleteActorEvent",
+
+  UPDATE_DIRECTOR = "UpdateDirectorEvent",
+  DELETE_DIRECTOR = "DeleteDirectorEvent",
+
+  UPDATE_PROJECT = "UpdateProjectEvent",
+  DELETE_PROJECT = "DeleteProjectEvent"
 }
 
 function logEvent(message, eventType, projectId) {

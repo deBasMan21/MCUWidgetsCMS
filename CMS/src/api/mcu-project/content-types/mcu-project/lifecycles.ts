@@ -1,4 +1,4 @@
-import rabbitMQHelper from "@helpers/rabbitMQHelper"
+import rabbitMQHelper, { EventType } from "@helpers/rabbitMQHelper"
 
 export default {
   async beforeCreate(event) {
@@ -59,7 +59,7 @@ async function createOrdUpdateProject(event) {
     project.posterUrl = Posters[0].PosterUrl
   } else {
     let posters = strapi.entityService.findOne('api::mcu-project.mcu-project', id, {
-      // @ts-ignore Posters is a relation and those are not included in the generated types
+      // @ts-ignore: Posters is a relation and those are not included in the generated types
       fields: ["Posters"],
       populate: {
         Posters: true
@@ -69,14 +69,14 @@ async function createOrdUpdateProject(event) {
     project.posterUrl = posters[0].PosterUrl
   }
 
-  await rabbitMQHelper.sendEvent(project, 'UpdateProjectEvent')
+  await rabbitMQHelper.sendEvent(project, EventType.UPDATE_PROJECT)
 }
 
 async function deleteProject(event) {
   const { result } = event
   const { id } = result
 
-  await rabbitMQHelper.sendEvent({ id }, 'DeleteProjectEvent')
+  await rabbitMQHelper.sendEvent({ id }, EventType.DELETE_PROJECT)
 }
 
 async function retrieveTmdbId(event) {
