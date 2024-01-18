@@ -1,0 +1,67 @@
+version: "3.4"
+
+services:
+  ##### CMS
+  mcuwidgets:
+    extends:
+      file: docker-compose.yml
+      service: mcuwidgets
+    build:
+      context: ./CMS
+      dockerfile: Dockerfile.prod
+    environment:
+      NODE_ENV: production
+    pull_policy: build
+    restart: always
+    networks:
+      - nginx
+      - mcu_internal_network
+    
+  mcuwidgetsDB:
+    extends:
+      file: docker-compose.yml
+      service: mcuwidgetsDB
+    networks:
+      - mcu_internal_network
+      
+  ##### RECOMMENDATIONS
+  mcu-widgets-recommendations-api:
+    extends:
+      file: docker-compose.yml
+      service: mcu-widgets-recommendations-api
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+    pull_policy: build
+    restart: always
+    networks:
+      - nginx
+      - mcu_internal_network
+
+  mcu-widgets-recommendations-db:
+    extends:
+      file: docker-compose.yml
+      service: mcu-widgets-recommendations-db
+    networks:
+      - mcu_internal_network
+
+  ##### RabbitMQ
+  messageQueue:
+    extends:
+      file: docker-compose.yml
+      service: messageQueue
+    networks:
+      - mcu_internal_network
+      
+
+volumes:
+  mcuwidgets-data:
+  mcu-widgets-recommendations-db:
+  mcuwidgets-cms-data:
+
+networks:
+  mcu_internal_network:
+    name: mcu_internal_network
+
+  nginx:
+    name: nginxproxymanager_default
+    external: true
