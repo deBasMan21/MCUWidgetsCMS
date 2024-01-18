@@ -32,7 +32,7 @@ services:
       RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
       RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PWD}
     networks:
-      - internal_network
+      - mcu_internal_network
       - nginx
 
 
@@ -43,8 +43,8 @@ volumes:
 
 
 networks:
-  internal_network:
-    name: internal_network
+  mcu_internal_network:
+    name: mcu_mcu_internal_network
   nginx:
     name: nginxproxymanager_default
     external: true

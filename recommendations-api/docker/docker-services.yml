@@ -14,7 +14,7 @@ services:
     ports:
       - "8000:80"
     networks:
-      - internal_network
+      - mcu_internal_network
       - nginx
     depends_on:
       mcu-widgets-recommendations-db:
@@ -33,7 +33,7 @@ services:
     volumes:
       - mcu-widgets-recommendations-db:/var/lib/mysql
     networks:
-      - internal_network
+      - mcu_internal_network
     healthcheck:
       test:
         [

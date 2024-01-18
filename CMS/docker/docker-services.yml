@@ -27,7 +27,7 @@ services:
     volumes:
       - mcuwidgets-cms-data:/opt/app/public/uploads
     networks:
-      - internal_network
+      - mcu_internal_network
       - nginx
     depends_on:
       mcuwidgetsDB:
@@ -46,7 +46,7 @@ services:
     volumes:
       - mcuwidgets-data:/var/lib/mysql
     networks:
-      - internal_network
+      - mcu_internal_network
     healthcheck:
       test:
         [
