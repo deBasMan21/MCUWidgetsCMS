@@ -1,5 +1,5 @@
 
-FROM node:16-alpine
+FROM node:18-alpine
 # Installing libvips-dev for sharp Compatability
 RUN apk update && apk add --no-cache build-base gcc autoconf automake zlib-dev libpng-dev nasm bash vips-dev
 ARG NODE_ENV=production
@@ -11,5 +11,11 @@ RUN npm install --platform=linuxmusl --arch=x64
 WORKDIR /opt/app
 COPY ./ .
 RUN npm run build
+
+# Install dependencies for plugin
+WORKDIR /opt/app/src/plugins/strapi-plugin-fcm
+RUN yarn install
+WORKDIR /opt/app
+
 EXPOSE 1337
 CMD ["npm", "run", "develop"]
