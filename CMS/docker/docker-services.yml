@@ -4,7 +4,7 @@ services:
     pull_policy: build
     build:
       context: ../
-      dockerfile: ./Dockerfile
+      dockerfile: ./Dockerfile.dev
     environment:
       MYSQL_HOST: mcuwidgetsDB
       MYSQL_DB: ${DATABASE_NAME}
@@ -21,9 +21,6 @@ services:
       NYT_TOKEN: ${NYT_TOKEN}
       RABBITMQ_USER: ${RABBITMQ_USER}
       RABBITMQ_PWD: ${RABBITMQ_PWD}
-    ports:
-      - "1337:1337"
-      - "1338:8000"
     volumes:
       - mcuwidgets-cms-data:/opt/app/public/uploads
     depends_on:

@@ -26,8 +26,6 @@ services:
   ##### RabbitMQ
   messageQueue:
     image: rabbitmq:3-management
-    ports:
-      - "8080:15672"
     environment:
       RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
       RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PWD}
@@ -37,9 +35,3 @@ volumes:
   mcuwidgets-data:
   mcu-widgets-recommendations-db:
   mcuwidgets-cms-data:
-
-
-networks:
-  default:
-    name: nginxproxymanager_default
-    external: true
