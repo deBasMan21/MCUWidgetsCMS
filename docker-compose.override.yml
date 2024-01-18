@@ -1,0 +1,20 @@
+services:
+  mcuwidgets:
+    ports:
+      - "1337:1337"
+      - "1338:8000"
+    volumes:
+      - type: bind
+        source: CMS/src
+        target: /opt/app/src
+      - type: bind
+        source: CMS/config
+        target: /opt/app/config
+  
+  mcu-widgets-recommendations-api:
+    ports:
+      - "8000:80"
+  
+  messageQueue:
+    ports:
+      - "8080:15672"
