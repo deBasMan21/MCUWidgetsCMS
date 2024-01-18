@@ -19,13 +19,18 @@ services:
       TMDB_API_KEY: ${TMDB_API_KEY}
       RAPID_API_KEY: ${RAPID_API_KEY}
       NYT_TOKEN: ${NYT_TOKEN}
+      RABBITMQ_USER: ${RABBITMQ_USER}
+      RABBITMQ_PWD: ${RABBITMQ_PWD}
     ports:
       - "1337:1337"
+      - "1338:8000"
     volumes:
       - mcuwidgets-cms-data:/opt/app/public/uploads
     depends_on:
       mcuwidgetsDB:
         condition: service_healthy
+      messageQueue:
+        condition: service_started
 
   mcuwidgetsDB:
     image: mysql:latest

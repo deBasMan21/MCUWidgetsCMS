@@ -1,16 +1,16 @@
 module.exports = {
   afterCreate(event) {
-    createDirector(event)
+    createOrUpdateDirector(event)
   },
   afterUpdate(event) {
-    createDirector(event)
+    createOrUpdateDirector(event)
   },
   afterDelete(event) {
     deleteDirector(event)
   }
 };
 
-async function createDirector(event) {
+async function createOrUpdateDirector(event) {
   const { result } = event
   const { id, FirstName, LastName, ImageUrl, DateOfBirth, mcu_projects } = result
 
@@ -23,34 +23,14 @@ async function createDirector(event) {
     projects: mcu_projects.map((project) => { return { id: project.id } })
   }
 
-  console.log(director)
-  try {
-    const fetch = require('node-fetch')
-
-    const result = await fetch(`http://mcu-widgets-recommendations-api:3000/api/director`, {
-      method: 'post',
-      body: JSON.stringify(director),
-      headers: { 'Content-Type': 'application/json' }
-    })
-
-    console.log(result)
-  } catch (error) {
-    console.log(error)
-  }
+  const helpers = require('./../../../../helpers/rabbitMQHelper')
+  await helpers.default.sendEvent(director, 'UpdateDirectorEvent')
 }
 
 async function deleteDirector(event) {
   const { result } = event
   const { id } = result
 
-  console.log(id)
-  try {
-    const fetch = require('node-fetch')
-
-    const result = await fetch(`http://mcu-widgets-recommendations-api:3000/api/director/${id}`, { method: 'delete' })
-
-    console.log(result)
-  } catch (error) {
-    console.log(error)
-  }
+  const helpers = require('./../../../../helpers/rabbitMQHelper')
+  await helpers.default.sendEvent({ id }, 'DeleteDirectorEvent')
 }

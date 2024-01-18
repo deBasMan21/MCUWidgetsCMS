@@ -1,6 +1,7 @@
-.tmp/
-.cache/
-.git/
-build/
-node_modules/
-data/
+Dockerfile
+.dockerignore
+node_modules
+npm-debug.log
+README.md
+.next
+.git

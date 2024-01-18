@@ -1,40 +1,45 @@
 services:
   mcu-widgets-recommendations-api:
-    container_name: mcu-widgets-recommendations-api
     pull_policy: build
     build:
-      context: ../
+      context: ../MCUWidgetsRecommendationsApi/
       dockerfile: ./Dockerfile
     environment:
-      MYSQL_USER: ${DATABASE_USERNAME}
-      MYSQL_PASSWORD: ${DATABASE_PASSWORD}
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:80
+      RECOMMENDATIONS_DATABASE_PASSWORD: ${RECOMMENDATIONS_DATABASE_PASSWORD}
+      RECOMMENDATIONS_DATABASE_NAME: ${RECOMMENDATIONS_DATABASE_NAME}
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PWD}
     ports:
-      - '3000:3000'
+      - "8000:80"
     depends_on:
       mcu-widgets-recommendations-db:
         condition: service_healthy
+      messageQueue:
+        condition: service_started
 
   mcu-widgets-recommendations-db:
     image: mysql:latest
     command: --default-authentication-plugin=mysql_native_password
     environment:
-      MYSQL_USER: ${DATABASE_USERNAME}
-      MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
-      MYSQL_PASSWORD: ${DATABASE_PASSWORD}
-      MYSQL_DATABASE: MCUWidgetsRecommendationsDB
+      MYSQL_USER: ${RECOMMENDATIONS_DATABASE_USER}
+      MYSQL_ROOT_PASSWORD: ${RECOMMENDATIONS_DATABASE_PASSWORD}
+      MYSQL_PASSWORD: ${RECOMMENDATIONS_DATABASE_PASSWORD}
+      MYSQL_DATABASE: ${RECOMMENDATIONS_DATABASE_NAME}
     volumes:
       - mcu-widgets-recommendations-db:/var/lib/mysql
     healthcheck:
       test:
         [
-          'CMD',
-          'mysqladmin',
-          'ping',
-          '-h',
-          'localhost',
-          '-u',
-          'root',
-          '--password=${DATABASE_PASSWORD}',
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-h",
+          "localhost",
+          "-u",
+          "root",
+          "--password=${RECOMMENDATIONS_DATABASE_PASSWORD}",
         ]
       timeout: 20s
       retries: 10
