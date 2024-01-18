@@ -115,6 +115,3 @@ build
 .strapi-updater.json
 export_*
 *.pem
-
-# Temporarily remove the old api until it is deleted
-recommendations-api-old/

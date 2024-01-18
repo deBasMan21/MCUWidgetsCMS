@@ -119,6 +119,10 @@ namespace MCUWidgetsRecommendationsApi.EventHandlers
                 Console.WriteLine($"Error while handling {messageType} event with message: {message}. Errormessage: {e.Message}");
                 return false;
             }
+            finally
+            {
+                _projectRepository.DetachAllEntries();
+            }
 
             Console.WriteLine($"Succesfully handled event {messageType}");
 

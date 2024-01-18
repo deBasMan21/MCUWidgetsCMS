@@ -58,6 +58,11 @@ namespace MCUWidgetsRecommendationsApi.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
+        public void DetachAllEntries()
+        {
+            _context.ChangeTracker.Clear();
+        }
+
         public bool Exists(int projectId)
         {
             return _context.Projects.Any(p => p.id == projectId);

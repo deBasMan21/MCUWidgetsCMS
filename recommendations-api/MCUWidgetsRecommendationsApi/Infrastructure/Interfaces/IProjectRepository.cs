@@ -9,6 +9,7 @@ namespace MCUWidgetsRecommendationsApi.Infrastructure.Interfaces
 		public Task Update(Project project);
 		public Task Delete(int projectId);
 		public bool Exists(int projectId);
+		public void DetachAllEntries();
 	}
 }
 
