@@ -1,4 +1,6 @@
-module.exports = {
+import rabbitMQHelper from "@helpers/rabbitMQHelper";
+
+export default {
   afterCreate(event) {
     createOrUpdateDirector(event)
   },
@@ -23,14 +25,12 @@ async function createOrUpdateDirector(event) {
     projects: mcu_projects.map((project) => { return { id: project.id } })
   }
 
-  const helpers = require('./../../../../helpers/rabbitMQHelper')
-  await helpers.default.sendEvent(director, 'UpdateDirectorEvent')
+  await rabbitMQHelper.sendEvent(director, 'UpdateDirectorEvent')
 }
 
 async function deleteDirector(event) {
   const { result } = event
   const { id } = result
 
-  const helpers = require('./../../../../helpers/rabbitMQHelper')
-  await helpers.default.sendEvent({ id }, 'DeleteDirectorEvent')
+  await rabbitMQHelper.sendEvent({ id }, 'DeleteDirectorEvent')
 }

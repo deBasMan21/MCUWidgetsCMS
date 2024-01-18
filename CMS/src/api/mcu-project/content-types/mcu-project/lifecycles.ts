@@ -1,4 +1,6 @@
-module.exports = {
+import rabbitMQHelper from "@helpers/rabbitMQHelper"
+
+export default {
   async beforeCreate(event) {
     await retrieveTmdbId(event)
   },
@@ -18,13 +20,28 @@ module.exports = {
   }
 };
 
+type Project = {
+  id: string,
+  title: string,
+  releaseDate: string,
+  overview: string,
+  imdb_id: string,
+  categories: string,
+  type: string,
+  source: string,
+  actors: [number],
+  directors: [number],
+  relatedProjects: [number],
+  posterUrl?: string,
+
+}
 async function createOrdUpdateProject(event) {
   const { result } = event
   const { id, Title, ReleaseDate, Type, Posters, Overview, imdb_id, Categories, actors, directors, related_projects, Source } = result
 
   if (!Posters || Posters.length == 0) { return }
 
-  let project = {
+  let project: Project = {
     id: id,
     title: Title,
     releaseDate: ReleaseDate,
@@ -42,7 +59,8 @@ async function createOrdUpdateProject(event) {
     project.posterUrl = Posters[0].PosterUrl
   } else {
     let posters = strapi.entityService.findOne('api::mcu-project.mcu-project', id, {
-      fields: ['Posters'],
+      // @ts-ignore Posters is a relation and those are not included in the generated types
+      fields: ["Posters"],
       populate: {
         Posters: true
       }
@@ -51,16 +69,14 @@ async function createOrdUpdateProject(event) {
     project.posterUrl = posters[0].PosterUrl
   }
 
-  const helpers = require('./../../../../helpers/rabbitMQHelper')
-  await helpers.default.sendEvent(project, 'UpdateProjectEvent')
+  await rabbitMQHelper.sendEvent(project, 'UpdateProjectEvent')
 }
 
 async function deleteProject(event) {
   const { result } = event
   const { id } = result
 
-  const helpers = require('./../../../../helpers/rabbitMQHelper')
-  await helpers.default.sendEvent({ id }, 'DeleteProjectEvent')
+  await rabbitMQHelper.sendEvent({ id }, 'DeleteProjectEvent')
 }
 
 async function retrieveTmdbId(event) {
@@ -103,14 +119,16 @@ async function createNotifications(event) {
         targetType: 'topics',
         target: getTopicName(Type, Source),
         publish_at: `${ReleaseDate}T08:00:00.000Z`,
-        mcu_project: [id],
+        mcu_project: id,
         image: Posters[0].PosterUrl,
         isReleaseNotification: true,
-        payload: {
+        payload: `
+        {
           data: {
-            url: `https://mcuwidgets.page.link/mcu/${id}`
+            url: \`https://mcuwidgets.page.link/mcu/${id}\`
           }
         }
+        `
       }
     })
   }
@@ -129,7 +147,7 @@ async function updateNotifications(event) {
     .filter((not) => not.publish_at > new Date().toISOString())
 
   await Promise.all(updateNotifications.map(async (notification) => {
-    let data = {}
+    let data: any = {}
 
     if (!notification.publish_at.startsWith(`${ReleaseDate}`)) {
       data.publish_at = `${ReleaseDate}T08:00:00.000Z`

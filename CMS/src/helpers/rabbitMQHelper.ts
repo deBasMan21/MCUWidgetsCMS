@@ -1,9 +1,10 @@
-exports.default = {
+import amqp from "amqplib"
+
+export default {
   sendEvent: async (project, type) => {
     try {
       logEvent('Starting connection', type, project.id)
 
-      const amqp = require("amqplib")
       const options = { credentials: amqp.credentials.plain(process.env.RABBITMQ_USER, process.env.RABBITMQ_PWD)}
       let connection = await amqp.connect('amqp://messageQueue', options)
       logEvent('Connection opened', type, project.id)

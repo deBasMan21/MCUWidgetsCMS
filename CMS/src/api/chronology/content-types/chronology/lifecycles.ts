@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   afterUpdate(event) {
     const { result } = event
     const projects = result.mcu_projects
