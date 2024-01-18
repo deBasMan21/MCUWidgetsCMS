@@ -55,7 +55,6 @@ services:
 
 volumes:
   mcuwidgets-data:
-    external: true
   mcu-widgets-recommendations-db:
   mcuwidgets-cms-data:
 
