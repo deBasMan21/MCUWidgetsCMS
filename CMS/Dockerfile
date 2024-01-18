@@ -10,5 +10,11 @@ RUN npm install --platform=linuxmusl --arch=x64 -f
 WORKDIR /opt/app
 COPY ./ .
 RUN npm run build
+
+# Install dependencies for plugin
+WORKDIR /opt/app/src/plugins/strapi-plugin-fcm
+RUN yarn install
+WORKDIR /opt/app
+
 EXPOSE 1337
 CMD ["npm", "run", "develop"]
