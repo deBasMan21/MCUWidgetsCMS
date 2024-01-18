@@ -1,6 +1,4 @@
-const path = require('path');
-
-module.exports = ({ env }) => ({
+export default ({ env }) => ({
   connection: {
     client: 'mysql',
     connection: {

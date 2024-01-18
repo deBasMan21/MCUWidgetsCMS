@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   rest: {
     defaultLimit: 200,
     maxLimit: 200,

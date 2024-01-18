@@ -1,6 +1,6 @@
-const cronTasks = require("./cron-task.js");
+import cronTask from "./cron-task";
 
-module.exports = ({ env }) => ({
+export default ({ env }) => ({
   host: env('HOST', '0.0.0.0'),
   port: env.int('PORT', 1337),
   url: env('BASE_URL', ''),
@@ -9,6 +9,6 @@ module.exports = ({ env }) => ({
   },
   cron: {
     enabled: true,
-    tasks: cronTasks
+    tasks: cronTask
   }
 });
