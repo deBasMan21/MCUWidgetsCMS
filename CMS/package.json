@@ -22,6 +22,7 @@
     "@strapi/strapi": "4.17.1",
     "amqplib": "^0.10.3",
     "cross-env": "^7.0.3",
+    "module-alias": "^2.2.3",
     "mysql": "^2.18.1",
     "node-fetch": "^2.6.9",
     "react": "^18.2.0",
@@ -40,5 +41,10 @@
   },
   "strapi": {
     "uuid": "9d6d04dd-eb09-4676-b908-6fe0619e950e"
+  },
+  "_moduleAliases": {
+    "@helpers": "app/dist/src/helpers",
+    "@src": "app/dist/src",
+    "@types": "app/dist/types/generated"
   }
 }
