@@ -33,7 +33,8 @@
     "strapi-plugin-populate-deep": "^1.1.2",
     "strapi-plugin-rest-cache": "^4.2.8",
     "strapi-plugin-todo": "^0.0.9",
-    "styled-components": "^5.3.11"
+    "styled-components": "^5.3.11",
+    "xml2js": "^0.6.2"
   },
   "engines": {
     "node": ">=14.19.1 <=18.x.x",

@@ -1,0 +1,21 @@
+{
+  "collectionName": "components_news_item_images",
+  "info": {
+    "displayName": "Image"
+  },
+  "options": {},
+  "attributes": {
+    "url": {
+      "type": "string",
+      "required": true
+    },
+    "height": {
+      "type": "integer",
+      "required": true
+    },
+    "width": {
+      "type": "integer",
+      "required": true
+    }
+  }
+}

@@ -43,6 +43,28 @@ export interface EpisodeSeason extends Schema.Component {
   };
 }
 
+export interface NewsItemCategory extends Schema.Component {
+  collectionName: 'components_news_item_categories';
+  info: {
+    displayName: 'Category';
+  };
+  attributes: {
+    category: Attribute.String & Attribute.Required;
+  };
+}
+
+export interface NewsItemImage extends Schema.Component {
+  collectionName: 'components_news_item_images';
+  info: {
+    displayName: 'Image';
+  };
+  attributes: {
+    url: Attribute.String & Attribute.Required;
+    height: Attribute.Integer & Attribute.Required;
+    width: Attribute.Integer & Attribute.Required;
+  };
+}
+
 export interface PosterPoster extends Schema.Component {
   collectionName: 'components_poster_posters';
   info: {
@@ -75,6 +97,8 @@ declare module '@strapi/types' {
     export interface Components {
       'episode.episode': EpisodeEpisode;
       'episode.season': EpisodeSeason;
+      'news-item.category': NewsItemCategory;
+      'news-item.image': NewsItemImage;
       'poster.poster': PosterPoster;
       'trailer.trailer': TrailerTrailer;
     }
