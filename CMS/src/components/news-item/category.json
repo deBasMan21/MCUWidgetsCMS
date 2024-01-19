@@ -1,0 +1,13 @@
+{
+  "collectionName": "components_news_item_categories",
+  "info": {
+    "displayName": "Category"
+  },
+  "options": {},
+  "attributes": {
+    "category": {
+      "type": "string",
+      "required": true
+    }
+  }
+}
