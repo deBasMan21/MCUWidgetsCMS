@@ -4,7 +4,8 @@
   "info": {
     "singularName": "news-item",
     "pluralName": "news-items",
-    "displayName": "NewsItem"
+    "displayName": "NewsItem",
+    "description": ""
   },
   "options": {
     "draftAndPublish": false
@@ -35,6 +36,18 @@
     },
     "content": {
       "type": "text"
+    },
+    "categories": {
+      "displayName": "Category",
+      "type": "component",
+      "repeatable": true,
+      "component": "news-item.category"
+    },
+    "image": {
+      "displayName": "Image",
+      "type": "component",
+      "repeatable": false,
+      "component": "news-item.image"
     }
   }
 }

@@ -1235,6 +1235,44 @@ export interface ApiMcuProjectMcuProject extends Schema.CollectionType {
   };
 }
 
+export interface ApiNewsItemNewsItem extends Schema.CollectionType {
+  collectionName: 'news_items';
+  info: {
+    singularName: 'news-item';
+    pluralName: 'news-items';
+    displayName: 'NewsItem';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    guid: Attribute.String & Attribute.Required & Attribute.Unique;
+    url: Attribute.String & Attribute.Required;
+    title: Attribute.String & Attribute.Required;
+    summary: Attribute.String;
+    date_published: Attribute.DateTime;
+    author: Attribute.String;
+    content: Attribute.Text;
+    categories: Attribute.Component<'news-item.category', true>;
+    image: Attribute.Component<'news-item.image'>;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::news-item.news-item',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::news-item.news-item',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 declare module '@strapi/types' {
   export module Shared {
     export interface ContentTypes {
@@ -1263,6 +1301,7 @@ declare module '@strapi/types' {
       'api::collection.collection': ApiCollectionCollection;
       'api::director.director': ApiDirectorDirector;
       'api::mcu-project.mcu-project': ApiMcuProjectMcuProject;
+      'api::news-item.news-item': ApiNewsItemNewsItem;
     }
   }
 }
