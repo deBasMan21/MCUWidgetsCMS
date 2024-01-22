@@ -1,0 +1,41 @@
+{
+  "collectionName": "components_home_page_horizontal_lists",
+  "info": {
+    "displayName": "Horizontal List",
+    "description": "",
+    "icon": "layer"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": false
+    },
+    "openMoreLink": {
+      "type": "boolean",
+      "default": true,
+      "required": true
+    },
+    "numberOfItems": {
+      "type": "integer",
+      "required": true,
+      "default": 10,
+      "min": 0
+    },
+    "contentType": {
+      "type": "enumeration",
+      "enum": [
+        "mcu-projects",
+        "directors",
+        "actors",
+        "collections",
+        "news-items"
+      ],
+      "required": true,
+      "default": "mcu-projects"
+    },
+    "filterAndSortKey": {
+      "type": "string"
+    }
+  }
+}

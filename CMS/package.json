@@ -29,10 +29,8 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^5.3.4",
     "sharp": "^0.32.1",
-    "strapi-plugin-notes": "^1.0.1",
     "strapi-plugin-populate-deep": "^1.1.2",
     "strapi-plugin-rest-cache": "^4.2.8",
-    "strapi-plugin-todo": "^0.0.9",
     "styled-components": "^5.3.11",
     "xml2js": "^0.6.2"
   },
