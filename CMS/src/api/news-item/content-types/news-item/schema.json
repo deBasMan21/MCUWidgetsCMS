@@ -43,11 +43,9 @@
       "repeatable": true,
       "component": "news-item.category"
     },
-    "image": {
-      "displayName": "Image",
-      "type": "component",
-      "repeatable": false,
-      "component": "news-item.image"
+    "imageUrl": {
+      "type": "string",
+      "required": true
     }
   }
 }
