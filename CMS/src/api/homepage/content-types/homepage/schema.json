@@ -1,0 +1,31 @@
+{
+  "kind": "singleType",
+  "collectionName": "homepages",
+  "info": {
+    "singularName": "homepage",
+    "pluralName": "homepages",
+    "displayName": "Homepage",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "components": {
+      "type": "dynamiczone",
+      "components": [
+        "home-page.text-component",
+        "home-page.horizontal-list",
+        "home-page.news-item-list",
+        "home-page.highlight-item",
+        "home-page.youtube-embed",
+        "home-page.title",
+        "home-page.actors-page",
+        "home-page.directors-page"
+      ],
+      "required": true,
+      "min": 1
+    }
+  }
+}

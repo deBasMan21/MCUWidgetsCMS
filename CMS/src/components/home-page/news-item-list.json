@@ -1,0 +1,26 @@
+{
+  "collectionName": "components_home_page_news_item_lists",
+  "info": {
+    "displayName": "NewsItemList",
+    "icon": "bulletList",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "news_items": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::news-item.news-item"
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "amountOfItems": {
+      "type": "integer",
+      "required": true,
+      "default": 3,
+      "min": 0
+    }
+  }
+}

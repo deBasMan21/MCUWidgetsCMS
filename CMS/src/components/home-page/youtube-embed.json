@@ -1,0 +1,18 @@
+{
+  "collectionName": "components_home_page_youtube_embeds",
+  "info": {
+    "displayName": "Youtube Embed",
+    "icon": "slideshow",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "embedUrl": {
+      "type": "string",
+      "required": true
+    }
+  }
+}

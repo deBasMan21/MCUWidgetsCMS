@@ -1,0 +1,14 @@
+{
+  "collectionName": "components_home_page_titles",
+  "info": {
+    "displayName": "Title",
+    "icon": "hashtag"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    }
+  }
+}

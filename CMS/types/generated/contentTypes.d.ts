@@ -573,93 +573,6 @@ export interface PluginContentReleasesReleaseAction
   };
 }
 
-export interface PluginEntityNotesNote extends Schema.CollectionType {
-  collectionName: 'notes';
-  info: {
-    singularName: 'note';
-    pluralName: 'notes';
-    displayName: 'notes';
-  };
-  options: {
-    draftAndPublish: false;
-    comment: '';
-  };
-  pluginOptions: {
-    'content-manager': {
-      visible: false;
-    };
-    'content-type-builder': {
-      visible: false;
-    };
-  };
-  attributes: {
-    title: Attribute.String;
-    content: Attribute.Text;
-    entityId: Attribute.Integer;
-    entitySlug: Attribute.String;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'plugin::entity-notes.note',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'plugin::entity-notes.note',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface PluginTodoTask extends Schema.CollectionType {
-  collectionName: 'todo_task';
-  info: {
-    tableName: 'task';
-    singularName: 'task';
-    pluralName: 'tasks';
-    displayName: 'Task';
-    description: 'A task in Strapi';
-    kind: 'collectionType';
-  };
-  options: {
-    draftAndPublish: false;
-  };
-  pluginOptions: {
-    'content-manager': {
-      visible: false;
-    };
-    'content-type-builder': {
-      visible: false;
-    };
-  };
-  attributes: {
-    name: Attribute.String &
-      Attribute.Required &
-      Attribute.SetMinMaxLength<{
-        maxLength: 40;
-      }>;
-    isDone: Attribute.Boolean & Attribute.DefaultTo<false>;
-    related: Attribute.Relation<'plugin::todo.task', 'morphToOne'>;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'plugin::todo.task',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'plugin::todo.task',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
 export interface PluginStrapiPluginFcmFcmTopic extends Schema.CollectionType {
   collectionName: 'fcm_topics';
   info: {
@@ -1131,6 +1044,51 @@ export interface ApiDirectorDirector extends Schema.CollectionType {
   };
 }
 
+export interface ApiHomepageHomepage extends Schema.SingleType {
+  collectionName: 'homepages';
+  info: {
+    singularName: 'homepage';
+    pluralName: 'homepages';
+    displayName: 'Homepage';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    components: Attribute.DynamicZone<
+      [
+        'home-page.text-component',
+        'home-page.horizontal-list',
+        'home-page.news-item-list',
+        'home-page.highlight-item',
+        'home-page.youtube-embed',
+        'home-page.title',
+        'home-page.actors-page',
+        'home-page.directors-page'
+      ]
+    > &
+      Attribute.Required &
+      Attribute.SetMinMax<{
+        min: 1;
+      }>;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::homepage.homepage',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::homepage.homepage',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiMcuProjectMcuProject extends Schema.CollectionType {
   collectionName: 'mcu_projects';
   info: {
@@ -1287,8 +1245,6 @@ declare module '@strapi/types' {
       'plugin::upload.folder': PluginUploadFolder;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
-      'plugin::entity-notes.note': PluginEntityNotesNote;
-      'plugin::todo.task': PluginTodoTask;
       'plugin::strapi-plugin-fcm.fcm-topic': PluginStrapiPluginFcmFcmTopic;
       'plugin::strapi-plugin-fcm.fcm-notification': PluginStrapiPluginFcmFcmNotification;
       'plugin::strapi-plugin-fcm.fcm-plugin-configuration': PluginStrapiPluginFcmFcmPluginConfiguration;
@@ -1300,6 +1256,7 @@ declare module '@strapi/types' {
       'api::chronology.chronology': ApiChronologyChronology;
       'api::collection.collection': ApiCollectionCollection;
       'api::director.director': ApiDirectorDirector;
+      'api::homepage.homepage': ApiHomepageHomepage;
       'api::mcu-project.mcu-project': ApiMcuProjectMcuProject;
       'api::news-item.news-item': ApiNewsItemNewsItem;
     }
