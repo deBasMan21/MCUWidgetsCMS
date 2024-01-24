@@ -1060,12 +1060,12 @@ export interface ApiHomepageHomepage extends Schema.SingleType {
       [
         'home-page.text-component',
         'home-page.horizontal-list',
-        'home-page.news-item-list',
         'home-page.highlight-item',
         'home-page.youtube-embed',
         'home-page.title',
-        'home-page.actors-page',
-        'home-page.directors-page'
+        'home-page.vertical-list',
+        'home-page.spotify-embed',
+        'home-page.nyt-review'
       ]
     > &
       Attribute.Required &
@@ -1213,7 +1213,7 @@ export interface ApiNewsItemNewsItem extends Schema.CollectionType {
     author: Attribute.String;
     content: Attribute.Text;
     categories: Attribute.Component<'news-item.category', true>;
-    image: Attribute.Component<'news-item.image'>;
+    imageUrl: Attribute.String & Attribute.Required;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
