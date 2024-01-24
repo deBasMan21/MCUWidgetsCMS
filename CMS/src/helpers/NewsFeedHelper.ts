@@ -25,7 +25,6 @@ export async function fetchAndUpdateNewsFeed() {
       });
     }
 
-    let image = item["media:group"]["media:content"][0].attr;
     return {
       guid: item.guid.value,
       url: item.link,
@@ -35,11 +34,7 @@ export async function fetchAndUpdateNewsFeed() {
       author: item["dc:creator"],
       content: item["content:encoded"].replace(/<[^>]*>?/gm, ""),
       categories: categories,
-      image: {
-        url: image.url,
-        width: image.width,
-        height: image.height,
-      },
+      imageUrl: item["media:group"]["media:content"][0].attr.url,
     };
   });
 

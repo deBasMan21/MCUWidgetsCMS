@@ -1,0 +1,17 @@
+{
+  "collectionName": "components_home_page_spotify_embeds",
+  "info": {
+    "displayName": "Spotify Embed",
+    "icon": "music"
+  },
+  "options": {},
+  "attributes": {
+    "embedCode": {
+      "type": "text",
+      "required": true
+    },
+    "title": {
+      "type": "string"
+    }
+  }
+}

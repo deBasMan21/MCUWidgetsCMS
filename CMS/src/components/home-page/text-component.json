@@ -1,0 +1,15 @@
+{
+  "collectionName": "components_home_page_text_components",
+  "info": {
+    "displayName": "Text Component",
+    "icon": "quote",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "text": {
+      "type": "richtext",
+      "required": true
+    }
+  }
+}

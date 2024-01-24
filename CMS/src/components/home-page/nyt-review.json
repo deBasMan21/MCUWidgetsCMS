@@ -1,0 +1,30 @@
+{
+  "collectionName": "components_home_page_nyt_reviews",
+  "info": {
+    "displayName": "NYT Review",
+    "icon": "feather",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "reviewTitle": {
+      "type": "string",
+      "required": true
+    },
+    "reviewSummary": {
+      "type": "text",
+      "required": true
+    },
+    "reviewCopyright": {
+      "type": "string",
+      "required": true,
+      "default": "Copyright (c) 2023 The New York Times Company. All Rights Reserved."
+    },
+    "project": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::mcu-project.mcu-project",
+      "private": true
+    }
+  }
+}
