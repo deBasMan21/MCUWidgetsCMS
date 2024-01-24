@@ -20,7 +20,9 @@
         "home-page.highlight-item",
         "home-page.youtube-embed",
         "home-page.title",
-        "home-page.vertical-list"
+        "home-page.vertical-list",
+        "home-page.spotify-embed",
+        "home-page.nyt-review"
       ],
       "required": true,
       "min": 1
