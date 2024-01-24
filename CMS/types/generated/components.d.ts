@@ -117,6 +117,9 @@ export interface HomePageHorizontalList extends Schema.Component {
       Attribute.Required &
       Attribute.DefaultTo<'mcu-projects'>;
     filterAndSortKey: Attribute.String;
+    viewType: Attribute.Enumeration<['poster', 'circle']> &
+      Attribute.Required &
+      Attribute.DefaultTo<'poster'>;
   };
 }
 
@@ -143,6 +146,40 @@ export interface HomePageNewsItemList extends Schema.Component {
   };
 }
 
+export interface HomePageNytReview extends Schema.Component {
+  collectionName: 'components_home_page_nyt_reviews';
+  info: {
+    displayName: 'NYT Review';
+    icon: 'feather';
+    description: '';
+  };
+  attributes: {
+    reviewTitle: Attribute.String & Attribute.Required;
+    reviewSummary: Attribute.Text & Attribute.Required;
+    reviewCopyright: Attribute.String &
+      Attribute.Required &
+      Attribute.DefaultTo<'Copyright (c) 2023 The New York Times Company. All Rights Reserved.'>;
+    project: Attribute.Relation<
+      'home-page.nyt-review',
+      'oneToOne',
+      'api::mcu-project.mcu-project'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface HomePageSpotifyEmbed extends Schema.Component {
+  collectionName: 'components_home_page_spotify_embeds';
+  info: {
+    displayName: 'Spotify Embed';
+    icon: 'music';
+  };
+  attributes: {
+    embedCode: Attribute.Text & Attribute.Required;
+    title: Attribute.String;
+  };
+}
+
 export interface HomePageTextComponent extends Schema.Component {
   collectionName: 'components_home_page_text_components';
   info: {
@@ -163,6 +200,31 @@ export interface HomePageTitle extends Schema.Component {
   };
   attributes: {
     title: Attribute.String & Attribute.Required;
+  };
+}
+
+export interface HomePageVerticalList extends Schema.Component {
+  collectionName: 'components_home_page_vertical_lists';
+  info: {
+    displayName: 'Vertical List';
+    icon: 'bulletList';
+  };
+  attributes: {
+    title: Attribute.String;
+    openMoreLink: Attribute.Boolean &
+      Attribute.Required &
+      Attribute.DefaultTo<false>;
+    numberOfItems: Attribute.Integer &
+      Attribute.Required &
+      Attribute.SetMinMax<{
+        min: 0;
+      }>;
+    contentType: Attribute.Enumeration<
+      ['mcu-projects', 'actors', 'directors', 'collections', 'news-items']
+    > &
+      Attribute.Required &
+      Attribute.DefaultTo<'mcu-projects'>;
+    filterAndSortKey: Attribute.String;
   };
 }
 
@@ -238,8 +300,11 @@ declare module '@strapi/types' {
       'home-page.highlight-item': HomePageHighlightItem;
       'home-page.horizontal-list': HomePageHorizontalList;
       'home-page.news-item-list': HomePageNewsItemList;
+      'home-page.nyt-review': HomePageNytReview;
+      'home-page.spotify-embed': HomePageSpotifyEmbed;
       'home-page.text-component': HomePageTextComponent;
       'home-page.title': HomePageTitle;
+      'home-page.vertical-list': HomePageVerticalList;
       'home-page.youtube-embed': HomePageYoutubeEmbed;
       'news-item.category': NewsItemCategory;
       'news-item.image': NewsItemImage;

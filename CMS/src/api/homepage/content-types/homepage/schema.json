@@ -17,12 +17,12 @@
       "components": [
         "home-page.text-component",
         "home-page.horizontal-list",
-        "home-page.news-item-list",
         "home-page.highlight-item",
         "home-page.youtube-embed",
         "home-page.title",
-        "home-page.actors-page",
-        "home-page.directors-page"
+        "home-page.vertical-list",
+        "home-page.spotify-embed",
+        "home-page.nyt-review"
       ],
       "required": true,
       "min": 1
