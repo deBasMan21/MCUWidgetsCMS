@@ -22,7 +22,10 @@
         "home-page.title",
         "home-page.vertical-list",
         "home-page.spotify-embed",
-        "home-page.nyt-review"
+        "home-page.nyt-review",
+        "home-page.divider",
+        "home-page.header-widget",
+        "home-page.notifications-dialog"
       ],
       "required": true,
       "min": 1
