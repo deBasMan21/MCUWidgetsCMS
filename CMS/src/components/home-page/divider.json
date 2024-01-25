@@ -1,0 +1,21 @@
+{
+  "collectionName": "components_home_page_dividers",
+  "info": {
+    "displayName": "Divider",
+    "icon": "oneToOne",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "height": {
+      "type": "integer",
+      "required": true,
+      "default": 1
+    },
+    "color": {
+      "type": "customField",
+      "regex": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$",
+      "customField": "plugin::color-picker.color"
+    }
+  }
+}

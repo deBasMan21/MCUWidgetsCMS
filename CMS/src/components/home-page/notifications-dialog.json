@@ -1,0 +1,32 @@
+{
+  "collectionName": "components_home_page_notifications_dialogs",
+  "info": {
+    "displayName": "Notifications Dialog",
+    "icon": "bell",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text",
+      "required": false
+    },
+    "topics": {
+      "type": "customField",
+      "options": [
+        "Movie",
+        "Serie",
+        "Special",
+        "Related",
+        "News",
+        "Testing"
+      ],
+      "required": true,
+      "customField": "plugin::multi-select.multi-select"
+    }
+  }
+}

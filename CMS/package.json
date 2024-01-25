@@ -16,6 +16,7 @@
     "strapi": "strapi"
   },
   "dependencies": {
+    "@strapi/plugin-color-picker": "^4.19.0",
     "@strapi/plugin-i18n": "4.17.1",
     "@strapi/plugin-users-permissions": "4.17.1",
     "@strapi/provider-email-sendmail": "4.17.1",
@@ -29,6 +30,7 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^5.3.4",
     "sharp": "^0.32.1",
+    "strapi-plugin-multi-select": "^1.2.3",
     "strapi-plugin-populate-deep": "^1.1.2",
     "strapi-plugin-rest-cache": "^4.2.8",
     "styled-components": "^5.3.11",

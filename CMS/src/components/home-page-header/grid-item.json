@@ -1,0 +1,23 @@
+{
+  "collectionName": "components_home_page_header_grid_items",
+  "info": {
+    "displayName": "Grid Item",
+    "icon": "dashboard"
+  },
+  "options": {},
+  "attributes": {
+    "iconName": {
+      "type": "string",
+      "required": true,
+      "default": "star.circle.fill"
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "value": {
+      "type": "string",
+      "required": true
+    }
+  }
+}
