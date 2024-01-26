@@ -28,7 +28,7 @@
       "component": "home-page-header.grid-item"
     },
     "description": {
-      "type": "text"
+      "type": "richtext"
     }
   }
 }
