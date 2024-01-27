@@ -25,7 +25,8 @@
         "home-page.nyt-review",
         "home-page.divider",
         "home-page.header-widget",
-        "home-page.notifications-dialog"
+        "home-page.notifications-dialog",
+        "home-page.page-link"
       ],
       "required": true,
       "min": 1

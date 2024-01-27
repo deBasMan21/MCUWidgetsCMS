@@ -37,7 +37,8 @@
         "actors",
         "directors",
         "collections",
-        "news-items"
+        "news-items",
+        "projects"
       ]
     },
     "contentTypeId": {

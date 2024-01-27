@@ -29,7 +29,8 @@
         "directors",
         "actors",
         "collections",
-        "news-items"
+        "news-items",
+        "pages"
       ],
       "required": true,
       "default": "mcu-projects"
