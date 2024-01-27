@@ -29,6 +29,19 @@
     },
     "description": {
       "type": "richtext"
+    },
+    "contentType": {
+      "type": "enumeration",
+      "enum": [
+        "mcu-projects",
+        "actors",
+        "directors",
+        "collections",
+        "news-items"
+      ]
+    },
+    "contentTypeId": {
+      "type": "integer"
     }
   }
 }
