@@ -15,7 +15,7 @@
     "guid": {
       "type": "string",
       "required": true,
-      "unique": true
+      "unique": false
     },
     "url": {
       "type": "string",

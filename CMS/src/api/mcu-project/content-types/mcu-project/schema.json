@@ -200,6 +200,10 @@
     },
     "backdropUrl": {
       "type": "string"
+    },
+    "notificationTopic": {
+      "type": "string",
+      "unique": true
     }
   }
 }

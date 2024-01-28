@@ -28,8 +28,7 @@
         "home-page.youtube-embed",
         "home-page.page-link"
       ],
-      "required": true,
-      "min": 1
+      "required": true
     },
     "title": {
       "type": "string",

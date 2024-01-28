@@ -3,9 +3,11 @@ import rabbitMQHelper, { EventType } from "../../../../helpers/rabbitMQHelper";
 export default {
   async beforeCreate(event) {
     await retrieveTmdbId(event);
+    createNotificationTopicName(event);
   },
   async beforeUpdate(event) {
     await retrieveTmdbId(event);
+    createNotificationTopicName(event);
   },
   async afterCreate(event) {
     await createNotifications(event);
@@ -126,20 +128,12 @@ async function retrieveTmdbId(event) {
   }
 }
 
-/// HELPERS
-function getTopicName(type, source) {
-  if (source == "MCU") {
-    return type;
-  } else {
-    return "Related";
-  }
-}
-
 /// NOTIFICATIONS
 async function createNotifications(event) {
   const { result } = event;
 
-  const { id, Title, ReleaseDate, Type, Posters, Source } = result;
+  const { id, Title, ReleaseDate, Type, Posters, Source, notificationTopic } =
+    result;
 
   if (ReleaseDate && ReleaseDate > new Date().toISOString()) {
     await strapi.entityService.create(
@@ -149,7 +143,7 @@ async function createNotifications(event) {
           title: Title,
           body: `${Title} (${Type}) releases today!`,
           targetType: "topics",
-          target: getTopicName(Type, Source),
+          target: notificationTopic ?? "Unkown",
           publish_at: `${ReleaseDate}T08:00:00.000Z`,
           mcu_project: id,
           image: Posters[0].PosterUrl,
@@ -169,8 +163,15 @@ async function createNotifications(event) {
 
 async function updateNotifications(event) {
   const { result } = event;
-  const { id, Title, ReleaseDate, Type, Posters, notifications, Source } =
-    result;
+  const {
+    id,
+    Title,
+    ReleaseDate,
+    Type,
+    Posters,
+    notifications,
+    notificationTopic,
+  } = result;
 
   if (!notifications) {
     return;
@@ -198,15 +199,12 @@ async function updateNotifications(event) {
         data.title = Title;
       }
 
-      if (notification.target != getTopicName(Type, Source)) {
-        data.target = getTopicName(Type, Source);
+      if (notification.title != Title) {
+        data.body = `${Title} (${Type}) releases today!`;
       }
 
-      if (
-        notification.title != Title ||
-        notification.target != getTopicName(Type, Source)
-      ) {
-        data.body = `${Title} (${Type}) releases today!`;
+      if (notification.target != notificationTopic) {
+        data.target = notificationTopic;
       }
 
       data.payload = {
@@ -224,4 +222,18 @@ async function updateNotifications(event) {
       );
     })
   );
+}
+
+function createNotificationTopicName(event) {
+  const notificationTopic = event.params.data.notificationTopic;
+  if (notificationTopic && notificationTopic !== "") {
+    return;
+  }
+
+  const title = event.params.data.Title;
+  if (!title) {
+    return;
+  }
+
+  event.params.data.notificationTopic = title.replace(/ /g, "_");
 }
