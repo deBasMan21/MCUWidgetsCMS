@@ -1065,7 +1065,11 @@ export interface ApiHomepageHomepage extends Schema.SingleType {
         'home-page.title',
         'home-page.vertical-list',
         'home-page.spotify-embed',
-        'home-page.nyt-review'
+        'home-page.nyt-review',
+        'home-page.divider',
+        'home-page.header-widget',
+        'home-page.notifications-dialog',
+        'home-page.page-link'
       ]
     > &
       Attribute.Required &
@@ -1231,6 +1235,50 @@ export interface ApiNewsItemNewsItem extends Schema.CollectionType {
   };
 }
 
+export interface ApiPagePage extends Schema.CollectionType {
+  collectionName: 'pages';
+  info: {
+    singularName: 'page';
+    pluralName: 'pages';
+    displayName: 'Page';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    components: Attribute.DynamicZone<
+      [
+        'home-page.divider',
+        'home-page.header-widget',
+        'home-page.highlight-item',
+        'home-page.horizontal-list',
+        'home-page.notifications-dialog',
+        'home-page.nyt-review',
+        'home-page.spotify-embed',
+        'home-page.text-component',
+        'home-page.title',
+        'home-page.vertical-list',
+        'home-page.youtube-embed',
+        'home-page.page-link'
+      ]
+    > &
+      Attribute.Required &
+      Attribute.SetMinMax<{
+        min: 1;
+      }>;
+    title: Attribute.String & Attribute.Required;
+    parallaxConfig: Attribute.Component<'page-builder.parallax-config'>;
+    imageUrl: Attribute.String & Attribute.Required;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<'api::page.page', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<'api::page.page', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+  };
+}
+
 declare module '@strapi/types' {
   export module Shared {
     export interface ContentTypes {
@@ -1259,6 +1307,7 @@ declare module '@strapi/types' {
       'api::homepage.homepage': ApiHomepageHomepage;
       'api::mcu-project.mcu-project': ApiMcuProjectMcuProject;
       'api::news-item.news-item': ApiNewsItemNewsItem;
+      'api::page.page': ApiPagePage;
     }
   }
 }
