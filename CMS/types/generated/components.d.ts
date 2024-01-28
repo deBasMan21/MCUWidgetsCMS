@@ -43,6 +43,32 @@ export interface EpisodeSeason extends Schema.Component {
   };
 }
 
+export interface HomePageHeaderCategory extends Schema.Component {
+  collectionName: 'components_home_page_header_categories';
+  info: {
+    displayName: 'Category';
+    icon: 'grid';
+  };
+  attributes: {
+    category: Attribute.String;
+  };
+}
+
+export interface HomePageHeaderGridItem extends Schema.Component {
+  collectionName: 'components_home_page_header_grid_items';
+  info: {
+    displayName: 'Grid Item';
+    icon: 'dashboard';
+  };
+  attributes: {
+    iconName: Attribute.String &
+      Attribute.Required &
+      Attribute.DefaultTo<'star.circle.fill'>;
+    title: Attribute.String & Attribute.Required;
+    value: Attribute.String & Attribute.Required;
+  };
+}
+
 export interface HomePageActorsPage extends Schema.Component {
   collectionName: 'components_home_page_actors_page';
   info: {
@@ -74,6 +100,47 @@ export interface HomePageDirectorsPage extends Schema.Component {
   };
 }
 
+export interface HomePageDivider extends Schema.Component {
+  collectionName: 'components_home_page_dividers';
+  info: {
+    displayName: 'Divider';
+    icon: 'oneToOne';
+    description: '';
+  };
+  attributes: {
+    height: Attribute.Integer & Attribute.Required & Attribute.DefaultTo<1>;
+    color: Attribute.String &
+      Attribute.CustomField<'plugin::color-picker.color'>;
+  };
+}
+
+export interface HomePageHeaderWidget extends Schema.Component {
+  collectionName: 'components_home_page_header_widgets';
+  info: {
+    displayName: 'HeaderWidget';
+    icon: 'layout';
+    description: '';
+  };
+  attributes: {
+    imageUrl: Attribute.String & Attribute.Required;
+    title: Attribute.String & Attribute.Required;
+    categories: Attribute.Component<'home-page-header.category', true>;
+    gridItems: Attribute.Component<'home-page-header.grid-item', true>;
+    description: Attribute.RichText;
+    contentType: Attribute.Enumeration<
+      [
+        'mcu-projects',
+        'actors',
+        'directors',
+        'collections',
+        'news-items',
+        'projects'
+      ]
+    >;
+    contentTypeId: Attribute.Integer;
+  };
+}
+
 export interface HomePageHighlightItem extends Schema.Component {
   collectionName: 'components_home_page_highlight_items';
   info: {
@@ -83,7 +150,14 @@ export interface HomePageHighlightItem extends Schema.Component {
   };
   attributes: {
     contentType: Attribute.Enumeration<
-      ['mcu-projects', 'actors', 'directors', 'collections', 'news-items']
+      [
+        'mcu-projects',
+        'actors',
+        'directors',
+        'collections',
+        'news-items',
+        'pages'
+      ]
     > &
       Attribute.Required &
       Attribute.DefaultTo<'mcu-projects'>;
@@ -112,7 +186,14 @@ export interface HomePageHorizontalList extends Schema.Component {
       }> &
       Attribute.DefaultTo<10>;
     contentType: Attribute.Enumeration<
-      ['mcu-projects', 'directors', 'actors', 'collections', 'news-items']
+      [
+        'mcu-projects',
+        'directors',
+        'actors',
+        'collections',
+        'news-items',
+        'pages'
+      ]
     > &
       Attribute.Required &
       Attribute.DefaultTo<'mcu-projects'>;
@@ -146,6 +227,25 @@ export interface HomePageNewsItemList extends Schema.Component {
   };
 }
 
+export interface HomePageNotificationsDialog extends Schema.Component {
+  collectionName: 'components_home_page_notifications_dialogs';
+  info: {
+    displayName: 'Notifications Dialog';
+    icon: 'bell';
+    description: '';
+  };
+  attributes: {
+    title: Attribute.String & Attribute.Required;
+    description: Attribute.Text;
+    topics: Attribute.JSON &
+      Attribute.Required &
+      Attribute.CustomField<
+        'plugin::multi-select.multi-select',
+        ['Movie', 'Serie', 'Special', 'Related', 'News', 'Testing']
+      >;
+  };
+}
+
 export interface HomePageNytReview extends Schema.Component {
   collectionName: 'components_home_page_nyt_reviews';
   info: {
@@ -165,6 +265,34 @@ export interface HomePageNytReview extends Schema.Component {
       'api::mcu-project.mcu-project'
     > &
       Attribute.Private;
+  };
+}
+
+export interface HomePagePageLink extends Schema.Component {
+  collectionName: 'components_home_page_page_links';
+  info: {
+    displayName: 'Page Link';
+    icon: 'arrowRight';
+    description: '';
+  };
+  attributes: {
+    contentType: Attribute.Enumeration<
+      [
+        'mcu-projects',
+        'actors',
+        'directors',
+        'collections',
+        'news-items',
+        'pages'
+      ]
+    > &
+      Attribute.Required &
+      Attribute.DefaultTo<'mcu-projects'>;
+    contentTypeId: Attribute.Integer & Attribute.Required;
+    text: Attribute.String & Attribute.Required;
+    backgroundColor: Attribute.String &
+      Attribute.CustomField<'plugin::color-picker.color'>;
+    iconName: Attribute.String;
   };
 }
 
@@ -208,6 +336,7 @@ export interface HomePageVerticalList extends Schema.Component {
   info: {
     displayName: 'Vertical List';
     icon: 'bulletList';
+    description: '';
   };
   attributes: {
     title: Attribute.String;
@@ -220,7 +349,14 @@ export interface HomePageVerticalList extends Schema.Component {
         min: 0;
       }>;
     contentType: Attribute.Enumeration<
-      ['mcu-projects', 'actors', 'directors', 'collections', 'news-items']
+      [
+        'mcu-projects',
+        'actors',
+        'directors',
+        'collections',
+        'news-items',
+        'pages'
+      ]
     > &
       Attribute.Required &
       Attribute.DefaultTo<'mcu-projects'>;
@@ -263,6 +399,18 @@ export interface NewsItemImage extends Schema.Component {
   };
 }
 
+export interface PageBuilderParallaxConfig extends Schema.Component {
+  collectionName: 'components_page_builder_parallax_configs';
+  info: {
+    displayName: 'Parallax Config';
+    icon: 'landscape';
+  };
+  attributes: {
+    imageUrl: Attribute.String & Attribute.Required;
+    height: Attribute.Integer & Attribute.Required & Attribute.DefaultTo<500>;
+  };
+}
+
 export interface PosterPoster extends Schema.Component {
   collectionName: 'components_poster_posters';
   info: {
@@ -295,12 +443,18 @@ declare module '@strapi/types' {
     export interface Components {
       'episode.episode': EpisodeEpisode;
       'episode.season': EpisodeSeason;
+      'home-page-header.category': HomePageHeaderCategory;
+      'home-page-header.grid-item': HomePageHeaderGridItem;
       'home-page.actors-page': HomePageActorsPage;
       'home-page.directors-page': HomePageDirectorsPage;
+      'home-page.divider': HomePageDivider;
+      'home-page.header-widget': HomePageHeaderWidget;
       'home-page.highlight-item': HomePageHighlightItem;
       'home-page.horizontal-list': HomePageHorizontalList;
       'home-page.news-item-list': HomePageNewsItemList;
+      'home-page.notifications-dialog': HomePageNotificationsDialog;
       'home-page.nyt-review': HomePageNytReview;
+      'home-page.page-link': HomePagePageLink;
       'home-page.spotify-embed': HomePageSpotifyEmbed;
       'home-page.text-component': HomePageTextComponent;
       'home-page.title': HomePageTitle;
@@ -308,6 +462,7 @@ declare module '@strapi/types' {
       'home-page.youtube-embed': HomePageYoutubeEmbed;
       'news-item.category': NewsItemCategory;
       'news-item.image': NewsItemImage;
+      'page-builder.parallax-config': PageBuilderParallaxConfig;
       'poster.poster': PosterPoster;
       'trailer.trailer': TrailerTrailer;
     }
