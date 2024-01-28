@@ -38,11 +38,16 @@
         "directors",
         "collections",
         "news-items",
-        "projects"
+        "pages"
       ]
     },
     "contentTypeId": {
       "type": "integer"
+    },
+    "showImage": {
+      "type": "boolean",
+      "default": true,
+      "required": true
     }
   }
 }
