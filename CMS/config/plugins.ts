@@ -5,23 +5,30 @@ export default ({ env }) => ({
     },
   },
   "rest-cache": {
-    provider: {
-      name: "memory",
-      options: {
-        max: 32767,
-        maxAge: 3600,
+    enabled: true,
+    config: {
+      provider: {
+        name: "memory",
+        options: {
+          max: 32767,
+          maxAge: 2678400,
+        },
       },
-    },
-    strategy: {
-      contentTypes: [
-        "api::mcu-project.mcu-project",
-        "api::actor.actor",
-        "api::director.director",
-      ],
-      enableXCacheHeaders: true,
-      debug: true,
-      hitpass: (ctx) => {
-        return !ctx.request.headers.authorization;
+      strategy: {
+        contentTypes: [
+          "api::mcu-project.mcu-project",
+          "api::actor.actor",
+          "api::director.director",
+          "api::news-item.news-item",
+          "api::page.page",
+          "api::collection.collection",
+          "api::homepage.homepage",
+        ],
+        enableXCacheHeaders: true,
+        debug: true,
+        hitpass: (ctx) => {
+          return !ctx.request.headers.authorization;
+        },
       },
     },
   },
