@@ -1,9 +1,9 @@
 {
-  "collectionName": "components_home_page_highlight_items",
+  "collectionName": "components_home_page_page_links",
   "info": {
-    "displayName": "Highlight Item",
-    "description": "",
-    "icon": "landscape"
+    "displayName": "Page Link",
+    "icon": "arrowRight",
+    "description": ""
   },
   "options": {},
   "attributes": {
@@ -24,10 +24,16 @@
       "type": "integer",
       "required": true
     },
-    "title": {
-      "type": "string"
+    "text": {
+      "type": "string",
+      "required": true
     },
-    "subtitle": {
+    "backgroundColor": {
+      "type": "customField",
+      "regex": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$",
+      "customField": "plugin::color-picker.color"
+    },
+    "iconName": {
       "type": "string"
     }
   }

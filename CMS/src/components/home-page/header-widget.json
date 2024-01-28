@@ -28,7 +28,21 @@
       "component": "home-page-header.grid-item"
     },
     "description": {
-      "type": "text"
+      "type": "richtext"
+    },
+    "contentType": {
+      "type": "enumeration",
+      "enum": [
+        "mcu-projects",
+        "actors",
+        "directors",
+        "collections",
+        "news-items",
+        "projects"
+      ]
+    },
+    "contentTypeId": {
+      "type": "integer"
     }
   }
 }

@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_page_builder_parallax_configs",
+  "info": {
+    "displayName": "Parallax Config",
+    "icon": "landscape"
+  },
+  "options": {},
+  "attributes": {
+    "imageUrl": {
+      "type": "string",
+      "required": true
+    },
+    "height": {
+      "type": "integer",
+      "required": true,
+      "default": 500
+    }
+  }
+}

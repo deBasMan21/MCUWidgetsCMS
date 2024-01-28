@@ -1,0 +1,48 @@
+{
+  "kind": "collectionType",
+  "collectionName": "pages",
+  "info": {
+    "singularName": "page",
+    "pluralName": "pages",
+    "displayName": "Page",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "components": {
+      "type": "dynamiczone",
+      "components": [
+        "home-page.divider",
+        "home-page.header-widget",
+        "home-page.highlight-item",
+        "home-page.horizontal-list",
+        "home-page.notifications-dialog",
+        "home-page.nyt-review",
+        "home-page.spotify-embed",
+        "home-page.text-component",
+        "home-page.title",
+        "home-page.vertical-list",
+        "home-page.youtube-embed",
+        "home-page.page-link"
+      ],
+      "required": true,
+      "min": 1
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "parallaxConfig": {
+      "type": "component",
+      "repeatable": false,
+      "component": "page-builder.parallax-config"
+    },
+    "imageUrl": {
+      "type": "string",
+      "required": true
+    }
+  }
+}
