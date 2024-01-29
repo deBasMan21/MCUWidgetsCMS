@@ -8,8 +8,7 @@
     "description": ""
   },
   "options": {
-    "draftAndPublish": true,
-    "comment": ""
+    "draftAndPublish": true
   },
   "attributes": {
     "title": {
@@ -36,17 +35,6 @@
     "response": {
       "type": "json"
     },
-    "target": {
-      "type": "enumeration",
-      "enum": [
-        "Movie",
-        "Serie",
-        "Special",
-        "Related",
-        "Testing"
-      ],
-      "required": true
-    },
     "publish_at": {
       "type": "datetime"
     },
@@ -59,6 +47,10 @@
     "isReleaseNotification": {
       "type": "boolean",
       "default": false,
+      "required": true
+    },
+    "target": {
+      "type": "string",
       "required": true
     }
   }

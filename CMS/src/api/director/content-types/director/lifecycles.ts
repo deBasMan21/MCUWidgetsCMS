@@ -23,9 +23,9 @@ async function createOrUpdateDirector(event) {
     lastName: LastName,
     dateOfBirth: DateOfBirth,
     imageUrl: ImageUrl,
-    projects: mcu_projects.map((project) => {
+    projects: mcu_projects?.map((project) => {
       return { id: project.id };
-    }),
+    }) ?? [],
   };
 
   await rabbitMQHelper.sendEvent(director, EventType.UPDATE_DIRECTOR);

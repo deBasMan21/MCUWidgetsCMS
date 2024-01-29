@@ -75,7 +75,6 @@
       "type": "component",
       "repeatable": true,
       "component": "poster.poster",
-      "min": 1,
       "required": true,
       "max": 10
     },
@@ -201,6 +200,10 @@
     },
     "backdropUrl": {
       "type": "string"
+    },
+    "notificationTopic": {
+      "type": "string",
+      "unique": true
     }
   }
 }

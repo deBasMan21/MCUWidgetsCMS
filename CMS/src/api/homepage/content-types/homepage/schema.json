@@ -28,8 +28,7 @@
         "home-page.notifications-dialog",
         "home-page.page-link"
       ],
-      "required": true,
-      "min": 1
+      "required": true
     }
   }
 }

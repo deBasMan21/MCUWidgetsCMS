@@ -1,0 +1,15 @@
+{
+  "collectionName": "components_notifications_dialog_notification_topics",
+  "info": {
+    "displayName": "NotificationTopic",
+    "icon": "bell",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "topic": {
+      "type": "string",
+      "required": true
+    }
+  }
+}
