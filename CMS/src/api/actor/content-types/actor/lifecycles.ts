@@ -31,9 +31,10 @@ async function createOrUpdateActor(event) {
     dateOfBirth: DateOfBirth,
     imageUrl: ImageUrl,
     character: Character,
-    projects: mcu_projects.map((project) => {
-      return { id: project.id };
-    }),
+    projects:
+      mcu_projects?.map((project) => {
+        return { id: project.id };
+      }) ?? [],
   };
 
   await rabbitMQHelper.sendEvent(actor, EventType.UPDATE_ACTOR);

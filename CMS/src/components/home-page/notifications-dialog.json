@@ -16,17 +16,11 @@
       "required": false
     },
     "topics": {
-      "type": "customField",
-      "options": [
-        "Movie",
-        "Serie",
-        "Special",
-        "Related",
-        "News",
-        "Testing"
-      ],
-      "required": true,
-      "customField": "plugin::multi-select.multi-select"
+      "displayName": "NotificationTopic",
+      "type": "component",
+      "repeatable": true,
+      "component": "notifications-dialog.notification-topic",
+      "required": true
     }
   }
 }
