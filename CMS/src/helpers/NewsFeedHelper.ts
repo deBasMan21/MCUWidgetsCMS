@@ -28,11 +28,13 @@ export async function fetchAndUpdateNewsFeed() {
     return {
       guid: item.guid.value,
       url: item.link,
-      title: item.title,
-      summary: item.description,
+      title: item.title.replace(/&#x27;/, "'"),
+      summary: item.description.replace(/&#x27;/, "'"),
       date_published: item["dc:date"],
       author: item["dc:creator"],
-      content: item["content:encoded"].replace(/<[^>]*>?/gm, ""),
+      content: item["content:encoded"]
+        .replace(/<[^>]*>?/gm, "")
+        .replace(/&#x27;/, "'"),
       categories: categories,
       imageUrl: item["media:group"]["media:content"][0].attr.url,
     };

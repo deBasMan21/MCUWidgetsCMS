@@ -23,11 +23,15 @@ module.exports = {
         }
 
         if (entry.payload) {
-          try {
-            let jsonPayload = JSON.parse(entry.payload);
-            payload = { ...payload, ...jsonPayload };
-          } catch {
-            console.log("parsing failed so sending without payload")
+          if (typeof entry.payload == "string") {
+            try {
+              let jsonPayload = JSON.parse(entry.payload);
+              payload = { ...payload, ...jsonPayload };
+            } catch {
+              console.log("parsing failed so sending without payload")
+            }
+          } else if (typeof entry.payload == "object") {
+            payload = { ...payload };
           }
         }
 

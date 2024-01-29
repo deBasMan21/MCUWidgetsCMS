@@ -235,5 +235,7 @@ function createNotificationTopicName(event) {
     return;
   }
 
-  event.params.data.notificationTopic = title.replace(/ /g, "_");
+  event.params.data.notificationTopic = title
+    .replace(/ /g, "_")
+    .replace(/:/g, "~");
 }

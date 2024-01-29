@@ -8,8 +8,6 @@ var fcmUtil = require('../../util/fcm');
 
 const { propOr } = require('lodash/fp');
 
-const { getFetchParams } = require('@strapi/strapi');
-
 const {
     hasDraftAndPublish,
     constants: { PUBLISHED_AT_ATTRIBUTE },
@@ -23,10 +21,8 @@ const uid = 'plugin::strapi-plugin-fcm.fcm-notification';
 module.exports = ({ strapi }) => ({
     async find(params = {}) {
 
-        const fetchParams = getFetchParams(params);
-        const data = await strapi.entityService.findMany(uid, {
-            ...fetchParams
-        });
+        // const fetchParams = getFetchParams(params);
+        const data = await strapi.entityService.findMany(uid, {});
 
         return {
             data
@@ -34,7 +30,7 @@ module.exports = ({ strapi }) => ({
     },
 
     async findOne(entityId, params) {
-        return strapi.entityService.findOne(uid, entityId, getFetchParams(params));
+        return strapi.entityService.findOne(uid, entityId, params);
     },
 
     async delete(entityId, params = {}) {
