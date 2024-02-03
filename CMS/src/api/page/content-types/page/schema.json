@@ -42,6 +42,11 @@
     "imageUrl": {
       "type": "string",
       "required": true
+    },
+    "showShareButton": {
+      "type": "boolean",
+      "default": true,
+      "required": true
     }
   }
 }

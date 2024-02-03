@@ -148,13 +148,9 @@ async function createNotifications(event) {
           mcu_project: id,
           image: Posters[0].PosterUrl,
           isReleaseNotification: true,
-          payload: `
-        {
-          data: {
-            url: \`https://mcuwidgets.page.link/mcu/${id}\`
-          }
-        }
-        `,
+          payload: {
+            url: `https://mcuwidgets.page.link/project/${id}`,
+          },
         },
       }
     );
@@ -208,9 +204,7 @@ async function updateNotifications(event) {
       }
 
       data.payload = {
-        data: {
-          url: `https://mcuwidgets.page.link/mcu/${id}`,
-        },
+        url: `https://mcuwidgets.page.link/mcu/${id}`,
       };
 
       await strapi.entityService.update(
