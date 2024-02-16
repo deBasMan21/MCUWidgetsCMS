@@ -18,9 +18,7 @@ async function sendNotification(event) {
     title: title,
     body: summary,
     payload: {
-      data: {
-        url: `https://mcuwidgets.page.link/news/${id}`,
-      },
+      url: `https://mcuwidgets.page.link/news/${id}`,
     },
     image: imageUrl,
     targetType: "topics",
