@@ -17,12 +17,14 @@ export async function fetchAndUpdateNewsFeed() {
 
   let newsItems: any[] = result.rss.channel.item.map((item: any) => {
     let categories: { category: string }[] = [];
-    if (item.category.value) {
-      categories = [{ category: item.category.value }];
-    } else {
-      categories = item.category.map((cat) => {
-        return { category: cat.value };
-      });
+    if (item.category) {
+      if (item.category.value) {
+        categories = [{ category: item.category.value }];
+      } else {
+        categories = item.category.map((cat) => {
+          return { category: cat.value };
+        });
+      }
     }
 
     return {
