@@ -72,15 +72,24 @@ module.exports = ({ strapi }) => ({
       }
     })
 
-    series.forEach(async (serie) => {
+    for(let serie of series) {
       let updatedSeasons = serie.Seasons.map((season) => {
+        if (!season.seasonProject) {
+          return season
+        }
+
         if (season.seasonProject.episodes) {
           season.NumberOfEpisodes = season.seasonProject.episodes.length
         }
 
         if (season.seasonProject.Posters) {
-          season.imageUrl = season.seasonProject.Posters[0].PosterUrl
+          let poster = season.seasonProject.Posters[0]
+          if (poster) {
+            season.imageUrl = poster.PosterUrl
+          }
         }
+
+        season.seasonProject = season.seasonProject.id
 
         return season
       })
@@ -90,7 +99,7 @@ module.exports = ({ strapi }) => ({
           Seasons: updatedSeasons
         }
       })
-    })
+    }
   }
 });
 
