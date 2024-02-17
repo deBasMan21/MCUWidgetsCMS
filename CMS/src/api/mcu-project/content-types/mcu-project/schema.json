@@ -204,6 +204,9 @@
     "notificationTopic": {
       "type": "string",
       "unique": true
+    },
+    "reviewUrl": {
+      "type": "string"
     }
   }
 }
