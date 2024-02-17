@@ -34,18 +34,22 @@ module.exports = ({ strapi }) => ({
       var promise = Promise.resolve();
       entries.forEach(function (entry) {
         promise = promise.then(async function () {
-          const resReviews = await fetch(`https://api.nytimes.com/svc/movies/v2/reviews/search.json?query=${entry.Title}&api-key=${apiKey}`).then((res) => res.json())
+          let requestUrl = `https://api.nytimes.com/svc/search/v2/articlesearch.json?fq=section_name:"Movies" AND type_of_material:"Review"&q=${entry.Title}&api-key=${apiKey}`
+          const resReviews = await fetch(requestUrl).then((res) => res.json())
 
           console.log(resReviews, entry)
 
-          if (resReviews.results?.length > 0) {
-            let review = resReviews.results.filter(review => review.display_title == entry.Title)[0]
+          if (resReviews.response?.docs?.length > 0) {
+            console.log(resReviews.response?.docs?.map(review => review.headline?.main))
+            let filteredReviews = resReviews.response?.docs.filter(review => review.headline.main.includes(entry.Title))
+            let review = filteredReviews[0]
 
             strapi.entityService.update('api::mcu-project.mcu-project', entry.id, {
               data: {
-                reviewTitle: decodeHtmlCharCodes(review?.headline ?? ""),
-                reviewSummary: decodeHtmlCharCodes(review?.summary_short ?? ""),
-                reviewCopyright: resReviews.copyright
+                reviewTitle: decodeHtmlCharCodes(review?.headline?.main ?? ""),
+                reviewSummary: decodeHtmlCharCodes(review?.abstract ?? ""),
+                reviewCopyright: resReviews.copyright,
+                reviewUrl: review?.web_url
               }
             });
           }
