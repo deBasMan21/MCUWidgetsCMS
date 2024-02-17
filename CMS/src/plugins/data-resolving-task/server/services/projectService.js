@@ -84,14 +84,14 @@ module.exports = ({ strapi }) => ({
 
     const fetch = require('node-fetch')
 
-    await Promise.all(entries.map(async (entry) => {
+    for(let entry of entries) {
       const res = await fetch(`https://api.themoviedb.org/3/collection/${entry.tmdb_id}?language=en`, {
         headers: {
           Authorization: `Bearer ${process.env.TMDB_API_KEY}`
         }
       }).then((res) => res.json())
 
-      let projects = await Promise.all(res.parts.map(async part => {
+      let projects = await Promise.all((res.parts ?? []).map(async part => {
         let tmdbId = part.id
         let projects = await strapi.entityService.findMany('api::mcu-project.mcu-project', {
           filters: {
@@ -113,12 +113,10 @@ module.exports = ({ strapi }) => ({
         projects: projects.filter(project => project)
       }
 
-      console.log(data)
-
       await strapi.entityService.update('api::collection.collection', entry.id, {
         data: data
       });
-    }))
+    }
   }
 });
 
