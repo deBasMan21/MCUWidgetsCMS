@@ -103,6 +103,10 @@ async function retrieveSeriesEpisodes(result, fetch, config) {
     }
   }).then((res) => res.json())
 
+  if (seasonInfo.success === false) {
+    return
+  }
+
   let episodes = seasonInfo.episodes.map((episode) => {
     let episodeData = {
       EpisodeNumber: episode.episode_number,

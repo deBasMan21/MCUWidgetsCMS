@@ -37,8 +37,6 @@ module.exports = ({ strapi }) => ({
           let requestUrl = `https://api.nytimes.com/svc/search/v2/articlesearch.json?fq=section_name:"Movies" AND type_of_material:"Review"&q=${entry.Title}&api-key=${apiKey}`
           const resReviews = await fetch(requestUrl).then((res) => res.json())
 
-          console.log(resReviews, entry)
-
           if (resReviews.response?.docs?.length > 0) {
             console.log(resReviews.response?.docs?.map(review => review.headline?.main))
             let filteredReviews = resReviews.response?.docs.filter(review => review.headline.main.includes(entry.Title))
