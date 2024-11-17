@@ -4,14 +4,14 @@ const { propOr } = require('lodash/fp');
 
 const { getFetchParams } = require('@strapi/strapi');
 
-const {
-    hasDraftAndPublish,
-    constants: { PUBLISHED_AT_ATTRIBUTE },
-} = require('@strapi/utils').contentTypes;
+// const {
+//     hasDraftAndPublish,
+//     constants: { PUBLISHED_AT_ATTRIBUTE },
+// } = require('@strapi/utils').contentTypes;
 
-const setPublishedAt = data => {
-    data[PUBLISHED_AT_ATTRIBUTE] = propOr(new Date(), PUBLISHED_AT_ATTRIBUTE, data);
-};
+// const setPublishedAt = data => {
+//     data[PUBLISHED_AT_ATTRIBUTE] = propOr(new Date(), PUBLISHED_AT_ATTRIBUTE, data);
+// };
 
 /**
  *  service.
@@ -38,9 +38,9 @@ module.exports = ({ strapi }) => ({
     async create(params = {}) {
         const { data } = params;
 
-        if (hasDraftAndPublish(contentType)) {
-            setPublishedAt(data);
-        }
+        // if (hasDraftAndPublish(contentType)) {
+        //     setPublishedAt(data);
+        // }
 
         return strapi.documents(uid).create({ ...params, data });
     },

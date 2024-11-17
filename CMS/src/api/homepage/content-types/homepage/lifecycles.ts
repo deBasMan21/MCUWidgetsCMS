@@ -1,3 +1,5 @@
+import { Schema } from "@strapi/strapi";
+
 export default {
   afterCreate(event) {
     setReviewPropsFromProject(event);
@@ -10,24 +12,21 @@ export default {
 async function setReviewPropsFromProject(event) {
   const { result } = event;
   const { id } = result;
-  let page: any = await strapi.entityService.findOne(
-    "api::homepage.homepage",
-    id,
-    {
-      populate: {
+  let page: any = await strapi.documents('api::homepage.homepage').findOne({
+    documentId: id,
+    populate: {
         components: {
-          on: {
-            // @ts-ignore
-            "home-page.nyt-review": {
-              populate: {
-                project: true,
-              },
-            },
-          },
-        },
-      },
+            on: {
+                // @ts-ignore
+                "home-page.nyt-review": {
+                  populate: {
+                    project: true,
+                  },
+                },
+            }
+        }
     }
-  );
+  })
 
   let components = page.components.map((component) => {
     if (component.project == null) {
@@ -53,11 +52,12 @@ async function setReviewPropsFromProject(event) {
     return;
   }
 
-  let allComponents = await strapi.entityService
-    .findOne("api::homepage.homepage", id, {
-      populate: {
-        components: true,
-      },
+  
+  let allComponents = await strapi.documents('api::homepage.homepage').findOne({
+        documentId: id,
+        populate: {
+            components: true
+        }
     })
     .then((res) => res.components);
 
@@ -71,9 +71,11 @@ async function setReviewPropsFromProject(event) {
     return component;
   });
 
-  await strapi.entityService.update("api::homepage.homepage", id, {
-    data: {
-      components: allComponents,
-    },
-  });
+  // TODO: Fix this updating
+//   await strapi.documents('api::homepage.homepage').update({
+//     documentId: id,
+//     data: {
+//         components: tmp
+//     }
+//   })
 }

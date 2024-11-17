@@ -1,6 +1,6 @@
-import { Strapi } from "@strapi/strapi";
 import 'module-alias/register'
+import type { Core } from '@strapi/strapi';
 
 export default {
-  register({ strapi }: { strapi: Strapi }) {},
+  register({ strapi }: { strapi: Core.Strapi }) {},
 };

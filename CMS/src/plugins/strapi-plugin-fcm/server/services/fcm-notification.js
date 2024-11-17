@@ -8,14 +8,14 @@ var fcmUtil = require('../../util/fcm');
 
 const { propOr } = require('lodash/fp');
 
-const {
-    hasDraftAndPublish,
-    constants: { PUBLISHED_AT_ATTRIBUTE },
-} = require('@strapi/utils').contentTypes;
+// const {
+//     hasDraftAndPublish,
+//     constants: { PUBLISHED_AT_ATTRIBUTE },
+// } = require('@strapi/utils').contentTypes;
 
-const setPublishedAt = data => {
-    data[PUBLISHED_AT_ATTRIBUTE] = propOr(new Date(), PUBLISHED_AT_ATTRIBUTE, data);
-};
+// const setPublishedAt = data => {
+//     data[PUBLISHED_AT_ATTRIBUTE] = propOr(new Date(), PUBLISHED_AT_ATTRIBUTE, data);
+// };
 
 const uid = 'plugin::strapi-plugin-fcm.fcm-notification';
 module.exports = ({ strapi }) => ({
@@ -50,13 +50,13 @@ module.exports = ({ strapi }) => ({
     async create(params = {}) {
         const model = strapi.contentTypes[uid];
         const setupEntry = async (entry) => {
-            if (hasDraftAndPublish(model)) {
-                setPublishedAt(entry);
-            }
-            if (entry[PUBLISHED_AT_ATTRIBUTE]) {
-                const fcmResponse = await fcmUtil.send(entry);
-                entry.response = fcmResponse || {};
-            }
+            // if (hasDraftAndPublish(model)) {
+            //     setPublishedAt(entry);
+            // }
+            // if (entry[PUBLISHED_AT_ATTRIBUTE]) {
+            //     const fcmResponse = await fcmUtil.send(entry);
+            //     entry.response = fcmResponse || {};
+            // }
             entry.payload = entry.payload || {};
             return entry;
         };
