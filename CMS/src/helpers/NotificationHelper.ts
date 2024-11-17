@@ -14,8 +14,7 @@ export async function publishNotifications() {
   // update the publish_at of articles previously fetched
   await Promise.all(draftArticleToPublish.map(article => {
     return strapi.documents('plugin::strapi-plugin-fcm.fcm-notification').update({
-      documentId: "__TODO__",
-
+      documentId: `${article.id}`,
       data: {
         publishedAt: new Date(),
       }
