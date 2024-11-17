@@ -61,7 +61,7 @@ module.exports = ({ strapi }) => ({
             return await strapi.documents(uid).create({ ...params, data });
         } else {
             return await strapi.documents(uid).update({
-                documentId: "__TODO__",
+                documentId: entityId,
                 ...params,
                 data
             });

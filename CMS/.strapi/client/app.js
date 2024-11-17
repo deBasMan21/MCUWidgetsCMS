@@ -5,7 +5,7 @@
 import i18N from "@strapi/plugin-i18n/strapi-admin";
 import usersPermissions from "@strapi/plugin-users-permissions/strapi-admin";
 import entityNotes from "strapi-plugin-notes/strapi-admin";
-import restCache from "strapi-plugin-rest-cache/strapi-admin";
+// import restCache from "strapi-plugin-rest-cache/strapi-admin";
 import todo from "strapi-plugin-todo/strapi-admin";
 import dataResolvingTask from "../../src/plugins/data-resolving-task/strapi-admin";
 import strapiPluginFcm from "../../src/plugins/strapi-plugin-fcm/strapi-admin";
@@ -20,7 +20,7 @@ renderAdmin(document.getElementById("strapi"), {
     i18n: i18N,
     "users-permissions": usersPermissions,
     "entity-notes": entityNotes,
-    "rest-cache": restCache,
+    // "rest-cache": restCache,
     todo: todo,
     "data-resolving-task": dataResolvingTask,
     "strapi-plugin-fcm": strapiPluginFcm,

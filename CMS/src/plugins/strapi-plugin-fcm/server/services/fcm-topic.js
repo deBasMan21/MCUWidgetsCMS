@@ -49,7 +49,7 @@ module.exports = ({ strapi }) => ({
         const { data } = params;
 
         return strapi.documents(uid).update({
-            documentId: "__TODO__",
+            documentId: entityId,
             ...params,
             data
         });

@@ -4,11 +4,12 @@ export default {
     const projects = result.mcu_projects;
 
     projects?.forEach((project) => {
-      strapi.entityService.update("api::mcu-project.mcu-project", project.id, {
-        data: {
-          chronology: projects.indexOf(project),
-        },
-      });
+        strapi.documents('api::mcu-project.mcu-project').update({
+            documentId: project.id,
+            data: {
+                chronology: projects.indexOf(project)
+            }
+        })
     });
   },
 };
