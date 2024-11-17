@@ -3,7 +3,8 @@
 module.exports = ({ strapi }) => ({
   async getVideos(id) {
     // Get entry from database
-    const entry = await strapi.entityService.findOne('api::mcu-project.mcu-project', id, {
+    const entry = await strapi.documents('api::mcu-project.mcu-project').findOne({
+      documentId: id,
       fields: ['tmdb_id', 'id', 'Type']
     })
 
@@ -46,7 +47,8 @@ module.exports = ({ strapi }) => ({
       console.log(videos)
 
       // Update the entry with the new posters
-      await strapi.entityService.update('api::mcu-project.mcu-project', id, {
+      await strapi.documents('api::mcu-project.mcu-project').update({
+        documentId: id,
         data: {
           Trailers: videos
         }

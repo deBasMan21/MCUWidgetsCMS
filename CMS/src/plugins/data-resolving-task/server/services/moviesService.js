@@ -3,7 +3,7 @@
 module.exports = ({ strapi }) => ({
   async updateReviews() {
     try {
-      const entries = await strapi.entityService.findMany('api::mcu-project.mcu-project', {
+      const entries = await strapi.documents('api::mcu-project.mcu-project').findMany({
         fields: ['Title'],
         filters: {
           $or: [
@@ -42,7 +42,8 @@ module.exports = ({ strapi }) => ({
             let filteredReviews = resReviews.response?.docs.filter(review => review.headline.main.includes(entry.Title))
             let review = filteredReviews[0]
 
-            strapi.entityService.update('api::mcu-project.mcu-project', entry.id, {
+            strapi.documents('api::mcu-project.mcu-project').update({
+              documentId: entry.id,
               data: {
                 reviewTitle: decodeHtmlCharCodes(review?.headline?.main ?? ""),
                 reviewSummary: decodeHtmlCharCodes(review?.abstract ?? ""),

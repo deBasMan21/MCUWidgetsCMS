@@ -3,7 +3,7 @@
 module.exports = ({ strapi }) => ({
   async updateProjectData() {
     try {
-      const entries = await strapi.entityService.findMany('api::mcu-project.mcu-project', {
+      const entries = await strapi.documents('api::mcu-project.mcu-project').findMany({
         filters: {
           imdb_id: {
             $notNull: true
@@ -22,14 +22,15 @@ module.exports = ({ strapi }) => ({
     }
   },
   async updateSingleProject(id) {
-    const entry = await strapi.entityService.findOne('api::mcu-project.mcu-project', id, {
+    const entry = await strapi.documents('api::mcu-project.mcu-project').findOne({
+      documentId: id,
       fields: ['imdb_id', 'id']
     })
 
     await getInfoForChunk([entry])
   },
   async getCollections() {
-    const entries = await strapi.entityService.findMany('api::mcu-project.mcu-project', {
+    const entries = await strapi.documents('api::mcu-project.mcu-project').findMany({
       filters: {
         tmdb_id: {
           $notNull: true
@@ -54,7 +55,7 @@ module.exports = ({ strapi }) => ({
 
     await Promise.all(
       arrayUniqueByKey.map(async (collection) => {
-        const existingCollection = await strapi.entityService.findMany('api::collection.collection', {
+        const existingCollection = await strapi.documents('api::collection.collection').findMany({
           filters: {
             tmdb_id: {
               $eq: `${collection.id}`
@@ -66,7 +67,7 @@ module.exports = ({ strapi }) => ({
           return
         }
 
-        await strapi.entityService.create('api::collection.collection', {
+        await strapi.documents('api::collection.collection').create({
           data: {
             tmdb_id: `${collection.id}`,
             name: collection.name,
@@ -78,7 +79,7 @@ module.exports = ({ strapi }) => ({
     )
   },
   async updateCollectionRelations() {
-    const entries = await strapi.entityService.findMany('api::collection.collection', {
+    const entries = await strapi.documents('api::collection.collection').findMany({
       fields: ['tmdb_id', 'id']
     })
 
@@ -93,7 +94,7 @@ module.exports = ({ strapi }) => ({
 
       let projects = await Promise.all((res.parts ?? []).map(async part => {
         let tmdbId = part.id
-        let projects = await strapi.entityService.findMany('api::mcu-project.mcu-project', {
+        let projects = await strapi.documents('api::mcu-project.mcu-project').findMany({
           filters: {
             tmdb_id: {
               $eq: tmdbId
@@ -113,7 +114,8 @@ module.exports = ({ strapi }) => ({
         projects: projects.filter(project => project)
       }
 
-      await strapi.entityService.update('api::collection.collection', entry.id, {
+      await strapi.documents('api::collection.collection').update({
+        documentId: entry.id,
         data: data
       });
     }
@@ -205,8 +207,9 @@ async function getInfoForChunk(entries) {
       }
     }
 
-    return strapi.entityService.update('api::mcu-project.mcu-project', entry.objectId, {
-        data: data
-      });
+    return strapi.documents('api::mcu-project.mcu-project').update({
+      documentId: entry.objectId,
+      data: data
+    });
   })).catch((err) => console.log(err))
 }

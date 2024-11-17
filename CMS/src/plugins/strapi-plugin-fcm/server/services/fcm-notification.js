@@ -22,7 +22,7 @@ module.exports = ({ strapi }) => ({
     async find(params = {}) {
 
         // const fetchParams = getFetchParams(params);
-        const data = await strapi.entityService.findMany(uid, {});
+        const data = await strapi.documents(uid).findMany({});
 
         return {
             data
@@ -30,11 +30,17 @@ module.exports = ({ strapi }) => ({
     },
 
     async findOne(entityId, params) {
-        return strapi.entityService.findOne(uid, entityId, params);
+        return strapi.documents(uid).findOne({
+            documentId: entityId,
+            ...params
+        });
     },
 
     async delete(entityId, params = {}) {
-        return strapi.entityService.delete(uid, entityId, params);
+        return strapi.documents(uid).delete({
+            documentId: entityId,
+            ...params
+        });
     },
 
     async send(body) {
@@ -64,7 +70,7 @@ module.exports = ({ strapi }) => ({
             }
         } else {
             const entry = await setupEntry(data);
-            return strapi.entityService.create(uid, { data: entry });
+            return strapi.documents(uid).create({ data: entry });
         }
     },
 
@@ -75,7 +81,11 @@ module.exports = ({ strapi }) => ({
             data.response = fcmResponse || {};
         }
         data.payload = data.payload || {};
-        return strapi.entityService.update(uid, entityId, { ...params, data });
+        return strapi.documents(uid).update({
+            documentId: entityId,
+            ...params,
+            data
+        });
     },
 
     count(params = {}) {

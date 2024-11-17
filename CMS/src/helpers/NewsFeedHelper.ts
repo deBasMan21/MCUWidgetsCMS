@@ -48,19 +48,16 @@ export async function fetchAndUpdateNewsFeed() {
 
   await Promise.all(
     newsItems.map(async (newsItem) => {
-      let existingItems = await strapi.entityService.findMany(
-        "api::news-item.news-item",
-        {
-          filters: {
-            guid: {
-              $eq: newsItem.guid,
-            },
+      let existingItems = await strapi.documents("api::news-item.news-item").findMany({
+        filters: {
+          guid: {
+            $eq: newsItem.guid,
           },
-        }
-      );
+        },
+      });
 
       if (existingItems.length == 0) {
-        await strapi.entityService.create("api::news-item.news-item", {
+        await strapi.documents("api::news-item.news-item").create({
           data: newsItem,
         });
 

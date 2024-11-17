@@ -2,8 +2,8 @@ import React from 'react';
 import { Button } from '@strapi/design-system/Button';
 import Picture from '@strapi/icons/Picture';
 import { useCMEditViewDataManager } from '@strapi/helper-plugin';
-import { useFetchClient } from '@strapi/helper-plugin'
 import pluginId from '../../pluginId'
+import { useFetchClient } from "@strapi/strapi/admin";
 
 const ImageRetrieverButton = () => {
   // Get page context

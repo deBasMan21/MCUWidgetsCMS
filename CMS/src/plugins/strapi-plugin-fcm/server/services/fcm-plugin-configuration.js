@@ -24,7 +24,7 @@ module.exports = ({ strapi }) => ({
     async find(params = {}) {
 
         const fetchParams = getFetchParams(params);
-        const data = await strapi.entityService.findMany(uid, {
+        const data = await strapi.documents(uid).findMany({
             ...fetchParams
         });
 
@@ -34,16 +34,20 @@ module.exports = ({ strapi }) => ({
     },
 
     async findOne(entityId, params) {
-        return strapi.entityService.findOne(uid, entityId, getFetchParams(params));
+        return strapi.documents(uid).findOne(getFetchParams(params));
     },
 
     async create(params = {}) {
         const { data } = params;
         const count = strapi.query(uid).count();
         if (count < 1) {
-            return await strapi.entityService.create(uid, { ...params, data });
+            return await strapi.documents(uid).create({ ...params, data });
         } else if (data.id) {
-            return await strapi.entityService.update(uid, data.id, { ...params, data });
+            return await strapi.documents(uid).update({
+                documentId: "__TODO__",
+                ...params,
+                data
+            });
         }
         return {
             error: 'Only one configuration is allowed, try passing the id to update the existing one.'
@@ -54,9 +58,13 @@ module.exports = ({ strapi }) => ({
         const { data } = params;
         const count = strapi.query(uid).count();
         if (count < 1) {
-            return await strapi.entityService.create(uid, { ...params, data });
+            return await strapi.documents(uid).create({ ...params, data });
         } else {
-            return await strapi.entityService.update(uid, entityId, { ...params, data });
+            return await strapi.documents(uid).update({
+                documentId: "__TODO__",
+                ...params,
+                data
+            });
         }
     }
 });

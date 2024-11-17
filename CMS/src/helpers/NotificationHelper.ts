@@ -1,7 +1,7 @@
 export async function publishNotifications() {
   // fetch articles to publish;
-  const draftArticleToPublish = await strapi.entityService.findMany('plugin::strapi-plugin-fcm.fcm-notification', {
-    publicationState: 'preview', // preview returns both draft and published entries
+  const draftArticleToPublish = await strapi.documents('plugin::strapi-plugin-fcm.fcm-notification').findMany({
+    status: "draft", // preview returns both draft and published entries
     filters: {
       publishedAt: {
         $null: true, // so we add another condition here to filter entries that have not been published
@@ -13,7 +13,9 @@ export async function publishNotifications() {
   });
   // update the publish_at of articles previously fetched
   await Promise.all(draftArticleToPublish.map(article => {
-    return strapi.entityService.update('plugin::strapi-plugin-fcm.fcm-notification', article.id, {
+    return strapi.documents('plugin::strapi-plugin-fcm.fcm-notification').update({
+      documentId: "__TODO__",
+
       data: {
         publishedAt: new Date(),
       }

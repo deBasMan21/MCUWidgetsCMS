@@ -11,9 +11,9 @@ import { Box } from '@strapi/design-system/Box';
 import { Stack } from '@strapi/design-system/Stack';
 import { Button } from '@strapi/design-system/Button';
 import { Typography } from '@strapi/design-system/Typography';
-import { useFetchClient } from '@strapi/helper-plugin'
 import { Loader } from '@strapi/design-system/Loader';
 import { Alert } from '@strapi/design-system/Alert';
+import { useFetchClient } from "@strapi/strapi/admin";
 
 const HomePage = () => {
   const client = useFetchClient();

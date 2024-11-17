@@ -2,7 +2,7 @@
 
 module.exports = ({ strapi }) => ({
   async updateAllSeries() {
-    const entries = await strapi.entityService.findMany('api::mcu-project.mcu-project', {
+    const entries = await strapi.documents('api::mcu-project.mcu-project').findMany({
       fields: ['id', 'tmdb_id', 'seasonNumber'],
       filters: {
         tmdb_id: {
@@ -28,7 +28,8 @@ module.exports = ({ strapi }) => ({
   },
 
   async updateSingleSerie(id) {
-    const entry = await strapi.entityService.findOne('api::mcu-project.mcu-project', id, {
+    const entry = await strapi.documents('api::mcu-project.mcu-project').findOne({
+      documentId: id,
       fields: ['id', 'tmdb_id', 'seasonNumber'],
       filters: {
         tmdb_id: {
@@ -52,7 +53,7 @@ module.exports = ({ strapi }) => ({
   },
 
   async updateSeasons() {
-    let series = await strapi.entityService.findMany('api::mcu-project.mcu-project', {
+    let series = await strapi.documents('api::mcu-project.mcu-project').findMany({
       filters: {
         Type: {
           $eq: 'Serie'
@@ -94,7 +95,8 @@ module.exports = ({ strapi }) => ({
         return season
       })
 
-      await strapi.entityService.update('api::mcu-project.mcu-project', serie.id, {
+      await strapi.documents('api::mcu-project.mcu-project').update({
+        documentId: serie.id,
         data: {
           Seasons: updatedSeasons
         }
@@ -135,7 +137,8 @@ async function retrieveSeriesEpisodes(result, fetch, config) {
     return episodeData
   })
 
-  await strapi.entityService.update('api::mcu-project.mcu-project', id, {
+  await strapi.documents('api::mcu-project.mcu-project').update({
+    documentId: id,
     data: {
       episodes
     }

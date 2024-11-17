@@ -2,8 +2,8 @@ import React from 'react';
 import { Button } from '@strapi/design-system/Button';
 import Play from '@strapi/icons/Play';
 import { useCMEditViewDataManager } from '@strapi/helper-plugin';
-import { useFetchClient } from '@strapi/helper-plugin'
 import pluginId from '../../pluginId'
+import { useFetchClient } from "@strapi/strapi/admin";
 
 const VideoRetrieverButton = () => {
   // Get page context
