@@ -14,19 +14,19 @@
   "attributes": {
     "FirstName": {
       "type": "string",
-      "required": false
+      "required": true
     },
     "LastName": {
       "type": "string",
-      "required": false
+      "required": true
     },
     "Character": {
       "type": "string",
-      "required": false
+      "required": true
     },
     "DateOfBirth": {
       "type": "date",
-      "required": false
+      "required": true
     },
     "mcu_projects": {
       "type": "relation",
@@ -37,22 +37,6 @@
     "ImageUrl": {
       "type": "string",
       "required": true
-    },
-    "name": {
-      "type": "string",
-      "required": false
-    },
-    "tmdb_id": {
-      "type": "string",
-      "required": false
-    },
-    "characters": {
-      "displayName": "characters",
-      "type": "component",
-      "repeatable": true,
-      "component": "actor.characters",
-      "required": true,
-      "min": 1
     }
   }
 }
