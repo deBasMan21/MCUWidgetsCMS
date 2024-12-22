@@ -25,14 +25,6 @@ module.exports = [
   },
   {
     method: 'POST',
-    path: '/updateActors',
-    handler: 'projectController.updateActors',
-    config: {
-      policies: [],
-    },
-  },
-  {
-    method: 'POST',
     path: '/updateAllSeries',
     handler: 'seriesController.updateAllSeries',
     config: {
