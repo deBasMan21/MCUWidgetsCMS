@@ -30,7 +30,7 @@ services:
         condition: service_started
 
   mcuwidgetsDB:
-    image: mysql:latest
+    image: mysql:8.2.0
     command: --default-authentication-plugin=mysql_native_password
     environment:
       MYSQL_USER: ${DATABASE_USERNAME}
