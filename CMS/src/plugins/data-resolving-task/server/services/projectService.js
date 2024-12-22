@@ -117,6 +117,91 @@ module.exports = ({ strapi }) => ({
         data: data
       });
     }
+  },
+  async updateActors(id) {
+    const entry = await strapi.entityService.findOne('api::mcu-project.mcu-project', id)
+
+    // Check if entry exists
+    if (!entry) {
+      console.log("Entry not found")
+      return
+    }
+
+    // Check if entry has tmdb_id
+    if (!entry.tmdb_id) {
+      console.log("Entry has no tmdb_id")
+      return
+    }
+
+    // Get url prefix based on type
+    const urlPrefix = entry.Type === "Serie" ? "tv" : "movie"
+
+    const fetch = require('node-fetch')
+
+    // Get configuration from tmdb (imageurl etc)
+    const config = await fetch(`https://api.themoviedb.org/3/configuration`, {
+      headers: {
+        Authorization: `Bearer ${process.env.TMDB_API_KEY}`
+      }
+    }).then((res) => res.json())
+
+    // Get images from tmdb
+    const credits = await fetch(`https://api.themoviedb.org/3/${urlPrefix}/${entry.tmdb_id}/credits?language=en`, {
+      headers: {
+        Authorization: `Bearer ${process.env.TMDB_API_KEY}`
+      }
+    }).then((res) => res.json())
+
+    let actors = credits.cast
+      .filter((castItem) => {
+        return !castItem.character.toLowerCase().includes('uncredited')
+      })
+      .map((castItem) => {
+        return {
+          name: castItem.name,
+          characters: [{ name: castItem.character }],
+          ImageUrl: `${config.images.secure_base_url}[INSERT_SIZE]${castItem.profile_path}`,
+          tmdb_id: `${castItem.id}`,
+          mcu_projects: [entry.id]
+        }
+      })
+
+    for(const actor of actors) {
+      let existingActors = await strapi.entityService.findMany('api::actor.actor', {
+        filters: {
+          tmdb_id: {
+            $eq: actor.tmdb_id
+          }
+        },
+        populate: {
+          mcu_projects: true,
+          characters: true
+        }
+      })
+      let actorsExists = existingActors.length > 0
+
+      if (actorsExists == true) { 
+        let existingActor = existingActors[0]
+        let characters = new Set(existingActor.characters.concat(actor.characters).map((actor) => actor.name))
+        await strapi.entityService.update(
+          'api::actor.actor', 
+          existingActor.id, 
+          {
+            data: {
+              mcu_projects: existingActor.mcu_projects.concat([entry.id]),
+              characters: [...characters].map((name) => { return { name }})
+            }
+          }
+        )
+      } else {
+        await strapi.entityService.create(
+          'api::actor.actor',
+          {
+            data: actor,
+          }
+        )
+      }
+    }
   }
 });
 

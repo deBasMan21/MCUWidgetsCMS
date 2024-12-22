@@ -1,0 +1,15 @@
+{
+  "collectionName": "components_actor_characters",
+  "info": {
+    "displayName": "characters",
+    "icon": "bulletList",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    }
+  }
+}
