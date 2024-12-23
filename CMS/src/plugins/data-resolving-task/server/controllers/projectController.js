@@ -41,5 +41,15 @@ module.exports = ({ strapi }) => ({
       .plugin('data-resolving-task')
       .service('projectService')
       .updateActors(ctx.request.body.id);
+
+    ctx.body = "Actors updated"
+  },
+  async updateAllProjectActors(ctx) {
+    await strapi
+      .plugin('data-resolving-task')
+      .service('projectService')
+      .updateAllProjectActors();
+
+    ctx.body = "Actors updated"
   }
 });

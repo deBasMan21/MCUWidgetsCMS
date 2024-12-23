@@ -135,6 +135,7 @@ module.exports = ({ strapi }) => ({
 
     // Get url prefix based on type
     const urlPrefix = entry.Type === "Serie" ? "tv" : "movie"
+    const urlPath = entry.Type === "Serie" ? "aggregate_credits" : "credits"
 
     const fetch = require('node-fetch')
 
@@ -146,20 +147,41 @@ module.exports = ({ strapi }) => ({
     }).then((res) => res.json())
 
     // Get images from tmdb
-    const credits = await fetch(`https://api.themoviedb.org/3/${urlPrefix}/${entry.tmdb_id}/credits?language=en`, {
+    const credits = await fetch(`https://api.themoviedb.org/3/${urlPrefix}/${entry.tmdb_id}/${urlPath}?language=en`, {
       headers: {
         Authorization: `Bearer ${process.env.TMDB_API_KEY}`
       }
     }).then((res) => res.json())
 
+    let directors = credits.crew
+      .filter((crewItem) => {
+        if (entry.Type === "Serie") {
+          return crewItem.jobs[0].job == "Director"
+        } else {
+          return crewItem.job == "Director"
+        }
+      })
+
+    console.log(directors)
+
     let actors = credits.cast
       .filter((castItem) => {
-        return !castItem.character.toLowerCase().includes('uncredited')
+        if (entry.Type === "Serie") {
+          return !castItem.roles[0].character.toLowerCase().includes('uncredited')
+        } else {
+          return !castItem.character.toLowerCase().includes('uncredited')
+        }
       })
       .map((castItem) => {
+        let characters = []
+        if (entry.Type === "Serie") {
+          characters = castItem.roles.map((character) => { return { name: character.character } })
+        } else {
+          characters = [ { name: castItem.character} ]
+        }
         return {
           name: castItem.name,
-          characters: [{ name: castItem.character }],
+          characters: characters,
           ImageUrl: `${config.images.secure_base_url}[INSERT_SIZE]${castItem.profile_path}`,
           tmdb_id: `${castItem.id}`,
           mcu_projects: [entry.id]
@@ -201,6 +223,20 @@ module.exports = ({ strapi }) => ({
           }
         )
       }
+    }
+  },
+  async updateAllProjectActors() {
+    const entries = await strapi.entityService.findMany('api::mcu-project.mcu-project', {
+      filters: {
+        tmdb_id: {
+          $notNull: true
+        }
+      },
+      fields: ['id']
+    });
+
+    for(const entry of entries) {
+      await this.updateActors(entry.id)
     }
   }
 });

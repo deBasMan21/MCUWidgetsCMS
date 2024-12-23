@@ -12,18 +12,6 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "FirstName": {
-      "type": "string",
-      "required": false
-    },
-    "LastName": {
-      "type": "string",
-      "required": false
-    },
-    "Character": {
-      "type": "string",
-      "required": false
-    },
     "DateOfBirth": {
       "type": "date",
       "required": false

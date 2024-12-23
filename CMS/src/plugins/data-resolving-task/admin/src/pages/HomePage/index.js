@@ -51,6 +51,16 @@ const HomePage = () => {
       openAlert('danger', 'Updating series failed')
     }
   }
+  
+  const updateAllProjectActors = async () => {
+    try {
+      await client.post(`/${pluginId}/updateAllProjectActors`)
+      openAlert('success', 'Actors updated')
+    } catch (error) {
+      console.log(error)
+      openAlert('danger', 'Updating actors failed')
+    }
+  }
 
   const updateSeasons = async () => {
     try {
@@ -146,6 +156,11 @@ const HomePage = () => {
               buttonText="Update collections"
               explanationText="Retrieves all collections from the projects and creates them if necessary. It also creates the relations between the projects and the collections."
               onClick={getCollection}
+            />
+            <TaskButton
+              buttonText="Update actors"
+              explanationText="Retrieves all actors from the projects and creates them if necessary. It also creates the relations between the projects and the actors."
+              onClick={updateAllProjectActors}
             />
           </Stack>
         </Box>

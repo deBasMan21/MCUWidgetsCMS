@@ -33,6 +33,14 @@ module.exports = [
   },
   {
     method: 'POST',
+    path: '/updateAllProjectActors',
+    handler: 'projectController.updateAllProjectActors',
+    config: {
+      policies: [],
+    },
+  },
+  {
+    method: 'POST',
     path: '/updateAllSeries',
     handler: 'seriesController.updateAllSeries',
     config: {
