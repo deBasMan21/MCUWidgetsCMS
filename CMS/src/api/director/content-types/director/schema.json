@@ -14,11 +14,11 @@
   "attributes": {
     "FirstName": {
       "type": "string",
-      "required": true
+      "required": false
     },
     "LastName": {
       "type": "string",
-      "required": true
+      "required": false
     },
     "mcu_projects": {
       "type": "relation",
@@ -32,7 +32,13 @@
     },
     "DateOfBirth": {
       "type": "date",
-      "required": true
+      "required": false
+    },
+    "name": {
+      "type": "string"
+    },
+    "tmdb_id": {
+      "type": "string"
     }
   }
 }

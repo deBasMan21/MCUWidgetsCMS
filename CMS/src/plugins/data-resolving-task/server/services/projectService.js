@@ -160,7 +160,48 @@ module.exports = ({ strapi }) => ({
         } else {
           return crewItem.job == "Director"
         }
+      }).map((director) => {
+        return {
+          name: director.name,
+          ImageUrl: `${config.images.secure_base_url}[INSERT_SIZE]${director.profile_path}`,
+          tmdb_id: `${director.id}`,
+          mcu_projects: [entry.id]
+        }
       })
+
+    for(const director of directors) {
+      let existingDirectors = await strapi.entityService.findMany('api::director.director', {
+        filters: {
+          tmdb_id: {
+            $eq: director.tmdb_id
+          }
+        },
+        populate: {
+          mcu_projects: true
+        }
+      })
+      let directorExists = existingDirectors.length > 0
+
+      if (directorExists == true) { 
+        let existingDirector = existingDirectors[0]
+        await strapi.entityService.update(
+          'api::director.director', 
+          existingDirector.id, 
+          {
+            data: {
+              mcu_projects: existingDirector.mcu_projects.concat([entry.id]),
+            }
+          }
+        )
+      } else {
+        await strapi.entityService.create(
+          'api::director.director',
+          {
+            data: director,
+          }
+        )
+      }
+    }
 
     console.log(directors)
 
